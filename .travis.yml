@@ -18,7 +18,7 @@ install:
   - composer validate
   - composer install $COMPOSER_FLAGS
 before_script:
-  - composer create-project drupal-composer/drupal-project:8.x-dev $TRAVIS_BUILD_DIR/../drupal --no-interaction
+  - composer create-project drupal-composer/drupal-project:8.x-dev $TRAVIS_BUILD_DIR/../drupal --no-interaction --no-dev --no-suggest
 script:
   - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/install.php"
 cache:
