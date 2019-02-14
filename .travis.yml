@@ -1,0 +1,36 @@
+language: php
+sudo: false
+matrix:
+  include:
+    - php: '7.1'
+      env: DEPLOY=true
+    - php: '7.2'
+    - php: '7.3'
+  allow_failures:
+    - php: nightly
+  fast_finish: true
+env:
+  - COMPOSER_FLAGS='--no-interaction --no-progress --no-suggest --prefer-dist'
+before_install:
+  - composer global require "hirak/prestissimo:^0.3"
+  - set -eo pipefail
+install:
+  - composer validate
+  - composer install $COMPOSER_FLAGS
+before_script:
+  - composer create-project drupal-composer/drupal-project:8.x-dev $TRAVIS_BUILD_DIR/../drupal --no-interaction
+script:
+  - $TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/install.php
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+#deploy:
+#  provider: releases
+#  api_key:
+#    secure:
+#  file: drupal-check.phar
+#  skip_cleanup: true
+#  on:
+#    tags: true
+#    repo: mglaman/drupal-check
+#    condition: "$DEPLOY"
