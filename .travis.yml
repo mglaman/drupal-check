@@ -20,17 +20,18 @@ install:
 before_script:
   - composer create-project drupal-composer/drupal-project:8.x-dev $TRAVIS_BUILD_DIR/../drupal --no-interaction
 script:
-  - $TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/install.php
+  - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/install.php"
 cache:
   directories:
-    - $HOME/.composer/cache/files
-#deploy:
-#  provider: releases
-#  api_key:
-#    secure:
-#  file: drupal-check.phar
-#  skip_cleanup: true
-#  on:
-#    tags: true
-#    repo: mglaman/drupal-check
-#    condition: "$DEPLOY"
+    - "$HOME/.composer/cache/files"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: EOFTPsBrtKkIE/95nt7T7SP5e4tNsrVe4m9DGQuFDQMYQ1d+vHoLLG1+JFaTDboqyLJ11cY5ceqgYNAJS2zFAB20R8gJwOawluahKvlbFrrNaqrfUYH01gMlDWmv9yAEzz1nvwaElNspYtG2/QMG9yGcbFiqxKxz+AM/GLlkZ+wOm4eypOCNF4OVO71KvtcK/wYMzE11pN3WnAobSJxh8UjsaKy5XcqycIqDCSGv17LMa3wvJ7CkvSNyNKAvzBm2KmBLWbCcium3YGsVeRYdbEBRGjnB0YsJoQ58WCGKNZup/pmxi79aEPwH6rrKsJNqOuBp6zs+MlnMMH3GFZFsbpobzNWOx7iO/X4dQcQYvig6Phv8rXSoABjpZ1QZz+BoKKOErHWBiwTxFzJmTHta0gzvlwpPrTr9V/v+KpwQj8Ix6JukTCodwsFCID88iK1q//haxk01QpOlpNuRrMNppNw5IRcXTFJCtZ1DvWZom3WoBhWuVlZvMG0Le3XVbWMw3MSRwUx78//BN/414bZYOmQNHdc7af9tFGq6B5Qbzgbu9jl9KZM1vwibCLRog7uRkv/9qp4xyhga9ng/fzzDj2/rAYQKmv9SxLqc9at/kAZP2vmErwUUsOtd41KD7B9rWK+lfu8us+SjlZwqZR3I/builPfrOP4bXAJ9tjI+on8=
+  file: drupal-check.phar
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: mglaman/drupal-check
+    condition: "$DEPLOY"
