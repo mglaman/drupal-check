@@ -21,7 +21,7 @@ class CheckCommand extends Command
     private $drupalRoot;
     private $vendorRoot;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('check')
@@ -33,7 +33,7 @@ class CheckCommand extends Command
             ->addOption('style', 's', InputOption::VALUE_NONE, 'Check code style');
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output) {
+    protected function initialize(InputInterface $input, OutputInterface $output): void {
         $this->isDeprecationsCheck = $input->getOption('deprecations');
         $this->isAnalysisCheck = $input->getOption('analysis');
         $this->isStyleCheck = $input->getOption('style');
@@ -52,6 +52,8 @@ class CheckCommand extends Command
         if (!$this->isDeprecationsCheck) {
             if (!$this->isAnalysisCheck && !$this->isStyleCheck) {
                 $this->isDeprecationsCheck = true;
+            } else {
+                $this->isDeprecationsCheck = false;
             }
         }
 
@@ -63,7 +65,7 @@ class CheckCommand extends Command
         }
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $drupalFinder = new DrupalFinder();
         $path = realpath($input->getArgument('path'));
@@ -152,7 +154,7 @@ class CheckCommand extends Command
                 $inceptionResult->getConsoleStyle(),
                 $errorFormatter,
                 $inceptionResult->isDefaultLevelUsed(),
-                $output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG,
+                $output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG
             )
         );
     }
