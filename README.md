@@ -28,9 +28,12 @@ Coming soon: code style w/ phpcs integration.
 
 ## Install
 
+Download the latest Phar from https://github.com/mglaman/drupal-check/releases/latest, move into your path, profit!
+
+Or, something like:
+
 ```
-git@github.com:mglaman/drupal-check.git
-cd drupal-check
+curl -O https://github.com/mglaman/drupal-check/releases/download/1.0.0/drupal-check.phar
 ln -s $(pwd)/drupal-check.phar /usr/local/bin/drupal-check
 drupal-check /path/to/drupal/code_to_analyze
 ```
