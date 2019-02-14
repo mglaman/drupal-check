@@ -1,5 +1,8 @@
 language: php
 sudo: false
+env:
+  global:
+    - COMPOSER_FLAGS='--no-interaction --no-progress --no-suggest --prefer-dist'
 matrix:
   include:
     - php: '7.1'
@@ -9,8 +12,6 @@ matrix:
   allow_failures:
     - php: nightly
   fast_finish: true
-env:
-  - COMPOSER_FLAGS='--no-interaction --no-progress --no-suggest --prefer-dist'
 before_install:
   - composer global require "hirak/prestissimo:^0.3"
   - set -eo pipefail
@@ -18,7 +19,7 @@ install:
   - composer validate
   - composer install $COMPOSER_FLAGS
 before_script:
-  - composer create-project drupal-composer/drupal-project:8.x-dev $TRAVIS_BUILD_DIR/../drupal --no-interaction --no-dev --no-suggest
+  - composer create-project drupal-composer/drupal-project:8.x-dev $TRAVIS_BUILD_DIR/../drupal --no-interaction --no-dev --prefer-dist
 script:
   - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/install.php"
 cache:
