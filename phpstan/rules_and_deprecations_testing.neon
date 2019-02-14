@@ -1,0 +1,10 @@
+parameters:
+	level: 1
+	reportUnmatchedIgnoredErrors: false
+	# Ignore tests
+	excludes_analyse:
+		- */tests/Drupal/Tests/Listeners/Legacy/*
+includes:
+	- ../vendor/mglaman/phpstan-drupal/extension.neon
+	- ../vendor/phpstan/phpstan-deprecation-rules/rules.neon
+	- junit_formatter.neon

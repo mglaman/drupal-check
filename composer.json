@@ -1,0 +1,27 @@
+{
+    "name": "mglaman/drupal-check",
+    "description": "CLI tool for running checks on a Drupal code base",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Matt Glaman",
+            "email": "nmd.matt@gmail.com"
+        }
+    ],
+    "require": {
+        "composer/xdebug-handler": "^1.3",
+        "mglaman/phpstan-drupal-deprecations": "^0.11.1",
+        "mglaman/phpstan-junit": "^0.11.1",
+        "symfony/console": "^4.2",
+        "webflo/drupal-finder": "^1.1"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "bin": "drupal-check",
+    "autoload": {
+        "psr-4": {
+            "DrupalCheck\\": "src"
+        }
+    }
+}
