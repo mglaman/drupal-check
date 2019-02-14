@@ -2,6 +2,7 @@
     "name": "mglaman/drupal-check",
     "description": "CLI tool for running checks on a Drupal code base",
     "type": "project",
+    "license": "MIT",
     "authors": [
         {
             "name": "Matt Glaman",
@@ -18,7 +19,9 @@
     "config": {
         "sort-packages": true
     },
-    "bin": "drupal-check",
+    "bin": [
+        "drupal-check"
+    ],
     "autoload": {
         "psr-4": {
             "DrupalCheck\\": "src"
