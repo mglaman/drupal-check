@@ -192,19 +192,20 @@
         },
         {
             "name": "mglaman/phpstan-junit",
-            "version": "0.11.1",
+            "version": "0.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-junit.git",
-                "reference": "2e5c3a10ceb68af49a04103fdbf40db3bcc35a02"
+                "reference": "f5a3bd48e2868902e540d8ff44af9da1853aa37e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-junit/zipball/2e5c3a10ceb68af49a04103fdbf40db3bcc35a02",
-                "reference": "2e5c3a10ceb68af49a04103fdbf40db3bcc35a02",
+                "url": "https://api.github.com/repos/mglaman/phpstan-junit/zipball/f5a3bd48e2868902e540d8ff44af9da1853aa37e",
+                "reference": "f5a3bd48e2868902e540d8ff44af9da1853aa37e",
                 "shasum": ""
             },
             "require": {
+                "ext-dom": "*",
                 "phpstan/phpstan": "^0.11.0"
             },
             "type": "library",
@@ -229,7 +230,7 @@
                 }
             ],
             "description": "ErrorFormatter for PHPStan to output errors in JUnit format",
-            "time": "2019-02-14T14:47:05+00:00"
+            "time": "2019-02-15T19:43:32+00:00"
         },
         {
             "name": "nette/bootstrap",
