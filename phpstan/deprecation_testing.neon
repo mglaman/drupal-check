@@ -1,9 +1,5 @@
 parameters:
 	customRulesetUsed: true
-	reportUnmatchedIgnoredErrors: false
-	# Ignore tests
-	excludes_analyse:
-		- */tests/Drupal/Tests/Listeners/Legacy/*
 	# Ignore phpstan-drupal extension's rules.
 	ignoreErrors:
 		- '#\Drupal calls should be avoided in classes, use dependency injection instead#'
@@ -13,4 +9,5 @@ parameters:
 includes:
 	- ../vendor/mglaman/phpstan-drupal/extension.neon
 	- ../vendor/phpstan/phpstan-deprecation-rules/rules.neon
+	- base_config.neon
 	- junit_formatter.neon

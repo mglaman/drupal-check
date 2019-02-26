@@ -1,0 +1,6 @@
+parameters:
+	reportUnmatchedIgnoredErrors: false
+	# Ignore tests
+	excludes_analyse:
+		- */tests/Drupal/Tests/Listeners/Legacy/*
+		- */tests/fixtures/*.php
