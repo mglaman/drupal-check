@@ -6,6 +6,7 @@ use DrupalFinder\DrupalFinder;
 use PHPStan\Command\AnalyseApplication;
 use PHPStan\Command\CommandHelper;
 use PHPStan\Command\ErrorFormatter\ErrorFormatter;
+use PHPStan\Command\ErrorsConsoleStyle;
 use PHPStan\ShouldNotHappenException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -30,7 +31,13 @@ class CheckCommand extends Command
             ->addOption('format', null, InputOption::VALUE_OPTIONAL, 'Formatter to use: table, json, or junit', 'table')
             ->addOption('deprecations', 'd', InputOption::VALUE_NONE, 'Check for deprecations')
             ->addOption('analysis', 'a', InputOption::VALUE_NONE, 'Check code analysis')
-            ->addOption('style', 's', InputOption::VALUE_NONE, 'Check code style');
+            ->addOption('style', 's', InputOption::VALUE_NONE, 'Check code style')
+            ->addOption(
+                ErrorsConsoleStyle::OPTION_NO_PROGRESS,
+                null,
+                InputOption::VALUE_NONE,
+                'Do not show progress bar, only results'
+            );
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void {
