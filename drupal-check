@@ -1,6 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+if (PHP_VERSION_ID < 70100) {
+    printf("This tool requires at least PHP 7.1. You currently have %s installed. Please upgrade your PHP version.\n", PHP_VERSION);
+    exit(1);
+}
+
 use Composer\XdebugHandler\XdebugHandler;
 
 gc_disable();
