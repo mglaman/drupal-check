@@ -17,10 +17,8 @@ install:
   - composer install --no-interaction --no-progress --no-suggest --prefer-dist
 before_script:
   - composer create-project drupal-composer/drupal-project:8.x-dev $TRAVIS_BUILD_DIR/../drupal --no-interaction --no-dev --prefer-dist
-  - composer require -d $TRAVIS_BUILD_DIR/../drupal drupal/honeypot:1.x-dev
 script:
   - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/install.php"
-  - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/modules/contrib/honeypot"
 cache:
   directories:
     - "$HOME/.composer/cache/files"
