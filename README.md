@@ -34,6 +34,7 @@ Or, something like:
 
 ```
 curl -O -L https://github.com/mglaman/drupal-check/releases/download/1.0.3/drupal-check.phar
+chmod +x $(pwd)/drupal-check.phar
 ln -s $(pwd)/drupal-check.phar /usr/local/bin/drupal-check
 drupal-check /path/to/drupal/code_to_analyze
 ```
