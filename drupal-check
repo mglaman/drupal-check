@@ -3,52 +3,58 @@
 
 use Composer\XdebugHandler\XdebugHandler;
 
-gc_disable();
-
-$composerAutoloadFile = __DIR__ . '/vendor/autoload.php';
-if (file_exists($composerAutoloadFile)) {
-    require $composerAutoloadFile;
+if (!phpversion() > 7.2) {
+  echo "You need at least PHP 7.1";
+  return false;
 } else {
+
+  gc_disable();
+
+  $composerAutoloadFile = __DIR__ . '/vendor/autoload.php';
+  if (file_exists($composerAutoloadFile)) {
+    require $composerAutoloadFile;
+  } else {
     echo "Composer autoload file not found.\n";
     echo "You need to run 'composer install'.\n";
     exit(1);
-}
+  }
 
-$xdebug = new XdebugHandler('cua', '--ansi');
-$xdebug->check();
-unset($xdebug);
+  $xdebug = new XdebugHandler('cua', '--ansi');
+  $xdebug->check();
+  unset($xdebug);
 
-// Bump memory limit
-// @see https://github.com/composer/composer/blob/master/bin/composer#L21
-if (function_exists('ini_set')) {
+  // Bump memory limit
+  // @see https://github.com/composer/composer/blob/master/bin/composer#L21
+  if (function_exists('ini_set')) {
     @ini_set('display_errors', 1);
     $memoryInBytes = function ($value) {
-        $unit = strtolower(substr($value, -1, 1));
-        $value = (int) $value;
-        switch($unit) {
-            case 'g':
-                $value *= 1024;
-                // no break (cumulative multiplier)
-            case 'm':
-                $value *= 1024;
-                // no break (cumulative multiplier)
-            case 'k':
-                $value *= 1024;
-        }
-        return $value;
+      $unit = strtolower(substr($value, -1, 1));
+      $value = (int) $value;
+      switch($unit) {
+	case 'g':
+	  $value *= 1024;
+	  // no break (cumulative multiplier)
+	case 'm':
+	  $value *= 1024;
+	  // no break (cumulative multiplier)
+	case 'k':
+	  $value *= 1024;
+      }
+      return $value;
     };
     $memoryLimit = trim(ini_get('memory_limit'));
     // Increase memory_limit if it is lower than 1.5GB
     if ($memoryLimit != -1 && $memoryInBytes($memoryLimit) < 1024 * 1024 * 1536) {
-        @ini_set('memory_limit', '1536M');
+      @ini_set('memory_limit', '1536M');
     }
     // Set user defined memory limit
     if ($memoryLimit = getenv('COMPOSER_MEMORY_LIMIT')) {
-        @ini_set('memory_limit', $memoryLimit);
+      @ini_set('memory_limit', $memoryLimit);
     }
     unset($memoryInBytes, $memoryLimit);
+  }
+
+  putenv('DRUPAL_CHECK_BINARY='.realpath($_SERVER['argv'][0]));
+
+  (new \DrupalCheck\Application())->run();
 }
-
-putenv('DRUPAL_CHECK_BINARY='.realpath($_SERVER['argv'][0]));
-
-(new \DrupalCheck\Application())->run();

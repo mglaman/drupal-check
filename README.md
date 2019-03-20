@@ -1,5 +1,9 @@
 # drupal-check
 
+## Requirements
+
+At least PHP 7.1
+
 ## Usage
 
 Check deprecations
