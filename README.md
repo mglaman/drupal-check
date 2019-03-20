@@ -1,5 +1,9 @@
 # drupal-check [![Build Status](https://travis-ci.com/mglaman/drupal-check.svg?branch=master)](https://travis-ci.com/mglaman/drupal-check)
 
+## Requirements
+
+You must have PHP 7.1 or greater, which is a requirement of PHPStan, the static analyzer backing this tool.
+
 ## Usage
 
 For the best experience with this tool is best used against a vanilla Drupal project. It will work against custom Drupal 
