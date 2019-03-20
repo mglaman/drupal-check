@@ -1,4 +1,4 @@
-# drupal-check
+# drupal-check [![Build Status](https://travis-ci.com/mglaman/drupal-check.svg?branch=master)](https://travis-ci.com/mglaman/drupal-check)
 
 ## Usage
 
@@ -40,7 +40,10 @@ drupal-check /path/to/drupal/code_to_analyze
 
 ## Building
 
-The phar is built using humbug/box
+The phar is built using [humbug/box](https://github.com/humbug/box)
+
+macOS with bew:
+
 ```
 brew tap humbug/box
 brew install box
