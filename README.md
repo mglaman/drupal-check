@@ -2,6 +2,9 @@
 
 ## Usage
 
+For the best experience with this tool is best used against a vanilla Drupal project. It will work against custom Drupal 
+projects, but there can be conflicts against other development tools added to projects.
+
 Check deprecations
 
 ```
