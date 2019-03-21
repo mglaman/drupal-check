@@ -1,4 +1,4 @@
-# drupal-check [![Build Status](https://travis-ci.com/mglaman/drupal-check.svg?branch=master)](https://travis-ci.com/mglaman/drupal-check)
+# drupal-check [![Build Status](https://travis-ci.com/mglaman/drupal-check.svg?branch=master)](https://travis-ci.com/mglaman/drupal-check) [![Latest release](https://img.shields.io/github/release/mglaman/drupal-check.svg)](https://github.com/mglaman/drupal-check/releases/latest)
 
 ## Requirements
 
@@ -40,7 +40,7 @@ Download the latest Phar from https://github.com/mglaman/drupal-check/releases/l
 Or, something like:
 
 ```
-curl -O -L https://github.com/mglaman/drupal-check/releases/download/1.0.3/drupal-check.phar
+curl -O -L https://github.com/mglaman/drupal-check/releases/download/1.0.5/drupal-check.phar
 chmod +x $(pwd)/drupal-check.phar
 ln -s $(pwd)/drupal-check.phar /usr/local/bin/drupal-check
 drupal-check /path/to/drupal/code_to_analyze
