@@ -40,10 +40,9 @@ Download the latest Phar from https://github.com/mglaman/drupal-check/releases/l
 Or, something like:
 
 ```
-curl -O -L https://github.com/mglaman/drupal-check/releases/download/1.0.5/drupal-check.phar
-chmod +x $(pwd)/drupal-check.phar
-ln -s $(pwd)/drupal-check.phar /usr/local/bin/drupal-check
-drupal-check /path/to/drupal/code_to_analyze
+curl -sO $(curl -s https://api.github.com/repos/mglaman/drupal-check/releases/latest | grep "browser_download_url.*phar" | cut -d : -f 2,3 | tr -d \") \
+&& chmod 755 drupal-check.phar \
+&& sudo mv drupal-check.phar /usr/local/bin/drupal-check
 ```
 
 ## Building
