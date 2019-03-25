@@ -1,4 +1,4 @@
-# drupal-check
+# drupal-check [![Build Status](https://travis-ci.com/mglaman/drupal-check.svg?branch=master)](https://travis-ci.com/mglaman/drupal-check) [![Latest release](https://img.shields.io/github/release/mglaman/drupal-check.svg)](https://github.com/mglaman/drupal-check/releases/latest)
 
 Built on [phpstan](https://github.com/phpstan/phpstan), this static analysis tool will check for correctness (e.g. using a class that doesn't exist), deprecation errors, and more.
 
@@ -15,7 +15,7 @@ Are you ready for Drupal 9? Check out our [Drupal 9 Readiness](https://github.co
 The easiest way to install is by downloading the latest PHAR and putting it into your path. For example:
 
 ```
-curl -O -L https://github.com/mglaman/drupal-check/releases/download/1.0.3/drupal-check.phar
+curl -O -L https://github.com/mglaman/drupal-check/releases/download/1.0.5/drupal-check.phar
 mv drupal-check.phar /usr/local/bin/drupal-check
 ```
 
