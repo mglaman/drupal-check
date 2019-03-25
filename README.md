@@ -1,10 +1,10 @@
 # drupal-check
 
-Built on [https://github.com/phpstan/phpstan](phpstan), this static analysis tool will check for correctness (e.g. using a class that doesn't exist), deprecation errors, and more.
+Built on [phpstan](https://github.com/phpstan/phpstan), this static analysis tool will check for correctness (e.g. using a class that doesn't exist), deprecation errors, and more.
 
 Why? While there are many static analysis tools out there, none of them run with the Drupal context in mind. This allows checking contrib modules for deprecation errors thrown by core.
 
-Are you ready for Drupal 9? Check out our [https://github.com/mglaman/drupal-check/wiki/Drupal-9-Readiness](Drupal 9 Readiness) instructions for details on how this tool can help.
+Are you ready for Drupal 9? Check out our [Drupal 9 Readiness](https://github.com/mglaman/drupal-check/wiki/Drupal-9-Readiness) instructions for details on how this tool can help.
 
 ## Requirements
 
@@ -85,7 +85,7 @@ Examples:
 
 ## License
 
-[LICENSE.txt](GPL v2)
+[GPL v2](LICENSE.txt)
 
 ## Roadmap
 
@@ -105,7 +105,7 @@ See the [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## References
 
-* [https://glamanate.com/blog/writing-better-drupal-code-static-analysis-using-phpstan](Writing better Drupal code with static analysis using PHPStan)
-* [https://medium.com/@ondrejmirtes/phpstan-2939cd0ad0e3](PHPStan: Find Bugs In Your Code Without Writing Tests!)
-* [https://phpstan.org/](Online PHPStan Analyzer)
+* [Writing better Drupal code with static analysis using PHPStan](https://glamanate.com/blog/writing-better-drupal-code-static-analysis-using-phpstan)
+* [PHPStan: Find Bugs In Your Code Without Writing Tests!](https://medium.com/@ondrejmirtes/phpstan-2939cd0ad0e3)
+* [Online PHPStan Analyzer](https://phpstan.org/)
 
