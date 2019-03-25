@@ -83,6 +83,10 @@ Examples:
 * Check the address contrib module for analysis: `drupal-check -a web/modules/contrib/address`
 * Check the address contrib module for both deprecations and analysis: `drupal-check -ad web/modules/contrib/address`
 
+## License
+
+[LICENSE.txt](GPL v2)
+
 ## Roadmap
 
 See what feature requests are most popular in the Issue queue: https://github.com/mglaman/drupal-check/issues.
