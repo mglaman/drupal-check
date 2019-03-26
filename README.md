@@ -1,6 +1,6 @@
 # drupal-check [![Build Status](https://travis-ci.com/mglaman/drupal-check.svg?branch=master)](https://travis-ci.com/mglaman/drupal-check) [![Latest release](https://img.shields.io/github/release/mglaman/drupal-check.svg)](https://github.com/mglaman/drupal-check/releases/latest)
 
-Built on [phpstan](https://github.com/phpstan/phpstan), this static analysis tool will check for correctness (e.g. using a class that doesn't exist), deprecation errors, and more.
+Built on [PHPStan](https://github.com/phpstan/phpstan), this static analysis tool will check for correctness (e.g. using a class that doesn't exist), deprecation errors, and more.
 
 Why? While there are many static analysis tools out there, none of them run with the Drupal context in mind. This allows checking contrib modules for deprecation errors thrown by core.
 
@@ -21,7 +21,7 @@ mv drupal-check.phar /usr/local/bin/drupal-check
 
 ### Composer
 
-You can also install this globally using composer like so:
+You can also install this globally using Composer like so:
 
 ```
 composer global require mglaman/drupal-check
@@ -29,30 +29,15 @@ composer global require mglaman/drupal-check
 
 Refer to Composer's documentation on how to ensure global binaries are in your PATH: https://getcomposer.org/doc/00-intro.md#manual-installation.
 
-Note: you can also install this locally to your project and run it from that project's composer bin directory.
+Note: you can also install this locally to your project and run it from that project's Composer bin directory.
 
 ### Build From Source
 
-You can also clone this repository and build the PHAR from source:
-
-First, install humbug/box:
-
-```
-composer global require humbug/box
-```
-
-Next, clone the repo and build:
-
-```
-git clone https://github.com/mglaman/drupal-check.git
-cd drupal-check
-composer install --prefer-dist
-box -v
-```
+Follow these instructions to build from source: https://github.com/mglaman/drupal-check/wiki/Build-From-Source.
 
 ## Usage
 
-This tool works on contrib modules within a Drupal repository.
+This tool works on all Drupal code, but must be executed within the root directory of a Drupal project..
 
 ### 1. cd into a Drupal Directory
 
@@ -78,10 +63,29 @@ Options:
 
 Examples:
 
-* Check the address contrib module: `drupal-check web/modules/contrib/address`
-* Check the address contrib module for deprecations: `drupal-check -d web/modules/contrib/address`
-* Check the address contrib module for analysis: `drupal-check -a web/modules/contrib/address`
-* Check the address contrib module for both deprecations and analysis: `drupal-check -ad web/modules/contrib/address`
+* Check the address contrib module:
+
+  ```
+  drupal-check web/modules/contrib/address
+  ```
+
+* Check the address contrib module for deprecations:
+
+  ```
+  drupal-check -d web/modules/contrib/address
+  ```
+
+* Check the address contrib module for analysis:
+
+  ```
+  drupal-check -a web/modules/contrib/address
+  ```
+
+* Check the address contrib module for both deprecations and analysis:
+
+  ```
+  drupal-check -ad web/modules/contrib/address
+  ```
 
 ## License
 
@@ -97,7 +101,10 @@ Submit issues and feature requests here: https://github.com/mglaman/drupal-check
 
 ### Known Issues
 
+There are conflicts with dependencies shared with other libraries that might be installed on a Drupal project:
+
 * This tool does not work with BLT 9: https://github.com/mglaman/drupal-check/issues/9
+* If you run into issues with other libraries, please submit an issue to this project.
 
 ## Contributing
 
