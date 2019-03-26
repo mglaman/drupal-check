@@ -1,0 +1,34 @@
+includes:
+	- base_config.neon
+	- junit_formatter.neon
+parameters:
+	customRulesetUsed: true
+	excludes_analyse:
+		- *.api.php
+	bootstrap: %rootDir%/../../mglaman/phpstan-drupal/phpstan-bootstrap.php
+	fileExtensions:
+		- module
+		- theme
+		- inc
+extensions:
+	drupal: PHPStan\DependencyInjection\DrupalExtension
+drupal:
+	entityTypeStorageMapping:
+		node: Drupal\node\NodeStorage
+		taxonomy_term: Drupal\taxonomy\TermStorage
+		user: Drupal\user\UserStorage
+rules: { }
+services:
+	drupal.serviceMapFactory:
+		class: PHPStan\Drupal\ServiceMapFactoryInterface
+		factory: PHPStan\Drupal\ServiceMapFactory(%drupalServiceMap%)
+	-
+		class: @drupal.serviceMapFactory::create()
+	-
+		class: PHPStan\Type\EntityTypeManagerGetStorageDynamicReturnTypeExtension
+		arguments:
+			entityTypeStorageMapping: %drupal.entityTypeStorageMapping%
+		tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
+	-
+		class: PHPStan\Type\ServiceDynamicReturnTypeExtension
+		tags: [phpstan.broker.dynamicMethodReturnTypeExtension]

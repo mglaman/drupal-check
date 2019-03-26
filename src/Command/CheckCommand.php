@@ -104,6 +104,7 @@ class CheckCommand extends Command
 
         $output->writeln(sprintf('<info>Using autoloader: %s</info>', $GLOBALS['autoloaderInWorkingDirectory']), OutputInterface::VERBOSITY_DEBUG);
 
+        // @todo Refactor this to a sensible matrix of config.
         if ($this->isDeprecationsCheck && $this->isAnalysisCheck) {
             $configuration = __DIR__ . '/../../phpstan/rules_and_deprecations_testing.neon';
         } elseif ($this->isDeprecationsCheck && !$this->isAnalysisCheck) {
@@ -111,9 +112,13 @@ class CheckCommand extends Command
         } elseif (!$this->isDeprecationsCheck && $this->isAnalysisCheck) {
             $configuration = __DIR__ . '/../../phpstan/rules_testing.neon';
         } else {
-            // @todo: only analysis check, style check. all of the above at once.
-            $output->writeln('Not support, yet');
-            return 1;
+            if ($this->isStyleCheck) {
+                $configuration = __DIR__ . '/../../phpstan/style_testing.neon';
+            } else {
+                // @todo: only analysis check, style check. all of the above at once.
+                $output->writeln('Not support, yet');
+                return 1;
+            }
         }
 
         try {
