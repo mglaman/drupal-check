@@ -53,13 +53,18 @@ cd drupal
 Usage:
 
   ```
-  drupal-check [OPTIONS] [MODULE]
+  drupal-check [OPTIONS] [DIR]
   ```
+
+Arguments:
+
+* `OPTIONS` - See "Options" for allowed values. Specify multiples in sequence, e.g. `-ad`.
+* `DIR` - Can be any directory within the root of a Drupal project.
 
 Options:
 
 * `-a` Check analysis
-* `-d` Check deprecations
+* `-d` Check deprecations (default)
 
 Examples:
 
