@@ -17,6 +17,7 @@ The easiest way to install is by downloading the latest PHAR and putting it into
 ```
 curl -O -L https://github.com/mglaman/drupal-check/releases/download/1.0.5/drupal-check.phar
 mv drupal-check.phar /usr/local/bin/drupal-check
+chmod +x /usr/local/bin/drupal-check
 ```
 
 ### Composer
