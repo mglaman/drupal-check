@@ -4,3 +4,4 @@ parameters:
 	excludes_analyse:
 		- */tests/Drupal/Tests/Listeners/Legacy/*
 		- */tests/fixtures/*.php
+		- */settings*.php
