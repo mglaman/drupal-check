@@ -94,6 +94,12 @@ Examples:
   ```
   drupal-check -ad web/modules/contrib/address
   ```
+  
+## Drupal Check - VS Code Extension
+
+You can run Drupal Check from VSCode using this extension: https://marketplace.visualstudio.com/items?itemName=bbeversdorf.drupal-check
+
+The code can be found at: https://github.com/bbeversdorf/vscode-drupal-check
 
 ## License
 
