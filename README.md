@@ -17,7 +17,7 @@ Don't want to run Drupal Check on your own? We offer a hosted version in [Centar
 The easiest way to install is by downloading the latest PHAR and putting it into your path. For example:
 
 ```
-curl -O -L https://github.com/mglaman/drupal-check/releases/download/1.0.5/drupal-check.phar
+curl -O -L https://github.com/mglaman/drupal-check/releases/latest/download/drupal-check.phar
 mv drupal-check.phar /usr/local/bin/drupal-check
 chmod +x /usr/local/bin/drupal-check
 ```
