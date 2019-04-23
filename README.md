@@ -11,6 +11,12 @@ Don't want to run Drupal Check on your own? We offer a hosted version in [Centar
 ## Requirements
 
 * PHP >=7.1
+* composer/xdebug-handler >=1.3
+* jean85/pretty-package-versions >=1.2
+* mglaman/phpstan-drupal-deprecations >=0.11.1
+* mglaman/phpstan-junit >=0.11.1
+* symfony/console >=4.2
+* webflo/drupal-finder >=1
 
 ## Installation
 
