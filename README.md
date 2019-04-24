@@ -38,6 +38,13 @@ Note: you can also install this locally to your project and run it from that pro
 
 Follow these instructions to build from source: https://github.com/mglaman/drupal-check/wiki/Build-From-Source.
 
+### Docker 
+
+You can also use Drupal-Check on a Docker image by running:
+
+    docker run --rm -v $(pwd)/path/to/my_module:/var/www/html/modules/my_module \
+        dcycle/drupal-check:1 my_module
+
 ## Usage
 
 This tool works on all Drupal code, but must be executed within the root directory of a Drupal project..
