@@ -1,0 +1,54 @@
+version: 2.1
+defaults: &defaults
+  docker:
+    - image: circleci/php:7.2-cli
+      environment:
+        BOX_VERSION: 3.6.0
+  working_directory: ~/repo
+aliases:
+  - &composer-cache
+      v4-composer-cache
+commands:
+  start-project:
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - *composer-cache
+      - run: composer global require "hirak/prestissimo:^0.3"
+      - run: composer install -n --prefer-dist
+      - save_cache:
+          key: *composer-cache
+          paths:
+            - ~/.composer/cache
+  build-phar:
+    steps:
+      - run: echo "Downloading box.phar version $BOX_VERSION"
+      - run: curl -O -L https://github.com/humbug/box/releases/download/$BOX_VERSION/box.phar
+      - run: php box.phar compile
+jobs:
+  lint:
+    <<: *defaults
+    steps:
+      - start-project
+      - run:
+          name: Composer Validate
+          command: |
+            composer validate
+      - run:
+          name: PHPCS
+          command: |
+            ./vendor/bin/phpcs src
+  build:
+    <<: *defaults
+    steps:
+      - start-project
+      - build-phar
+      - run: php box.phar info drupal-check.phar
+
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - lint
+      - build
