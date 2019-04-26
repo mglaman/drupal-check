@@ -40,7 +40,8 @@ class CheckCommand extends Command
             );
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output): void {
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
         $this->isDeprecationsCheck = $input->getOption('deprecations');
         $this->isAnalysisCheck = $input->getOption('analysis');
         $this->isStyleCheck = $input->getOption('style');

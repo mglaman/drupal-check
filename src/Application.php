@@ -6,7 +6,8 @@ use Symfony\Component\Console\Application as BaseApplication;
 
 final class Application extends BaseApplication
 {
-    public function __construct() {
+    public function __construct()
+    {
         try {
             $version = \Jean85\PrettyVersions::getVersion('mglaman/drupal-check')->getPrettyVersion();
         } catch (\OutOfBoundsException $e) {
