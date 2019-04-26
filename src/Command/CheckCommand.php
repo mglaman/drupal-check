@@ -28,7 +28,7 @@ class CheckCommand extends Command
             ->setName('check')
             ->setDescription('Checks a Drupal site')
             ->addArgument('path', InputArgument::REQUIRED, 'The Drupal code path to inspect')
-            ->addOption('format', null, InputOption::VALUE_OPTIONAL, 'Formatter to use: table, json, or junit', 'table')
+            ->addOption('format', null, InputOption::VALUE_OPTIONAL, 'Formatter to use: raw, table, checkstyle, json, or junit', 'table')
             ->addOption('deprecations', 'd', InputOption::VALUE_NONE, 'Check for deprecations')
             ->addOption('analysis', 'a', InputOption::VALUE_NONE, 'Check code analysis')
             ->addOption('style', 's', InputOption::VALUE_NONE, 'Check code style')
