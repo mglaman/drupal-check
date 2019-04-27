@@ -10,10 +10,12 @@ use Composer\XdebugHandler\XdebugHandler;
 
 gc_disable();
 
-$composerAutoloadFile = __DIR__ . '/vendor/autoload.php';
-if (file_exists($composerAutoloadFile)) {
-    require $composerAutoloadFile;
-} else {
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require __DIR__ . '/vendor/autoload.php';
+} elseif (is_file(__DIR__ . '/../../autoload.php')) {
+    require_once __DIR__ . '/../../autoload.php';
+}
+else {
     echo "Composer autoload file not found.\n";
     echo "You need to run 'composer install'.\n";
     exit(1);
