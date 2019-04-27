@@ -29,6 +29,29 @@ commands:
   create-drupal-project:
     steps:
       - run: composer create-project drupal-composer/drupal-project:8.x-dev /tmp/drupal --no-interaction --no-dev --prefer-dist --ignore-platform-reqs
+  global-require:
+    steps:
+      - run:
+          name: Remove vendor directory
+          command: |
+            rm -rf vendor
+      - run:
+          name: Add project as a global dependency
+          command: |
+            composer global config repositories.drupalCheck '{"type": "path", "url": "~/repo", "options": { "symlink": false }}'
+      - run:
+          name: Add globally
+          command: |
+            composer global require mglaman/drupal-check *@dev
+      - run:
+          name: Add Composer global path
+          command: |
+            echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> $BASH_ENV
+            echo $BASH_ENV
+      - run:
+          name: Check drupal-check can be executed
+          command: |
+            drupal-check --version
 jobs:
   lint:
     <<: *defaults
@@ -52,27 +75,21 @@ jobs:
     <<: *defaults
     steps:
       - start-project
+      - global-require
+      - create-drupal-project
       - run:
-          name: Remove vendor directory
+          name: Run against a file
           command: |
-            rm -rf vendor
+            drupal-check /tmp/drupal/web/core/install.php
+  test_global_require_with_drush:
+    <<: *defaults
+    steps:
+      - start-project
       - run:
-          name: Add project as a global dependency
+          name: Install Drush globally (which is not recommended by Drush team)
           command: |
-            composer global config repositories.drupalCheck '{"type": "path", "url": "~/repo", "options": { "symlink": false }}'
-      - run:
-          name: Add globally
-          command: |
-            composer global require mglaman/drupal-check *@dev
-      - run:
-          name: Add Composer global path
-          command: |
-            echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> $BASH_ENV
-            echo $BASH_ENV
-      - run:
-          name: Check drupal-check can be executed
-          command: |
-            drupal-check --version
+            composer global require drush/drush
+      - global-require
       - create-drupal-project
       - run:
           name: Run against a file
@@ -85,4 +102,5 @@ workflows:
     jobs:
       - lint
       - test_global_require
+      - test_global_require_with_drush
       - build
