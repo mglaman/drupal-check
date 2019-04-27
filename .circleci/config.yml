@@ -45,10 +45,36 @@ jobs:
       - start-project
       - build-phar
       - run: php box.phar info drupal-check.phar
+  test_global_require:
+    <<: *defaults
+    steps:
+      - start-project
+      - run:
+          name: Remove vendor directory
+          command: |
+            rm -rf vendor
+      - run:
+          name: Add project as a global dependency
+          command: |
+            composer global config repositories.drupalCheck '{"type": "path", "url": "~/repo", "options": { "symlink": false }}'
+      - run:
+          name: Add globally
+          command: |
+            composer global require mglaman/drupal-check *@dev
+      - run:
+          name: Add Composer global path
+          command: |
+            echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> $BASH_ENV
+            echo $BASH_ENV
+      - run:
+          name: Check drupal-check can be executed
+          command: |
+            drupal-check --version
 
 workflows:
   version: 2
   test_and_deploy:
     jobs:
       - lint
+      - test_global_require
       - build
