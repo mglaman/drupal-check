@@ -85,7 +85,7 @@ jobs:
       - run:
           name: Run against a file
           command: |
-            drupal-check /tmp/drupal/docroot/core/install.php
+            php drupal-check.phar /tmp/drupal/docroot/core/install.php
   test_global_require:
     <<: *defaults
     steps:
