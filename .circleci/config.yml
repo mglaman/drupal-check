@@ -27,8 +27,12 @@ commands:
       - run: curl -O -L https://github.com/humbug/box/releases/download/$BOX_VERSION/box.phar
       - run: php box.phar compile
   create-drupal-project:
+    parameters:
+      project:
+        type: string
+        default: 'drupal-composer/drupal-project:8.x-dev'
     steps:
-      - run: composer create-project drupal-composer/drupal-project:8.x-dev /tmp/drupal --no-interaction --no-dev --prefer-dist --ignore-platform-reqs
+      - run: composer create-project << parameters.project >> /tmp/drupal --no-interaction --no-dev --prefer-dist --ignore-platform-reqs
   global-require:
     steps:
       - run:
@@ -71,6 +75,17 @@ jobs:
       - start-project
       - build-phar
       - run: php box.phar info drupal-check.phar
+  test_lightning:
+    <<: *defaults
+    steps:
+      - start-project
+      - build-phar
+      - create-drupal-project:
+          project: 'acquia/lightning-project'
+      - run:
+          name: Run against a file
+          command: |
+            php drupal-check.phar /tmp/drupal/docroot/core/install.php
   test_global_require:
     <<: *defaults
     steps:
@@ -101,6 +116,7 @@ workflows:
   test_and_deploy:
     jobs:
       - lint
+      - test_lightning
       - test_global_require
       - test_global_require_with_drush
       - build
