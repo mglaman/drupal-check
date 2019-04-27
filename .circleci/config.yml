@@ -75,6 +75,27 @@ jobs:
       - start-project
       - build-phar
       - run: php box.phar info drupal-check.phar
+  test_drupal:
+    <<: *defaults
+    steps:
+      - start-project
+      - build-phar
+      - create-drupal-project:
+          project: 'drupal/drupal'
+      - run:
+          name: Run against a file
+          command: |
+            php drupal-check.phar /tmp/drupal/core/install.php
+  test_drupal_project:
+    <<: *defaults
+    steps:
+      - start-project
+      - build-phar
+      - create-drupal-project
+      - run:
+          name: Run against a file
+          command: |
+            php drupal-check.phar /tmp/drupal/web/core/install.php
   test_lightning:
     <<: *defaults
     steps:
@@ -116,6 +137,8 @@ workflows:
   test_and_deploy:
     jobs:
       - lint
+      - test_drupal
+      - test_drupal_project
       - test_lightning
       - test_global_require
       - test_global_require_with_drush
