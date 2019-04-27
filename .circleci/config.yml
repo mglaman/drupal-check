@@ -116,6 +116,7 @@ workflows:
   test_and_deploy:
     jobs:
       - lint
+      - test_lightning
       - test_global_require
       - test_global_require_with_drush
       - build
