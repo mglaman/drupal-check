@@ -7,7 +7,6 @@ parameters:
 		- '#Missing cache backend declaration for performance.#'
 		- '#Plugin manager has cache backend specified but does not declare cache tags.#'
 includes:
-	- ../vendor/mglaman/phpstan-drupal/extension.neon
-	- ../vendor/phpstan/phpstan-deprecation-rules/rules.neon
 	- base_config.neon
+	- phpstan_deprecation_rules.php
 	- junit_formatter.neon

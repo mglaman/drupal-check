@@ -5,3 +5,5 @@ parameters:
 		- */tests/Drupal/Tests/Listeners/Legacy/*
 		- */tests/fixtures/*.php
 		- */settings*.php
+includes:
+	- phpstan_drupal_extension.php

@@ -1,7 +1,6 @@
 parameters:
 	level: 1
 includes:
-	- ../vendor/mglaman/phpstan-drupal/extension.neon
-	- ../vendor/phpstan/phpstan-deprecation-rules/rules.neon
 	- base_config.neon
+	- phpstan_deprecation_rules.php
 	- junit_formatter.neon

@@ -26,6 +26,9 @@ commands:
       - run: echo "Downloading box.phar version $BOX_VERSION"
       - run: curl -O -L https://github.com/humbug/box/releases/download/$BOX_VERSION/box.phar
       - run: php box.phar compile
+  create-drupal-project:
+    steps:
+      - run: composer create-project drupal-composer/drupal-project:8.x-dev /tmp/drupal --no-interaction --no-dev --prefer-dist --ignore-platform-reqs
 jobs:
   lint:
     <<: *defaults
@@ -45,10 +48,41 @@ jobs:
       - start-project
       - build-phar
       - run: php box.phar info drupal-check.phar
+  test_global_require:
+    <<: *defaults
+    steps:
+      - start-project
+      - run:
+          name: Remove vendor directory
+          command: |
+            rm -rf vendor
+      - run:
+          name: Add project as a global dependency
+          command: |
+            composer global config repositories.drupalCheck '{"type": "path", "url": "~/repo", "options": { "symlink": false }}'
+      - run:
+          name: Add globally
+          command: |
+            composer global require mglaman/drupal-check *@dev
+      - run:
+          name: Add Composer global path
+          command: |
+            echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> $BASH_ENV
+            echo $BASH_ENV
+      - run:
+          name: Check drupal-check can be executed
+          command: |
+            drupal-check --version
+      - create-drupal-project
+      - run:
+          name: Run against a file
+          command: |
+            drupal-check /tmp/drupal/web/core/install.php
 
 workflows:
   version: 2
   test_and_deploy:
     jobs:
       - lint
+      - test_global_require
       - build

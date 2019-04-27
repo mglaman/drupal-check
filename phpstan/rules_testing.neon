@@ -1,6 +1,5 @@
 parameters:
 	level: 1
 includes:
-	- ../vendor/mglaman/phpstan-drupal/extension.neon
 	- base_config.neon
 	- junit_formatter.neon
