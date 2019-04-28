@@ -157,6 +157,10 @@ jobs:
           name: Run against a file
           command: |
             drupal-check /tmp/drupal/web/core/install.php
+      - run:
+          name: Run against a module
+          command: |
+            drupal-check /tmp/drupal/web/core/modules/action
   test_global_require_with_drush:
     <<: *defaults
     steps:
@@ -171,6 +175,10 @@ jobs:
           name: Run against a file
           command: |
             drupal-check /tmp/drupal/web/core/install.php
+      - run:
+          name: Run against a module
+          command: |
+            drupal-check /tmp/drupal/web/core/modules/action
 
 workflows:
   version: 2
