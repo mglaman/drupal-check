@@ -83,9 +83,22 @@ jobs:
       - create-drupal-project:
           project: 'drupal/drupal'
       - run:
-          name: Run against a file
+          name: Phar - Run against a file
           command: |
             php drupal-check.phar /tmp/drupal/core/install.php
+      - run:
+          name: Phar - Run against a module
+          command: |
+            php drupal-check.phar /tmp/drupal/core/modules/action
+      - global-require
+      - run:
+          name: Global - Run against a file
+          command: |
+            drupal-check /tmp/drupal/core/install.php
+      - run:
+          name: Global - Run against a module
+          command: |
+             drupal-check /tmp/drupal/core/modules/action
   test_drupal_project:
     <<: *defaults
     steps:
@@ -93,9 +106,22 @@ jobs:
       - build-phar
       - create-drupal-project
       - run:
-          name: Run against a file
+          name: Phar - Run against a file
           command: |
             php drupal-check.phar /tmp/drupal/web/core/install.php
+      - run:
+          name: Phar - Run against a module
+          command: |
+            php drupal-check.phar /tmp/drupal/web/core/modules/action
+      - global-require
+      - run:
+          name: Global - Run against a file
+          command: |
+            drupal-check /tmp/drupal/web/core/install.php
+      - run:
+          name: Global - Run against a module
+          command: |
+            drupal-check /tmp/drupal/web/core/modules/action
   test_lightning:
     <<: *defaults
     steps:
@@ -104,9 +130,23 @@ jobs:
       - create-drupal-project:
           project: 'acquia/lightning-project'
       - run:
-          name: Run against a file
+          name: Phar - Run against a file
           command: |
             php drupal-check.phar /tmp/drupal/docroot/core/install.php
+      - run:
+          name: Phar - Run against a module
+          command: |
+            php drupal-check.phar /tmp/drupal/docroot/core/modules/action
+      - global-require
+      - run:
+          name: Global - Run against a file
+          command: |
+            drupal-check /tmp/drupal/docroot/core/install.php
+      - run:
+          name: Global - Run against a module
+          command: |
+            drupal-check /tmp/drupal/docroot/core/modules/action
+
   test_global_require:
     <<: *defaults
     steps:
