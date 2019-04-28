@@ -11,6 +11,10 @@ aliases:
 commands:
   start-project:
     steps:
+      - run: sudo apt-get update && sudo apt-get install -y libpng-dev libjpeg62-turbo-dev
+      - run:
+          name: Install PHP Extensions
+          command: sudo docker-php-ext-install gd
       - checkout
       - restore_cache:
           keys:
@@ -81,7 +85,7 @@ jobs:
       - start-project
       - build-phar
       - create-drupal-project:
-          project: 'drupal/drupal'
+          project: 'drupal/drupal:^8@alpha'
       - run:
           name: Phar - Run against a file
           command: |
@@ -146,7 +150,6 @@ jobs:
           name: Global - Run against a module
           command: |
             drupal-check /tmp/drupal/docroot/core/modules/action
-
   test_global_require:
     <<: *defaults
     steps:
