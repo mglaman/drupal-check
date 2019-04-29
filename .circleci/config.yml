@@ -93,7 +93,7 @@ jobs:
       - run:
           name: Phar - Run against a module
           command: |
-            php drupal-check.phar /tmp/drupal/core/modules/action
+            php drupal-check.phar /tmp/drupal/core/modules/dynamic_page_cache
       - global-require
       - run:
           name: Global - Run against a file
@@ -102,7 +102,7 @@ jobs:
       - run:
           name: Global - Run against a module
           command: |
-             drupal-check /tmp/drupal/core/modules/action
+             drupal-check /tmp/drupal/core/modules/dynamic_page_cache
   test_drupal_project:
     <<: *defaults
     steps:
@@ -116,7 +116,7 @@ jobs:
       - run:
           name: Phar - Run against a module
           command: |
-            php drupal-check.phar /tmp/drupal/web/core/modules/action
+            php drupal-check.phar /tmp/drupal/web/core/modules/dynamic_page_cache
       - global-require
       - run:
           name: Global - Run against a file
@@ -125,7 +125,7 @@ jobs:
       - run:
           name: Global - Run against a module
           command: |
-            drupal-check /tmp/drupal/web/core/modules/action
+            drupal-check /tmp/drupal/web/core/modules/dynamic_page_cache
   test_lightning:
     <<: *defaults
     steps:
@@ -140,7 +140,7 @@ jobs:
       - run:
           name: Phar - Run against a module
           command: |
-            php drupal-check.phar /tmp/drupal/docroot/core/modules/action
+            php drupal-check.phar /tmp/drupal/docroot/core/modules/dynamic_page_cache
       - global-require
       - run:
           name: Global - Run against a file
@@ -149,7 +149,7 @@ jobs:
       - run:
           name: Global - Run against a module
           command: |
-            drupal-check /tmp/drupal/docroot/core/modules/action
+            drupal-check /tmp/drupal/docroot/core/modules/dynamic_page_cache
   test_global_require:
     <<: *defaults
     steps:
@@ -163,7 +163,7 @@ jobs:
       - run:
           name: Run against a module
           command: |
-            drupal-check /tmp/drupal/web/core/modules/action
+            drupal-check /tmp/drupal/web/core/modules/dynamic_page_cache
   test_global_require_with_drush:
     <<: *defaults
     steps:
@@ -181,7 +181,7 @@ jobs:
       - run:
           name: Run against a module
           command: |
-            drupal-check /tmp/drupal/web/core/modules/action
+            drupal-check /tmp/drupal/web/core/modules/dynamic_page_cache
 
 workflows:
   version: 2
