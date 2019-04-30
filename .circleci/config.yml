@@ -89,11 +89,11 @@ jobs:
       - run:
           name: Phar - Run against a file
           command: |
-            php drupal-check.phar /tmp/drupal/core/install.php
+            php drupal-check.phar /tmp/drupal/core/install.php -vvv
       - run:
           name: Phar - Run against a module
           command: |
-            php drupal-check.phar /tmp/drupal/core/modules/dynamic_page_cache
+            php drupal-check.phar /tmp/drupal/core/modules/dynamic_page_cache -vvv
       - global-require
       - run:
           name: Global - Run against a file

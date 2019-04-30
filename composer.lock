@@ -113,6 +113,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/ebf69ca5a5c526bec8ae51ed6a91154cd660c1a4",
                 "reference": "ebf69ca5a5c526bec8ae51ed6a91154cd660c1a4",
+                "shasum": ""
             },
             "require": {
                 "php": "^7.1",
@@ -174,7 +175,7 @@
                 }
             ],
             "description": "Drupal extension and rules for PHPStan",
-            "time": "2019-04-29T04:51:30+00:00"
+            "time": "2019-05-03T14:50:40+00:00"
         },
         {
             "name": "mglaman/phpstan-drupal-deprecations",
