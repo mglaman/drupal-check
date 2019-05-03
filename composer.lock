@@ -103,16 +103,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "0.11.4",
+            "version": "0.11.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "bf4a26fe856a61fe2cbfc191aada702ef0cecac3"
+                "reference": "ebf69ca5a5c526bec8ae51ed6a91154cd660c1a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/bf4a26fe856a61fe2cbfc191aada702ef0cecac3",
-                "reference": "bf4a26fe856a61fe2cbfc191aada702ef0cecac3",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/ebf69ca5a5c526bec8ae51ed6a91154cd660c1a4",
+                "reference": "ebf69ca5a5c526bec8ae51ed6a91154cd660c1a4",
                 "shasum": ""
             },
             "require": {
@@ -127,6 +127,7 @@
             "require-dev": {
                 "composer/installers": "^1.6",
                 "drupal/core": "^8.6",
+                "drush/drush": "^9.6",
                 "phpstan/phpstan-deprecation-rules": "^0.11.0",
                 "phpstan/phpstan-strict-rules": "^0.11",
                 "phpunit/phpunit": "^7.5",
@@ -174,7 +175,7 @@
                 }
             ],
             "description": "Drupal extension and rules for PHPStan",
-            "time": "2019-04-08T14:26:27+00:00"
+            "time": "2019-05-03T14:50:40+00:00"
         },
         {
             "name": "mglaman/phpstan-drupal-deprecations",
@@ -1096,7 +1097,7 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.2.7",
+            "version": "v4.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
@@ -1236,7 +1237,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.2.7",
+            "version": "v4.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -1402,7 +1403,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.2.7",
+            "version": "v4.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
