@@ -165,7 +165,18 @@ jobs:
           name: Run against a module
           command: |
             drupal-check /tmp/drupal/web/core/modules/dynamic_page_cache
-
+  test_symfony_console_conflict:
+    <<: *defaults
+    steps:
+      - setup-job
+      - run: mkdir -p /tmp/example
+      - run: composer require behat/behat:^3.0 drush/drush:^9 --working-dir /tmp/example
+      - run: |
+          composer config repositories.drupalCheck '{"type": "path", "url": "~/repo", "options": { "symlink": false }}' --working-dir /tmp/example
+      - run: |
+          composer require mglaman/drupal-check *@dev --working-dir /tmp/example
+      - run: |
+          /tmp/example/vendor/bin/drupal-check --version
 workflows:
   version: 2
   test_and_deploy:
@@ -175,4 +186,5 @@ workflows:
       - test_drupal_project
       - test_lightning
       - test_global_require_with_drush
+      - test_symfony_console_conflict
       - build
