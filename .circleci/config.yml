@@ -36,7 +36,7 @@ commands:
         type: string
         default: 'drupal-composer/drupal-project:8.x-dev'
     steps:
-      - run: composer create-project << parameters.project >> /tmp/drupal --no-interaction --no-dev --prefer-dist --ignore-platform-reqs
+      - run: composer create-project << parameters.project >> /tmp/drupal --no-interaction --prefer-dist --ignore-platform-reqs
   global-require:
     steps:
       - run:
