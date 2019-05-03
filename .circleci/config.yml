@@ -9,13 +9,11 @@ aliases:
   - &composer-cache
       v4-composer-cache
 commands:
-  start-project:
+  setup-job:
     steps:
-      - run: sudo apt-get update && sudo apt-get install -y libpng-dev libjpeg62-turbo-dev
-      - run:
-          name: Install PHP Extensions
-          command: sudo docker-php-ext-install gd
       - checkout
+      - run: sudo apt-get update && sudo apt-get install -y libpng-dev libjpeg62-turbo-dev
+      - run: sudo docker-php-ext-install gd
       - restore_cache:
           keys:
             - *composer-cache
@@ -25,6 +23,7 @@ commands:
           key: *composer-cache
           paths:
             - ~/.composer/cache
+
   build-phar:
     steps:
       - run: echo "Downloading box.phar version $BOX_VERSION"
@@ -39,10 +38,6 @@ commands:
       - run: composer create-project << parameters.project >> /tmp/drupal --no-interaction --prefer-dist --ignore-platform-reqs
   global-require:
     steps:
-      - run:
-          name: Remove vendor directory
-          command: |
-            rm -rf vendor
       - run:
           name: Add project as a global dependency
           command: |
@@ -64,7 +59,7 @@ jobs:
   lint:
     <<: *defaults
     steps:
-      - start-project
+      - setup-job
       - run:
           name: Composer Validate
           command: |
@@ -76,13 +71,13 @@ jobs:
   build:
     <<: *defaults
     steps:
-      - start-project
+      - setup-job
       - build-phar
       - run: php box.phar info drupal-check.phar
   test_drupal:
     <<: *defaults
     steps:
-      - start-project
+      - setup-job
       - build-phar
       - create-drupal-project:
           project: 'drupal/drupal:^8@alpha'
@@ -106,7 +101,7 @@ jobs:
   test_drupal_project:
     <<: *defaults
     steps:
-      - start-project
+      - setup-job
       - build-phar
       - create-drupal-project
       - run:
@@ -125,49 +120,37 @@ jobs:
       - run:
           name: Global - Run against a module
           command: |
-            drupal-check /tmp/drupal/web/core/modules/dynamic_page_cache
+             drupal-check /tmp/drupal/web/core/modules/dynamic_page_cache
   test_lightning:
     <<: *defaults
     steps:
-      - start-project
+      - setup-job
       - build-phar
+      # acquia/lightning-project does not require-dev Drupal's require-dev.
+      # see PR https://github.com/acquia/lightning-project/pull/101
       - create-drupal-project:
           project: 'acquia/lightning-project'
       - run:
           name: Phar - Run against a file
           command: |
             php drupal-check.phar /tmp/drupal/docroot/core/install.php
-      - run:
-          name: Phar - Run against a module
-          command: |
-            php drupal-check.phar /tmp/drupal/docroot/core/modules/dynamic_page_cache
+      # - run:
+      #     name: Phar - Run against a module
+      #     command: |
+      #       php drupal-check.phar /tmp/drupal/docroot/core/modules/dynamic_page_cache
       - global-require
       - run:
           name: Global - Run against a file
           command: |
             drupal-check /tmp/drupal/docroot/core/install.php
-      - run:
-          name: Global - Run against a module
-          command: |
-            drupal-check /tmp/drupal/docroot/core/modules/dynamic_page_cache
-  test_global_require:
-    <<: *defaults
-    steps:
-      - start-project
-      - global-require
-      - create-drupal-project
-      - run:
-          name: Run against a file
-          command: |
-            drupal-check /tmp/drupal/web/core/install.php
-      - run:
-          name: Run against a module
-          command: |
-            drupal-check /tmp/drupal/web/core/modules/dynamic_page_cache
+      # - run:
+      #     name: Global - Run against a module
+      #     command: |
+      #       drupal-check /tmp/drupal/docroot/core/modules/dynamic_page_cache
   test_global_require_with_drush:
     <<: *defaults
     steps:
-      - start-project
+      - setup-job
       - run:
           name: Install Drush globally (which is not recommended by Drush team)
           command: |
@@ -191,6 +174,5 @@ workflows:
       - test_drupal
       - test_drupal_project
       - test_lightning
-      - test_global_require
       - test_global_require_with_drush
       - build
