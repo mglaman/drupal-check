@@ -36,6 +36,12 @@ commands:
         default: 'drupal-composer/drupal-project:8.x-dev'
     steps:
       - run: composer create-project << parameters.project >> /tmp/drupal --no-interaction --prefer-dist --ignore-platform-reqs
+  require-contrib:
+    parameters:
+      project:
+        type: string
+    steps:
+      - run: composer require << parameters.project >> --working-dir /tmp/drupal
   global-require:
     steps:
       - run:
@@ -147,6 +153,18 @@ jobs:
       #     name: Global - Run against a module
       #     command: |
       #       drupal-check /tmp/drupal/docroot/core/modules/dynamic_page_cache
+  test_contrib:
+    <<: *defaults
+    steps:
+      - setup-job
+      - build-phar
+      - create-drupal-project
+      - require-contrib:
+          project: drupal/ctools:^3
+      - run:
+          name: Phar - Run against a module
+          command: |
+            php drupal-check.phar /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
   test_global_require_with_drush:
     <<: *defaults
     steps:
@@ -187,4 +205,5 @@ workflows:
       - test_lightning
       - test_global_require_with_drush
       - test_symfony_console_conflict
+      - test_contrib
       - build
