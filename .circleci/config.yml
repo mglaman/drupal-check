@@ -165,6 +165,12 @@ jobs:
           name: Phar - Run against a module
           command: |
             php drupal-check.phar /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
+      - require-contrib:
+          project: drupal/examples:1.x-dev
+      - run:
+          name: Phar - Run against a module
+          command: |
+            php drupal-check.phar /tmp/drupal/web/modules/contrib/examples || if (($? == 255)); then false; else echo $?; fi
   test_global_require_with_drush:
     <<: *defaults
     steps:
