@@ -1,8 +1,4 @@
 {
-  "chmod": "0755",
   "directories": ["phpstan", "src", "vendor"],
-  "dump-autoload": true,
-  "main": "drupal-check",
-  "output": "drupal-check.phar",
   "stub": "stub.php"
 }
