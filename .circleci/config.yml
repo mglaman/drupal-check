@@ -168,15 +168,21 @@ jobs:
       - require-contrib:
           project: drupal/purge drupal/cloudflare
       - run:
-          name: Phar - Run against a module
+          name: Phar - Run against a Cloudflare
           command: |
             php drupal-check.phar /tmp/drupal/web/modules/contrib/cloudflare || if (($? == 255)); then false; else true; fi
       - require-contrib:
           project: drupal/coffee
       - run:
-          name: Phar - Run against a module
+          name: Phar - Run against a Coffee
           command: |
             php drupal-check.phar /tmp/drupal/web/modules/contrib/coffee || if (($? == 255)); then false; else true; fi
+      - require-contrib:
+          project: drupal/redirect
+      - run:
+          name: Phar - Run against a Redirect
+          command: |
+            php drupal-check.phar /tmp/drupal/web/modules/contrib/redirect || if (($? == 255)); then false; else true; fi
   test_global_require_with_drush:
     <<: *defaults
     steps:
