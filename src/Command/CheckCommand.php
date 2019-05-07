@@ -27,7 +27,7 @@ class CheckCommand extends Command
         $this
             ->setName('check')
             ->setDescription('Checks a Drupal site')
-            ->addArgument('path', InputArgument::REQUIRED, 'The Drupal code path to inspect')
+            ->addArgument('path', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'The Drupal code path(s) to inspect')
             ->addOption('format', null, InputOption::VALUE_OPTIONAL, 'Formatter to use: raw, table, checkstyle, json, or junit', 'table')
             ->addOption('deprecations', 'd', InputOption::VALUE_NONE, 'Check for deprecations')
             ->addOption('analysis', 'a', InputOption::VALUE_NONE, 'Check code analysis')
@@ -76,19 +76,24 @@ class CheckCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $drupalFinder = new DrupalFinder();
-        $path = realpath($input->getArgument('path'));
 
-        if (!$path || !file_exists($path)) {
-            $output->writeln(sprintf('<error>%s does not exist</error>', $input->getArgument('path')));
-            return 1;
+        $paths = [];
+        foreach ($input->getArgument('path') as $path) {
+            $realPath = realpath($path);
+            if (!$realPath) {
+                $output->writeln(sprintf('<error>%s does not exist</error>', $path));
+                return 1;
+            }
+
+            $paths[] = $realPath;
         }
 
-        $drupalFinder->locateRoot($path);
+        $drupalFinder->locateRoot($paths[0]);
         $this->drupalRoot = $drupalFinder->getDrupalRoot();
         $this->vendorRoot = $drupalFinder->getVendorDir();
 
         if (!$this->drupalRoot) {
-            $output->writeln('Unable to determine the Drupal root');
+            $output->writeln(sprintf('<error>Unable to locate the Drupal root in %s</error>', $paths[0]));
             return 1;
         }
 
@@ -121,7 +126,7 @@ class CheckCommand extends Command
             $inceptionResult = CommandHelper::begin(
                 $input,
                 $output,
-                [$input->getArgument('path')],
+                $input->getArgument('path'),
                 null,
                 null,
                 null,
