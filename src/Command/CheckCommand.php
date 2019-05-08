@@ -3,6 +3,7 @@
 namespace DrupalCheck\Command;
 
 use DrupalCheck\DrupalCheckErrorHandler;
+use DrupalCheck\PHPStan\DrupalCheckAnalyze;
 use DrupalFinder\DrupalFinder;
 use PHPStan\Command\AnalyseApplication;
 use PHPStan\Command\CommandHelper;
@@ -78,7 +79,6 @@ class CheckCommand extends Command
     {
         $errorHandler = new DrupalCheckErrorHandler();
         $errorHandler->register();
-        $output->writeln('<info>Registered custom error handler</info>', OutputInterface::VERBOSITY_DEBUG);
 
         $drupalFinder = new DrupalFinder();
 
@@ -176,10 +176,12 @@ class CheckCommand extends Command
             )
         );
         $errorHandler->restore();
-        $output->writeln('<info>Restored the original error handler</info>', OutputInterface::VERBOSITY_DEBUG);
         $warnings = $errorHandler->getWarnings();
-        foreach ($warnings as $warning) {
-            $output->writeln("<info>$warning</info>");
+        if (count($warnings) > 0) {
+            $output->write(PHP_EOL);
+            foreach ($warnings as $warning) {
+                $output->writeln("<info>$warning</info>");
+            }
         }
 
         return $exitCode;
