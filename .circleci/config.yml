@@ -199,6 +199,20 @@ jobs:
           composer require mglaman/drupal-check *@dev --working-dir /tmp/example
       - run: |
           /tmp/example/vendor/bin/drupal-check --version
+  test_contained_not_initialized:
+    <<: *defaults
+    steps:
+      - setup-job
+      - build-phar
+      - create-drupal-project
+      - run:
+          name: Copy test fixture
+          command: |
+            cp -r ~/repo/tests/fixtures/contained_not_initialized /tmp/drupal/web/modules
+      - run:
+          name: Phar - Run against a file
+          command: |
+            php drupal-check.phar /tmp/drupal/web/modules/contained_not_initialized -vvv | grep "invoked the Drupal container outside of the scope of a function or class method."
 workflows:
   version: 2
   test_and_deploy:
@@ -210,4 +224,5 @@ workflows:
       - test_global_require_with_drush
       - test_symfony_console_conflict
       - test_contrib
+      - test_contained_not_initialized
       - build
