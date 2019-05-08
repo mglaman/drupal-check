@@ -95,6 +95,10 @@ jobs:
           name: Phar - Run against a module
           command: |
             php drupal-check.phar /tmp/drupal/core/modules/dynamic_page_cache -vvv
+      - run:
+          name: Phar - Run against multiple paths
+          command: |
+            php drupal-check.phar /tmp/drupal/core/install.php /tmp/drupal/core/modules/dynamic_page_cache -vvv
       - global-require
       - run:
           name: Global - Run against a file

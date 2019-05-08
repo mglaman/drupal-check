@@ -56,13 +56,13 @@ cd drupal
 Usage:
 
   ```
-  drupal-check [OPTIONS] [DIR]
+  drupal-check [OPTIONS] [DIRS]
   ```
 
 Arguments:
 
 * `OPTIONS` - See "Options" for allowed values. Specify multiples in sequence, e.g. `-ad`.
-* `DIR` - Can be any directory within the root of a Drupal project.
+* `DIRS` - One or more directories within the root of a Drupal project.
 
 Options:
 
