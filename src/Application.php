@@ -6,15 +6,18 @@ use Symfony\Component\Console\Application as BaseApplication;
 
 final class Application extends BaseApplication
 {
+    const FALLBACK_VERSION = '0.0.0';
+
     public function __construct()
     {
         try {
             $version = \Jean85\PrettyVersions::getVersion('mglaman/drupal-check')->getPrettyVersion();
         } catch (\OutOfBoundsException $e) {
-            $version = '0.0.0';
+            $version = self::FALLBACK_VERSION;
         }
         parent::__construct('Drupal Check', $version);
         $this->add(new Command\CheckCommand());
-        $this->setDefaultCommand('check', true);
+        $this->add(new Command\UpdateCommand());
+        $this->setDefaultCommand('check', false);
     }
 }
