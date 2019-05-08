@@ -2,6 +2,7 @@
 
 namespace DrupalCheck\Command;
 
+use DrupalCheck\DrupalCheckErrorHandler;
 use DrupalFinder\DrupalFinder;
 use PHPStan\Command\AnalyseApplication;
 use PHPStan\Command\CommandHelper;
@@ -75,6 +76,10 @@ class CheckCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $errorHandler = new DrupalCheckErrorHandler();
+        $errorHandler->register();
+        $output->writeln('<info>Registered custom error handler</info>', OutputInterface::VERBOSITY_DEBUG);
+
         $drupalFinder = new DrupalFinder();
 
         $paths = [];
@@ -97,7 +102,7 @@ class CheckCommand extends Command
             return 1;
         }
 
-        $output->writeln(sprintf('<info>Current working directory: %s', getcwd()), OutputInterface::VERBOSITY_DEBUG);
+        $output->writeln(sprintf('<comment>Current working directory: %s</comment>', getcwd()), OutputInterface::VERBOSITY_DEBUG);
         $output->writeln(sprintf('<info>Using Drupal root: %s</info>', $this->drupalRoot), OutputInterface::VERBOSITY_DEBUG);
         $output->writeln(sprintf('<info>Using vendor root: %s</info>', $this->vendorRoot), OutputInterface::VERBOSITY_DEBUG);
         if (!is_file($this->vendorRoot . '/autoload.php')) {
@@ -160,7 +165,7 @@ class CheckCommand extends Command
         /** @var AnalyseApplication  $application */
         $application = $container->getByType(AnalyseApplication::class);
 
-        return $inceptionResult->handleReturn(
+        $exitCode = $inceptionResult->handleReturn(
             $application->analyse(
                 $inceptionResult->getFiles(),
                 $inceptionResult->isOnlyFiles(),
@@ -170,5 +175,13 @@ class CheckCommand extends Command
                 $output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG
             )
         );
+        $errorHandler->restore();
+        $output->writeln('<info>Restored the original error handler</info>', OutputInterface::VERBOSITY_DEBUG);
+        $warnings = $errorHandler->getWarnings();
+        foreach ($warnings as $warning) {
+            $output->writeln("<info>$warning</info>");
+        }
+
+        return $exitCode;
     }
 }
