@@ -17,7 +17,6 @@ final class Application extends BaseApplication
         }
         parent::__construct('Drupal Check', $version);
         $this->add(new Command\CheckCommand());
-        $this->add(new Command\UpdateCommand());
-        $this->setDefaultCommand('check', false);
+        $this->setDefaultCommand('check', true);
     }
 }

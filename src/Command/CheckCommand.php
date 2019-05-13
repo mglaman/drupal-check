@@ -2,9 +2,11 @@
 
 namespace DrupalCheck\Command;
 
+use DrupalCheck\Application;
 use DrupalCheck\DrupalCheckErrorHandler;
 use DrupalCheck\PHPStan\DrupalCheckAnalyze;
 use DrupalFinder\DrupalFinder;
+use Humbug\SelfUpdate\Updater;
 use PHPStan\Command\AnalyseApplication;
 use PHPStan\Command\CommandHelper;
 use PHPStan\Command\ErrorFormatter\ErrorFormatter;
@@ -15,6 +17,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class CheckCommand extends Command
 {
@@ -44,6 +47,8 @@ class CheckCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
+        $this->checkUpdates($input, $output);
+
         $this->isDeprecationsCheck = $input->getOption('deprecations');
         $this->isAnalysisCheck = $input->getOption('analysis');
         $this->isStyleCheck = $input->getOption('style');
@@ -185,5 +190,49 @@ class CheckCommand extends Command
         }
 
         return $exitCode;
+    }
+
+    private function checkUpdates(InputInterface $input, OutputInterface $output): bool
+    {
+        if (!extension_loaded('Phar') || !($localPhar = \Phar::running(false))) {
+            $output->writeln('<comment>Drupal Check was not installed as a Phar archive and cannot self-update</comment>.', OutputInterface::VERBOSITY_DEBUG);
+            return false;
+        }
+        if (!is_writable($localPhar)) {
+            $output->writeln("<comment>Cannot update as the Phar file is not writable: $localPhar</comment>");
+            return false;
+        }
+
+        $currentVersion = $this->getApplication()->getVersion();
+        if ($currentVersion === Application::FALLBACK_VERSION || strpos($currentVersion, 'dev-') === 0) {
+            $output->writeln('<comment>Cannot update with a development installation.</comment>', OutputInterface::VERBOSITY_DEBUG);
+            return false;
+        }
+
+        $updater = new Updater(null, false);
+        $updater->setStrategy(Updater::STRATEGY_GITHUB);
+        $updater->getStrategy()->setPackageName('mglaman/drupal-check');
+        $updater->getStrategy()->setPharName('drupal-check.phar');
+        $updater->getStrategy()->setCurrentLocalVersion($currentVersion);
+
+        if (!$updater->hasUpdate()) {
+            return true;
+        }
+
+        $newVersion = $updater->getNewVersion();
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion(sprintf('<question>Update to version %s? [Y/n]</question>', $newVersion), true);
+        if (!$helper->ask($input, $output, $question)) {
+            return false;
+        }
+
+        try {
+            $updater->update();
+            $output->writeln(sprintf('<info>Drupal Check has been updated from %s to %s!</info>', $currentVersion, $newVersion));
+            return true;
+        } catch (\Throwable $e) {
+            $output->writeln('Automatic update failed, please download the latest version from https://github.com/mglaman/drupal-check/releases/latest');
+            return false;
+        }
     }
 }
