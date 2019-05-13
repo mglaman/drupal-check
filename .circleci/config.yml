@@ -131,6 +131,29 @@ jobs:
           name: Global - Run against a module
           command: |
              drupal-check /tmp/drupal/web/core/modules/dynamic_page_cache
+  test_drupal_local_require:
+    <<: *defaults
+    steps:
+      - setup-job
+      - build-phar
+      - create-drupal-project
+      - run:
+          name: Add as a local dependency
+          command: |
+            cd /tmp/drupal
+            composer config repositories.drupalCheck '{"type": "path", "url": "~/repo", "options": { "symlink": false }}'
+            composer require mglaman/drupal-check *@dev
+            ./vendor/bin/drupal-check --version
+      - run:
+          name: Local - Run against a file
+          command: |
+            cd /tmp/drupal
+            ./vendor/bin/drupal-check web/core/install.php
+      - run:
+          name: Local - Run against a module
+          command: |
+            cd /tmp/drupal
+            ./vendor/bin/drupal-check web/core/modules/dynamic_page_cache
   test_lightning:
     <<: *defaults
     steps:
@@ -225,4 +248,5 @@ workflows:
       - test_symfony_console_conflict
       - test_contrib
       - test_contained_not_initialized
+      - test_drupal_local_require
       - build
