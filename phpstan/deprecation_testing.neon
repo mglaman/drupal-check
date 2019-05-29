@@ -8,5 +8,5 @@ parameters:
 		- '#Plugin manager has cache backend specified but does not declare cache tags.#'
 includes:
 	- base_config.neon
-	- phpstan_deprecation_rules.php
+	- %rootDir%/../../../vendor/phpstan/phpstan-deprecation-rules/rules.neon
 	- junit_formatter.neon
