@@ -6,4 +6,4 @@ parameters:
 		- */tests/fixtures/*.php
 		- */settings*.php
 includes:
-	- %rootDir%/../../../vendor/mglaman/phpstan-drupal/extension.neon
+	- phpstan_drupal_extension.php
