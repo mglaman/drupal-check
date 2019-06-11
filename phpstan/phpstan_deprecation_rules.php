@@ -15,3 +15,6 @@ if (file_exists(__DIR__ . '/../../../vendor/autoload.php')) {
         ],
     ];
 }
+else {
+    throw new RuntimeException(__DIR__);
+}
