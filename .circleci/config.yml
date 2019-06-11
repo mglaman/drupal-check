@@ -31,7 +31,6 @@ commands:
             echo 'xdebug.var_display_max_children=128' | sudo tee -a /usr/local/etc/php/php.ini
             echo 'xdebug.var_display_max_depth=3' | sudo tee -a /usr/local/etc/php/php.ini
             echo 'xdebug.collect_vars=on' | sudo tee -a /usr/local/etc/php/php.ini
-            php -i | grep xdebug
 
   build-phar:
     steps:

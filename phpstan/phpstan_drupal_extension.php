@@ -9,14 +9,13 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 }
 
 if (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
+    $path = __DIR__ . '/../../../../vendor';
     return [
         'includes' => [
-            '../../../vendor/mglaman/phpstan-drupal/extension.neon',
+            $path . '/mglaman/phpstan-drupal/extension.neon',
         ],
     ];
 }
-else {
-    throw new RuntimeException(__DIR__);
-}
+
 
 

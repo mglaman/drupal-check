@@ -9,12 +9,10 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 }
 
 if (file_exists(__DIR__ . '/../../../vendor/autoload.php')) {
+    $path = __DIR__ . '/../../../../vendor';
     return [
         'includes' => [
-            '../../../vendor/phpstan/phpstan-deprecation-rules/rules.neon',
+            $path . '/phpstan/phpstan-deprecation-rules/rules.neon',
         ],
     ];
-}
-else {
-    throw new RuntimeException(__DIR__);
 }
