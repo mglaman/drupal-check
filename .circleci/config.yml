@@ -24,13 +24,6 @@ commands:
           key: *composer-cache
           paths:
             - ~/.composer/cache
-      - run:
-          name: Better debugging with xdebug
-          command: |
-            echo 'xdebug.collect_params=3' | sudo tee -a /usr/local/etc/php/php.ini
-            echo 'xdebug.var_display_max_children=128' | sudo tee -a /usr/local/etc/php/php.ini
-            echo 'xdebug.var_display_max_depth=3' | sudo tee -a /usr/local/etc/php/php.ini
-            echo 'xdebug.collect_vars=on' | sudo tee -a /usr/local/etc/php/php.ini
 
   build-phar:
     steps:
@@ -202,7 +195,7 @@ jobs:
       - run: mkdir -p /tmp/example
       - run: composer require behat/behat:^3.0 drush/drush:^9 --working-dir /tmp/example
       - run: |
-          composer config repositories.drupalCheck '{"type": "path", "url": "~/repo", "options": { "symlink": false }}' --working-dir /tmp/example
+          composer config repositories.0 '{"type": "path", "url": "~/repo", "options": { "symlink": false }}' --working-dir /tmp/example
       - run: |
           composer require mglaman/drupal-check *@dev --working-dir /tmp/example
       - run: |
