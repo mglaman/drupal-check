@@ -59,6 +59,7 @@ commands:
             composer global config prefer-stable true
             composer global config repositories.0 '{"type": "path", "url": "'$CIRCLE_WORKING_DIRECTORY'", "options": { "symlink": false }}'
             composer global require mglaman/drupal-check dev-${CIRCLE_BRANCH}
+            rm -rf ~/.composer/vendor/mglaman/drupal-check/vendor
       - run:
           name: Add Composer global path
           command: |
