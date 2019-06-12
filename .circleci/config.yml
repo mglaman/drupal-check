@@ -4,7 +4,6 @@ defaults: &defaults
     - image: circleci/php:7.2-cli
       environment:
         BOX_VERSION: 3.6.0
-        CUA_ALLOW_XDEBUG: true
   working_directory: ~/repo
 aliases:
   - &composer-cache
