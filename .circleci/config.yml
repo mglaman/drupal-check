@@ -47,11 +47,10 @@ commands:
       - run:
           name: Add project as a global dependency
           command: |
-            composer global config repositories.drupalCheck '{"type": "path", "url": "~/repo", "options": { "symlink": false }}'
-      - run:
-          name: Add globally
-          command: |
-            composer global require mglaman/drupal-check *@dev
+            composer global config minimum-stability dev
+            composer global config prefer-stable true
+            composer global config repositories.0 '{"type": "path", "url": "'$CIRCLE_WORKING_DIRECTORY'", "options": { "symlink": false }}'
+            composer global require mglaman/drupal-check dev-${CIRCLE_BRANCH}
       - run:
           name: Add Composer global path
           command: |
