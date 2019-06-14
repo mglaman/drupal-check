@@ -24,6 +24,12 @@ chmod +x /usr/local/bin/drupal-check
 
 ### Composer
 
+You can install this in your project using Composer as a development dependency like so:
+
+```
+composer require mglaman/drupal-check --dev
+```
+
 You can also install this globally using Composer like so:
 
 ```
