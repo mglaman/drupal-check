@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8f5c94e61797051776d25fbf4876717",
+    "content-hash": "980f385b95521b487d5707675537f22a",
     "packages": [
         {
             "name": "composer/xdebug-handler",
@@ -894,12 +894,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "a53c59423ab71c59503df05a6a903161f76844ca"
+                "reference": "bf4e560b898dd77e5d4b22978e5fddece3d7a364"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a53c59423ab71c59503df05a6a903161f76844ca",
-                "reference": "a53c59423ab71c59503df05a6a903161f76844ca",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bf4e560b898dd77e5d4b22978e5fddece3d7a364",
+                "reference": "bf4e560b898dd77e5d4b22978e5fddece3d7a364",
                 "shasum": ""
             },
             "require": {
@@ -961,7 +961,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2019-06-11T12:58:21+00:00"
+            "time": "2019-06-10T20:56:45+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
