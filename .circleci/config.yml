@@ -217,7 +217,7 @@ jobs:
       - run: mkdir -p /tmp/example
       - run: composer require behat/behat:^3.0 drush/drush:^9 --working-dir /tmp/example
       - run: |
-          composer config repositories.drupalCheck '{"type": "path", "url": "~/repo", "options": { "symlink": false }}' --working-dir /tmp/example
+          composer config repositories.0 '{"type": "path", "url": "~/repo", "options": { "symlink": false }}' --working-dir /tmp/example
       - run: |
           composer require mglaman/drupal-check *@dev --working-dir /tmp/example
       - run: |
