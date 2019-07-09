@@ -172,7 +172,8 @@ class CheckCommand extends Command
                 $inceptionResult->getConsoleStyle(),
                 $errorFormatter,
                 $inceptionResult->isDefaultLevelUsed(),
-                $output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG
+                $output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG,
+                null
             )
         );
         $errorHandler->restore();
