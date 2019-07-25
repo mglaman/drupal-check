@@ -3,7 +3,6 @@
 namespace DrupalCheck\Command;
 
 use DrupalCheck\DrupalCheckErrorHandler;
-use DrupalCheck\PHPStan\DrupalCheckAnalyze;
 use DrupalFinder\DrupalFinder;
 use PHPStan\Command\AnalyseApplication;
 use PHPStan\Command\CommandHelper;
@@ -30,6 +29,7 @@ class CheckCommand extends Command
             ->setName('check')
             ->setDescription('Checks a Drupal site')
             ->addArgument('path', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'The Drupal code path(s) to inspect')
+            ->addOption('drupal-root', null, InputOption::VALUE_OPTIONAL, 'Path to Drupal root.')
             ->addOption('format', null, InputOption::VALUE_OPTIONAL, 'Formatter to use: raw, table, checkstyle, json, or junit', 'table')
             ->addOption('deprecations', 'd', InputOption::VALUE_NONE, 'Check for deprecations')
             ->addOption('analysis', 'a', InputOption::VALUE_NONE, 'Check code analysis')
@@ -93,12 +93,22 @@ class CheckCommand extends Command
             $paths[] = $realPath;
         }
 
-        $drupalFinder->locateRoot($paths[0]);
+        $drupalRootCandidate = $paths[0];
+
+        if (!empty($input->getOption('drupal-root'))) {
+            $drupalRootCandidate = realpath($input->getOption('drupal-root'));
+            if ($drupalRootCandidate === false) {
+                $output->writeln(sprintf('<error>%s does not exist</error>', $input->getOption('drupal-root')));
+                return 1;
+            }
+        }
+
+        $drupalFinder->locateRoot($drupalRootCandidate);
         $this->drupalRoot = $drupalFinder->getDrupalRoot();
         $this->vendorRoot = $drupalFinder->getVendorDir();
 
         if (!$this->drupalRoot) {
-            $output->writeln(sprintf('<error>Unable to locate the Drupal root in %s</error>', $paths[0]));
+            $output->writeln(sprintf('<error>Unable to locate the Drupal root in %s</error>', $drupalRootCandidate));
             return 1;
         }
 
