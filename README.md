@@ -74,6 +74,7 @@ Options:
 
 * `-a` Check analysis
 * `-d` Check deprecations (default)
+* `--drupal-root` Path to Drupal root. Fallback option if drupal-check could not identify Drupal root from the provided path(s).
 
 Examples:
 
