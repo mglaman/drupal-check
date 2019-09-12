@@ -103,7 +103,12 @@ class CheckCommand extends Command
             }
         }
 
-        $drupalFinder->locateRoot($drupalRootCandidate);
+        if (getenv('DRUPAL_ROOT')) {
+            $drupalFinder->locateRoot(getenv('DRUPAL_ROOT'));
+        }
+        else {
+            $drupalFinder->locateRoot($paths[0]);
+        }
         $this->drupalRoot = $drupalFinder->getDrupalRoot();
         $this->vendorRoot = $drupalFinder->getVendorDir();
 
