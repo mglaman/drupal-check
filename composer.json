@@ -23,6 +23,9 @@
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.4"
     },
+    "conflict": {
+        "ocramius/package-versions": ">=1.5"
+    },
     "config": {
         "sort-packages": true
     },
