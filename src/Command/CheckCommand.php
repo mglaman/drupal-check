@@ -20,6 +20,7 @@ class CheckCommand extends Command
     private $isDeprecationsCheck = false;
     private $isAnalysisCheck = false;
     private $isStyleCheck = false;
+    private $memoryLimit = null;
     private $drupalRoot;
     private $vendorRoot;
 
@@ -34,6 +35,7 @@ class CheckCommand extends Command
             ->addOption('deprecations', 'd', InputOption::VALUE_NONE, 'Check for deprecations')
             ->addOption('analysis', 'a', InputOption::VALUE_NONE, 'Check code analysis')
             ->addOption('style', 's', InputOption::VALUE_NONE, 'Check code style')
+            ->addOption('memory-limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit for analysis')
             ->addOption(
                 ErrorsConsoleStyle::OPTION_NO_PROGRESS,
                 null,
@@ -47,7 +49,11 @@ class CheckCommand extends Command
         $this->isDeprecationsCheck = $input->getOption('deprecations');
         $this->isAnalysisCheck = $input->getOption('analysis');
         $this->isStyleCheck = $input->getOption('style');
+        $this->memoryLimit = $input->getOption('memory-limit');
 
+        if ($this->memoryLimit) {
+            $output->writeln("<comment>Memory limit set to $this->memoryLimit", OutputInterface::VERBOSITY_DEBUG);
+        }
         if ($this->isDeprecationsCheck) {
             $output->writeln('<comment>Performing deprecation checks', OutputInterface::VERBOSITY_DEBUG);
         }
@@ -143,7 +149,7 @@ class CheckCommand extends Command
                 $output,
                 $input->getArgument('path'),
                 null,
-                null,
+                $this->memoryLimit,
                 null,
                 $configuration,
                 null,
