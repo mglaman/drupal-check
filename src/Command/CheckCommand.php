@@ -146,7 +146,8 @@ class CheckCommand extends Command
                 null,
                 null,
                 $configuration,
-                null
+                null,
+                false
             );
         } catch (\PHPStan\Command\InceptionNotSuccessfulException $e) {
             return 1;
