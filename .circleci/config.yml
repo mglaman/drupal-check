@@ -33,7 +33,7 @@ commands:
     parameters:
       project:
         type: string
-        default: 'drupal-composer/drupal-project:8.x-dev'
+        default: 'drupal/recommended-project:^8.8@alpha'
     steps:
       - run: composer create-project << parameters.project >> /tmp/drupal --no-interaction --prefer-dist --ignore-platform-reqs
   require-contrib:
@@ -86,7 +86,7 @@ jobs:
       - setup-job
       - build-phar
       - create-drupal-project:
-          project: 'drupal/drupal:^8@alpha'
+          project: 'drupal/legacy-project:^8@alpha'
       - run:
           name: Phar - Run against a file
           command: |
