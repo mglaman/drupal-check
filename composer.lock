@@ -103,16 +103,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "0.11.14",
+            "version": "0.11.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "3458665f7bb579f700c1384d5bc05d879757f76c"
+                "reference": "1d73e1acc717a3cfb6ef355535c7940e8c25ce97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/3458665f7bb579f700c1384d5bc05d879757f76c",
-                "reference": "3458665f7bb579f700c1384d5bc05d879757f76c",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/1d73e1acc717a3cfb6ef355535c7940e8c25ce97",
+                "reference": "1d73e1acc717a3cfb6ef355535c7940e8c25ce97",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +182,7 @@
                 }
             ],
             "description": "Drupal extension and rules for PHPStan",
-            "time": "2019-12-10T15:17:37+00:00"
+            "time": "2019-12-09T19:26:22+00:00"
         },
         {
             "name": "mglaman/phpstan-junit",
