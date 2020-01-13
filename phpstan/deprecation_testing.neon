@@ -9,4 +9,3 @@ parameters:
 includes:
 	- base_config.neon
 	- phpstan_deprecation_rules.php
-	- junit_formatter.neon

@@ -2,4 +2,3 @@ parameters:
 	level: 1
 includes:
 	- base_config.neon
-	- junit_formatter.neon
