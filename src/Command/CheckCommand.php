@@ -4,23 +4,21 @@ namespace DrupalCheck\Command;
 
 use DrupalCheck\DrupalCheckErrorHandler;
 use DrupalFinder\DrupalFinder;
-use PHPStan\Command\AnalyseApplication;
-use PHPStan\Command\CommandHelper;
-use PHPStan\Command\ErrorFormatter\ErrorFormatter;
+use Nette\Neon\Neon;
 use PHPStan\Command\ErrorsConsoleStyle;
-use PHPStan\ShouldNotHappenException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 class CheckCommand extends Command
 {
     private $isDeprecationsCheck = false;
     private $isAnalysisCheck = false;
     private $isStyleCheck = false;
-    private $memoryLimit = null;
+    private $memoryLimit;
     private $drupalRoot;
     private $vendorRoot;
 
@@ -125,83 +123,69 @@ class CheckCommand extends Command
             $output->writeln('<error>Could not find autoload file.</error>');
             return 1;
         }
-        // Spoof the global phpstan normally provides when running as its
-        // binary alongside a project.
-        $GLOBALS['autoloaderInWorkingDirectory'] = $this->vendorRoot . '/autoload.php';
 
-        $output->writeln(sprintf('<info>Using autoloader: %s</info>', $GLOBALS['autoloaderInWorkingDirectory']), OutputInterface::VERBOSITY_DEBUG);
 
-        if ($this->isDeprecationsCheck && $this->isAnalysisCheck) {
-            $configuration = __DIR__ . '/../../phpstan/rules_and_deprecations_testing.neon';
-        } elseif ($this->isDeprecationsCheck && !$this->isAnalysisCheck) {
-            $configuration = __DIR__ . '/../../phpstan/deprecation_testing.neon';
-        } elseif (!$this->isDeprecationsCheck && $this->isAnalysisCheck) {
-            $configuration = __DIR__ . '/../../phpstan/rules_testing.neon';
-        } else {
+        $configuration_data = [
+            'parameters' => [
+                'reportUnmatchedIgnoredErrors' => false,
+                'excludes_analyse' => [
+                    '*/tests/Drupal/Tests/Listeners/Legacy/*',
+                    '*/tests/fixtures/*.php',
+                    '*/settings*.php',
+                ],
+                'drupal' => [
+                    'drupal_root' => $this->drupalRoot,
+                ]
+            ]
+        ];
+
+        if ($this->isAnalysisCheck) {
+            $configuration_data['parameters']['level'] = 4;
+        }
+        else {
+            $configuration_data['parameters']['customRulesetUsed'] = true;
+        }
+
+        if ($this->isDeprecationsCheck) {
+            $configuration_data['parameters']['ignoreErrors'] = [
+                '#\Drupal calls should be avoided in classes, use dependency injection instead#',
+                '#Plugin definitions cannot be altered.#',
+                '#Missing cache backend declaration for performance.#',
+                '#Plugin manager has cache backend specified but does not declare cache tags.#'
+            ];
+        }
+
+        if ($this->isStyleCheck) {
             // @todo: only analysis check, style check. all of the above at once.
             $output->writeln('Not support, yet');
             return 1;
         }
 
-        try {
-            $inceptionResult = CommandHelper::begin(
-                $input,
-                $output,
-                $input->getArgument('path'),
-                null,
-                $this->memoryLimit,
-                null,
-                $configuration,
-                null,
-                false
-            );
-        } catch (\PHPStan\Command\InceptionNotSuccessfulException $e) {
-            return 1;
-        } catch (ShouldNotHappenException $e) {
-            return 1;
-        }
+        $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
+        $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
+        file_put_contents($configuration, $configuration_encoded);
 
-        $errorOutput = $inceptionResult->getErrorOutput();
-
-        $container = $inceptionResult->getContainer();
-        $errorFormatterServiceName = sprintf('errorFormatter.%s', $input->getOption('format'));
-        if (!$container->hasService($errorFormatterServiceName)) {
-            $errorOutput->writeln(sprintf(
-                'Error formatter "%s" not found. Available error formatters are: %s',
-                $input->getOption('format'),
-                implode(', ', array_map(static function (string $name) {
-                    return substr($name, strlen('errorFormatter.'));
-                }, $container->findByType(ErrorFormatter::class)))
-            ));
-            return 1;
-        }
-
-        /** @var ErrorFormatter $errorFormatter */
-        $errorFormatter = $container->getService($errorFormatterServiceName);
-
-        /** @var AnalyseApplication  $application */
-        $application = $container->getByType(AnalyseApplication::class);
-
-        $exitCode = $inceptionResult->handleReturn(
-            $application->analyse(
-                $inceptionResult->getFiles(),
-                $inceptionResult->isOnlyFiles(),
-                $inceptionResult->getConsoleStyle(),
-                $errorFormatter,
-                $inceptionResult->isDefaultLevelUsed(),
-                $output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG,
-                null
-            )
-        );
-        $errorHandler->restore();
-        $warnings = $errorHandler->getWarnings();
-        if (count($warnings) > 0) {
-            $output->write(PHP_EOL);
-            foreach ($warnings as $warning) {
-                $output->writeln("<info>$warning</info>");
+        // @todo support all of the current input options.
+        $command = [
+            __DIR__ . '/../../vendor/bin/phpstan',
+            'analyse',
+            '-c',
+            $configuration,
+            '--error-format=' . $input->getOption('format'),
+            implode(' ', $paths)
+        ];
+        $process = new Process($command);
+        $process->setTty(true);
+        $process->setTimeout(null);
+        $process->run(static function ($type, $buffer) use ($output) {
+            if (Process::ERR === $type) {
+                $output->write($buffer, false, OutputInterface::OUTPUT_RAW);
+            } else {
+                $output->writeln($buffer, OutputInterface::OUTPUT_RAW);
             }
-        }
+        });
+        unlink($configuration);
 
-        return $exitCode;
+        return $process->getExitCode();
     }
 }
