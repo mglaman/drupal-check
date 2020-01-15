@@ -35,7 +35,7 @@ class CheckCommand extends Command
             ->addOption('style', 's', InputOption::VALUE_NONE, 'Check code style')
             ->addOption('memory-limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit for analysis')
             ->addOption(
-                ErrorsConsoleStyle::OPTION_NO_PROGRESS,
+                'no-progress',
                 null,
                 InputOption::VALUE_NONE,
                 'Do not show progress bar, only results'
@@ -141,8 +141,7 @@ class CheckCommand extends Command
 
         if ($this->isAnalysisCheck) {
             $configuration_data['parameters']['level'] = 4;
-        }
-        else {
+        } else {
             $configuration_data['parameters']['customRulesetUsed'] = true;
         }
 
