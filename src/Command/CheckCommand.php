@@ -165,8 +165,15 @@ class CheckCommand extends Command
         file_put_contents($configuration, $configuration_encoded);
 
         // @todo support all of the current input options.
+        $pharPath = \Phar::running();
+        if (!empty($pharPath)) {
+            $phpstanBin = 'vendor/phpstan/phpstan/phpstan';
+        } else {
+            $phpstanBin = __DIR__ . '/../../vendor/phpstan/phpstan/phpstan';
+        }
+
         $command = [
-            __DIR__ . '/../../vendor/phpstan/phpstan/phpstan.phar',
+            $phpstanBin,
             'analyse',
             '-c',
             $configuration,
