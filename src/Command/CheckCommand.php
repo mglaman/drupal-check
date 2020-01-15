@@ -166,7 +166,7 @@ class CheckCommand extends Command
 
         // @todo support all of the current input options.
         $command = [
-            __DIR__ . '/../../vendor/bin/phpstan',
+            __DIR__ . '/../../vendor/phpstan/phpstan/phpstan.phar',
             'analyse',
             '-c',
             $configuration,
