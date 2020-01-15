@@ -1,4 +1,4 @@
 {
-  "directories": ["phpstan", "src", "vendor"],
+  "directories": ["src", "vendor"],
   "stub": "stub.php"
 }
