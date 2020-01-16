@@ -1,4 +1,5 @@
 {
   "directories": ["src", "vendor"],
+  "files": ["error-bootstrap.php"],
   "stub": "stub.php"
 }

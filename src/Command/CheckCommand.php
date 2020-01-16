@@ -160,7 +160,7 @@ class CheckCommand extends Command
         $pharPath = \Phar::running();
         if (!empty($pharPath)) {
             $phpstanBin = 'vendor/phpstan/phpstan/phpstan';
-            $configuration_data['parameters']['bootstrap'] = 'error-bootstrap.php';
+            $configuration_data['parameters']['bootstrap'] = $pharPath . '/error-bootstrap.php';
         } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
             $phpstanBin = __DIR__ . '/../../vendor/phpstan/phpstan/phpstan';
             $configuration_data['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
