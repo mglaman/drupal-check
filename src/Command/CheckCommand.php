@@ -2,10 +2,8 @@
 
 namespace DrupalCheck\Command;
 
-use DrupalCheck\DrupalCheckErrorHandler;
 use DrupalFinder\DrupalFinder;
 use Nette\Neon\Neon;
-use PHPStan\Command\ErrorsConsoleStyle;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -81,9 +79,6 @@ class CheckCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $errorHandler = new DrupalCheckErrorHandler();
-        $errorHandler->register();
-
         $drupalFinder = new DrupalFinder();
 
         $paths = [];
@@ -127,6 +122,7 @@ class CheckCommand extends Command
 
         $configuration_data = [
             'parameters' => [
+                'tipsOfTheDay' => false,
                 'reportUnmatchedIgnoredErrors' => false,
                 'excludes_analyse' => [
                     '*/tests/Drupal/Tests/Listeners/Legacy/*',
@@ -160,26 +156,35 @@ class CheckCommand extends Command
             return 1;
         }
 
-        $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
-        $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
-        file_put_contents($configuration, $configuration_encoded);
-
-        // @todo support all of the current input options.
         $pharPath = \Phar::running();
         if (!empty($pharPath)) {
             $phpstanBin = 'vendor/phpstan/phpstan/phpstan';
+            $configuration['parameters']['bootstrap'] = 'error-bootstrap.php';
         } else {
             $phpstanBin = __DIR__ . '/../../vendor/phpstan/phpstan/phpstan';
+            $configuration['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
         }
+
+        $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
+        $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
+        file_put_contents($configuration, $configuration_encoded);
 
         $command = [
             $phpstanBin,
             'analyse',
             '-c',
             $configuration,
-            '--error-format=' . $input->getOption('format'),
-            implode(' ', $paths)
+            '--error-format=' . $input->getOption('format')
         ];
+        if ($output->getVerbosity() === OutputInterface::VERBOSITY_VERBOSE) {
+            $command[] = '-v';
+        } elseif ($output->getVerbosity() === OutputInterface::VERBOSITY_VERY_VERBOSE) {
+            $command[] = '-vv';
+        } elseif ($output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG) {
+            $command[] = '-vvv';
+        }
+        $command[] = implode(' ', $paths);
+
         $process = new Process($command);
         $process->setTty(true);
         $process->setTimeout(null);
