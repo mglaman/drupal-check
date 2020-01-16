@@ -4,6 +4,7 @@ namespace DrupalCheck\Command;
 
 use DrupalFinder\DrupalFinder;
 use Nette\Neon\Neon;
+use PHPStan\ShouldNotHappenException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -159,15 +160,23 @@ class CheckCommand extends Command
         $pharPath = \Phar::running();
         if (!empty($pharPath)) {
             $phpstanBin = 'vendor/phpstan/phpstan/phpstan';
-            $configuration['parameters']['bootstrap'] = 'error-bootstrap.php';
-        } else {
+            $configuration_data['parameters']['bootstrap'] = 'error-bootstrap.php';
+        } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
             $phpstanBin = __DIR__ . '/../../vendor/phpstan/phpstan/phpstan';
-            $configuration['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
+            $configuration_data['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
+        } elseif (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
+            $phpstanBin = __DIR__ . '/../../../../vendor/phpstan/phpstan/phpstan';
+            $configuration_data['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
+        } else {
+            throw new ShouldNotHappenException('Could not determine if local or global installation');
         }
 
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
         $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
         file_put_contents($configuration, $configuration_encoded);
+
+        $output->writeln('<comment>PHPStan configuration:</comment>', OutputInterface::VERBOSITY_DEBUG);
+        $output->writeln($configuration_encoded, OutputInterface::VERBOSITY_DEBUG);
 
         $command = [
             $phpstanBin,
