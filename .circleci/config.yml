@@ -52,13 +52,16 @@ commands:
   global-require:
     steps:
       - run:
+          name: Remove existing vendor dir
+          command: |
+            rm -rf ~/repo/vendor
+      - run:
           name: Add project as a global dependency
           command: |
             composer global config minimum-stability dev
             composer global config prefer-stable true
             composer global config repositories.0 '{"type": "path", "url": "'$CIRCLE_WORKING_DIRECTORY'", "options": { "symlink": false }}'
             composer global require mglaman/drupal-check "*"
-            rm -rf ~/.composer/vendor/mglaman/drupal-check/vendor
       - run:
           name: Add Composer global path
           command: |

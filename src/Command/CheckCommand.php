@@ -164,8 +164,8 @@ class CheckCommand extends Command
         } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
             $phpstanBin = __DIR__ . '/../../vendor/phpstan/phpstan/phpstan';
             $configuration_data['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
-        } elseif (file_exists(__DIR__ . '/../../../../vendor/autoload.php')) {
-            $phpstanBin = __DIR__ . '/../../../../vendor/phpstan/phpstan/phpstan';
+        } elseif (file_exists(__DIR__ . '/../../../../autoload.php')) {
+            $phpstanBin = __DIR__ . '/../../../../phpstan/phpstan/phpstan';
             $configuration_data['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
         } else {
             throw new ShouldNotHappenException('Could not determine if local or global installation');
