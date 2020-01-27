@@ -103,16 +103,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "0.12.1",
+            "version": "0.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "3a2ba26a67c9095a7a47841d73561baceda3a20a"
+                "reference": "bcd4ba1db8f49d282f3fb6558bda5cc21f677cc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/3a2ba26a67c9095a7a47841d73561baceda3a20a",
-                "reference": "3a2ba26a67c9095a7a47841d73561baceda3a20a",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/bcd4ba1db8f49d282f3fb6558bda5cc21f677cc9",
+                "reference": "bcd4ba1db8f49d282f3fb6558bda5cc21f677cc9",
                 "shasum": ""
             },
             "require": {
@@ -178,7 +178,7 @@
                 }
             ],
             "description": "Drupal extension and rules for PHPStan",
-            "time": "2020-01-13T19:41:44+00:00"
+            "time": "2020-01-27T20:01:01+00:00"
         },
         {
             "name": "nette/finder",
@@ -479,16 +479,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.5",
+            "version": "0.12.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "71a20c18f06c53605251a00a8efe443fa85225d1"
+                "reference": "62a552602b7586d82826231f2fd4cbfe39fe0b1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/71a20c18f06c53605251a00a8efe443fa85225d1",
-                "reference": "71a20c18f06c53605251a00a8efe443fa85225d1",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/62a552602b7586d82826231f2fd4cbfe39fe0b1d",
+                "reference": "62a552602b7586d82826231f2fd4cbfe39fe0b1d",
                 "shasum": ""
             },
             "require": {
@@ -514,7 +514,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2020-01-12T14:31:21+00:00"
+            "time": "2020-01-26T23:36:48+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -665,16 +665,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.4.2",
+            "version": "v4.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "82437719dab1e6bdd28726af14cb345c2ec816d0"
+                "reference": "e9ee09d087e2c88eaf6e5fc0f5c574f64d100e4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/82437719dab1e6bdd28726af14cb345c2ec816d0",
-                "reference": "82437719dab1e6bdd28726af14cb345c2ec816d0",
+                "url": "https://api.github.com/repos/symfony/console/zipball/e9ee09d087e2c88eaf6e5fc0f5c574f64d100e4f",
+                "reference": "e9ee09d087e2c88eaf6e5fc0f5c574f64d100e4f",
                 "shasum": ""
             },
             "require": {
@@ -737,7 +737,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2019-12-17T10:32:23+00:00"
+            "time": "2020-01-10T21:54:01+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -916,16 +916,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v4.4.2",
+            "version": "v4.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "b84501ad50adb72a94fb460a5b5c91f693e99c9b"
+                "reference": "f5697ab4cb14a5deed7473819e63141bf5352c36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/b84501ad50adb72a94fb460a5b5c91f693e99c9b",
-                "reference": "b84501ad50adb72a94fb460a5b5c91f693e99c9b",
+                "url": "https://api.github.com/repos/symfony/process/zipball/f5697ab4cb14a5deed7473819e63141bf5352c36",
+                "reference": "f5697ab4cb14a5deed7473819e63141bf5352c36",
                 "shasum": ""
             },
             "require": {
@@ -961,7 +961,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2019-12-06T10:06:46+00:00"
+            "time": "2020-01-09T09:50:08+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -1023,16 +1023,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.4.2",
+            "version": "v4.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "a08832b974dd5fafe3085a66d41fe4c84bb2628c"
+                "reference": "cd014e425b3668220adb865f53bff64b3ad21767"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/a08832b974dd5fafe3085a66d41fe4c84bb2628c",
-                "reference": "a08832b974dd5fafe3085a66d41fe4c84bb2628c",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/cd014e425b3668220adb865f53bff64b3ad21767",
+                "reference": "cd014e425b3668220adb865f53bff64b3ad21767",
                 "shasum": ""
             },
             "require": {
@@ -1078,7 +1078,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2019-12-10T10:33:21+00:00"
+            "time": "2020-01-21T11:12:16+00:00"
         },
         {
             "name": "webflo/drupal-finder",
