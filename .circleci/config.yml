@@ -135,14 +135,21 @@ jobs:
     <<: *defaults
     steps:
       - setup-job
+      - run:
+          name: Remove vendor directory
+          command: rm -rf vendor/mglaman/drupal-check/vendor
       - create-drupal-project
+      - run:
+          name: Require Drupal's dev dependencies
+          command: |
+            cd /tmp/drupal
+            composer require --dev drupal/core-dev-pinned
       - run:
           name: Add as a local dependency
           command: |
             cd /tmp/drupal
             composer config repositories.0 '{"type": "path", "url": "'$CIRCLE_WORKING_DIRECTORY'", "options": { "symlink": false }}'
             composer require mglaman/drupal-check "*"
-            rm -rf vendor/mglaman/drupal-check/vendor
             ./vendor/bin/drupal-check --version
       - run:
           name: Local - Run against a file
