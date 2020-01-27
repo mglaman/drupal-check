@@ -15,7 +15,6 @@
         "jean85/pretty-package-versions": "^1.2",
         "mglaman/phpstan-drupal": "^0.12",
         "nette/neon": "^3.1",
-        "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-deprecation-rules": "^0.12",
         "symfony/console": "~3.2 || ~4.0",

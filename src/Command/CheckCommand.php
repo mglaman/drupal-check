@@ -162,10 +162,18 @@ class CheckCommand extends Command
             // Running in packaged Phar archive.
             $phpstanBin = 'vendor/phpstan/phpstan/phpstan';
             $configuration_data['parameters']['bootstrap'] = $pharPath . '/error-bootstrap.php';
+            $configuration_data['includes'] = [
+                $pharPath . '/vendor/phpstan/phpstan-deprecation-rules/rules.neon',
+                $pharPath . '/vendor/mglaman/phpstan-drupal/extension.neon',
+            ];
         } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
             // Running as a project dependency.
             $phpstanBin = __DIR__ . '/../../vendor/phpstan/phpstan/phpstan';
             $configuration_data['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
+            $configuration_data['includes'] = [
+                __DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon',
+                __DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon',
+            ];
         } elseif (file_exists(__DIR__ . '/../../../../autoload.php')) {
             // Running as a global dependency.
             $phpstanBin = __DIR__ . '/../../../../phpstan/phpstan/phpstan';
