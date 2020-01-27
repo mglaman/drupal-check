@@ -3,7 +3,7 @@ defaults: &defaults
   docker:
     - image: circleci/php:7.2-cli
       environment:
-        BOX_VERSION: 3.6.0
+        BOX_VERSION: 3.8.4
   working_directory: ~/repo
 aliases:
   - &composer-cache

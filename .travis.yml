@@ -2,7 +2,7 @@ language: php
 sudo: false
 env:
   global:
-    - BOX_VERSION=3.6.0
+    - BOX_VERSION=3.8.4
     - PATH=$PATH:/home/travis/.config/composer/vendor/bin
 matrix:
   include:
