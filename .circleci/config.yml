@@ -35,7 +35,7 @@ commands:
         type: string
         default: 'drupal/recommended-project:^8.8@alpha'
     steps:
-      - run: composer create-project << parameters.project >> /tmp/drupal --no-interaction --prefer-dist --ignore-platform-reqs
+      - run: COMPOSER_MEMORY_LIMIT=-1 composer create-project << parameters.project >> /tmp/drupal --no-interaction --prefer-dist --ignore-platform-reqs
   require-contrib:
     parameters:
       project:
