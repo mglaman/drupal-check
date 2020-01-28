@@ -56,10 +56,7 @@ commands:
       - run: composer require << parameters.project >> --working-dir /tmp/drupal
   global-require:
     steps:
-      - run:
-          name: Remove existing vendor dir
-          command: |
-            rm -rf ~/repo/vendor
+      - run: rm -rf ~/repo/vendor
       - run:
           name: Add project as a global dependency
           command: |
@@ -209,7 +206,7 @@ jobs:
       - run:
           name: Phar - Run against a module
           command: |
-            php -d memory_limit=-1 drupal-check.phar /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
+            php drupal-check.phar /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
   test_global_require_with_drush:
     <<: *defaults
     steps:
@@ -253,7 +250,7 @@ jobs:
       - run:
           name: Phar - Run against a file
           command: |
-            php drupal-check.phar /tmp/drupal/web/modules/contained_not_initialized -vvv
+            php drupal-check.phar /tmp/drupal/web/modules/contained_not_initialized -vvv | grep "invoked the Drupal container outside of the scope of a function or class method."
 workflows:
   version: 2
   test_and_deploy:
