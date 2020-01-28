@@ -34,8 +34,15 @@ commands:
       project:
         type: string
         default: 'drupal/recommended-project:^8.8@alpha'
+      require_dev:
+        type: boolean
+        default: true
     steps:
       - run: COMPOSER_MEMORY_LIMIT=-1 composer create-project << parameters.project >> /tmp/drupal --no-interaction --prefer-dist --ignore-platform-reqs
+      - when:
+          condition: << parameters.require_dev >>
+          steps:
+            - run: COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev --dev --working-dir /tmp/drupal --no-interaction
   require-contrib:
     parameters:
       project:
@@ -140,11 +147,6 @@ jobs:
           command: rm -rf vendor/mglaman/drupal-check/vendor
       - create-drupal-project
       - run:
-          name: Require Drupal's dev dependencies
-          command: |
-            cd /tmp/drupal
-            composer require --dev drupal/core-dev-pinned
-      - run:
           name: Add as a local dependency
           command: |
             cd /tmp/drupal
@@ -170,6 +172,7 @@ jobs:
       # see PR https://github.com/acquia/lightning-project/pull/101
       - create-drupal-project:
           project: 'acquia/lightning-project'
+          require_dev: false
       - run:
           name: Phar - Run against a file
           command: |
