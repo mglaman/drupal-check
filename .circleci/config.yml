@@ -204,7 +204,7 @@ jobs:
       - run:
           name: Phar - Run against a module
           command: |
-            php drupal-check.phar /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
+            php -d memory_limit=-1 drupal-check.phar /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
   test_global_require_with_drush:
     <<: *defaults
     steps:
