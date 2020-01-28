@@ -208,7 +208,7 @@ class CheckCommand extends Command
         } elseif ($output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG) {
             $command[] = '-vvv';
         }
-        $command[] = implode(' ', $paths);
+        $command = array_merge($command, $paths);
 
         $process = new Process($command);
         $process->setTty(true);
