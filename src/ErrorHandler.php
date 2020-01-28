@@ -2,7 +2,7 @@
 
 namespace DrupalCheck;
 
-final class DrupalCheckErrorHandler
+final class ErrorHandler
 {
     private $previousErrorHandler;
     private $gatheredWarnings = [];

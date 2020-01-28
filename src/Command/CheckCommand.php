@@ -2,25 +2,22 @@
 
 namespace DrupalCheck\Command;
 
-use DrupalCheck\DrupalCheckErrorHandler;
 use DrupalFinder\DrupalFinder;
-use PHPStan\Command\AnalyseApplication;
-use PHPStan\Command\CommandHelper;
-use PHPStan\Command\ErrorFormatter\ErrorFormatter;
-use PHPStan\Command\ErrorsConsoleStyle;
+use Nette\Neon\Neon;
 use PHPStan\ShouldNotHappenException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 class CheckCommand extends Command
 {
     private $isDeprecationsCheck = false;
     private $isAnalysisCheck = false;
     private $isStyleCheck = false;
-    private $memoryLimit = null;
+    private $memoryLimit;
     private $drupalRoot;
     private $vendorRoot;
 
@@ -37,7 +34,7 @@ class CheckCommand extends Command
             ->addOption('style', 's', InputOption::VALUE_NONE, 'Check code style')
             ->addOption('memory-limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit for analysis')
             ->addOption(
-                ErrorsConsoleStyle::OPTION_NO_PROGRESS,
+                'no-progress',
                 null,
                 InputOption::VALUE_NONE,
                 'Do not show progress bar, only results'
@@ -83,9 +80,6 @@ class CheckCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $errorHandler = new DrupalCheckErrorHandler();
-        $errorHandler->register();
-
         $drupalFinder = new DrupalFinder();
 
         $paths = [];
@@ -125,83 +119,109 @@ class CheckCommand extends Command
             $output->writeln('<error>Could not find autoload file.</error>');
             return 1;
         }
-        // Spoof the global phpstan normally provides when running as its
-        // binary alongside a project.
-        $GLOBALS['autoloaderInWorkingDirectory'] = $this->vendorRoot . '/autoload.php';
 
-        $output->writeln(sprintf('<info>Using autoloader: %s</info>', $GLOBALS['autoloaderInWorkingDirectory']), OutputInterface::VERBOSITY_DEBUG);
 
-        if ($this->isDeprecationsCheck && $this->isAnalysisCheck) {
-            $configuration = __DIR__ . '/../../phpstan/rules_and_deprecations_testing.neon';
-        } elseif ($this->isDeprecationsCheck && !$this->isAnalysisCheck) {
-            $configuration = __DIR__ . '/../../phpstan/deprecation_testing.neon';
-        } elseif (!$this->isDeprecationsCheck && $this->isAnalysisCheck) {
-            $configuration = __DIR__ . '/../../phpstan/rules_testing.neon';
+        $configuration_data = [
+            'parameters' => [
+                'tipsOfTheDay' => false,
+                'reportUnmatchedIgnoredErrors' => false,
+                'excludes_analyse' => [
+                    '*/tests/Drupal/Tests/Listeners/Legacy/*',
+                    '*/tests/fixtures/*.php',
+                    '*/settings*.php',
+                ],
+                'drupal' => [
+                    'drupal_root' => $this->drupalRoot,
+                ]
+            ]
+        ];
+
+        if ($this->isAnalysisCheck) {
+            $configuration_data['parameters']['level'] = 4;
         } else {
+            $configuration_data['parameters']['customRulesetUsed'] = true;
+        }
+
+        if ($this->isDeprecationsCheck) {
+            $configuration_data['parameters']['ignoreErrors'] = [
+                '#\Drupal calls should be avoided in classes, use dependency injection instead#',
+                '#Plugin definitions cannot be altered.#',
+                '#Missing cache backend declaration for performance.#',
+                '#Plugin manager has cache backend specified but does not declare cache tags.#'
+            ];
+        }
+
+        if ($this->isStyleCheck) {
             // @todo: only analysis check, style check. all of the above at once.
             $output->writeln('Not support, yet');
             return 1;
         }
 
-        try {
-            $inceptionResult = CommandHelper::begin(
-                $input,
-                $output,
-                $input->getArgument('path'),
-                null,
-                $this->memoryLimit,
-                null,
-                $configuration,
-                null,
-                false
-            );
-        } catch (\PHPStan\Command\InceptionNotSuccessfulException $e) {
-            return 1;
-        } catch (ShouldNotHappenException $e) {
-            return 1;
+        $pharPath = \Phar::running();
+        if ($pharPath !== '') {
+            // Running in packaged Phar archive.
+            $phpstanBin = 'vendor/phpstan/phpstan/phpstan';
+            $configuration_data['parameters']['bootstrap'] = $pharPath . '/error-bootstrap.php';
+            $configuration_data['includes'] = [
+                $pharPath . '/vendor/phpstan/phpstan-deprecation-rules/rules.neon',
+                $pharPath . '/vendor/mglaman/phpstan-drupal/extension.neon',
+            ];
+        } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+            // Running as a project dependency.
+            $phpstanBin = __DIR__ . '/../../vendor/phpstan/phpstan/phpstan';
+            $configuration_data['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
+            $configuration_data['includes'] = [
+                __DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon',
+                __DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon',
+            ];
+        } elseif (file_exists(__DIR__ . '/../../../../autoload.php')) {
+            // Running as a global dependency.
+            $phpstanBin = __DIR__ . '/../../../../phpstan/phpstan/phpstan';
+            $configuration_data['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
+            // The phpstan/extension-installer doesn't seem to register.
+            $configuration_data['includes'] = [
+                __DIR__ . '/../../../../phpstan/phpstan-deprecation-rules/rules.neon',
+                __DIR__ . '/../../../../mglaman/phpstan-drupal/extension.neon',
+            ];
+        } else {
+            throw new ShouldNotHappenException('Could not determine if local or global installation');
         }
 
-        $errorOutput = $inceptionResult->getErrorOutput();
+        $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
+        $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
+        file_put_contents($configuration, $configuration_encoded);
 
-        $container = $inceptionResult->getContainer();
-        $errorFormatterServiceName = sprintf('errorFormatter.%s', $input->getOption('format'));
-        if (!$container->hasService($errorFormatterServiceName)) {
-            $errorOutput->writeln(sprintf(
-                'Error formatter "%s" not found. Available error formatters are: %s',
-                $input->getOption('format'),
-                implode(', ', array_map(static function (string $name) {
-                    return substr($name, strlen('errorFormatter.'));
-                }, $container->findByType(ErrorFormatter::class)))
-            ));
-            return 1;
+        $output->writeln('<comment>PHPStan configuration:</comment>', OutputInterface::VERBOSITY_DEBUG);
+        $output->writeln($configuration_encoded, OutputInterface::VERBOSITY_DEBUG);
+
+        $command = [
+            $phpstanBin,
+            'analyse',
+            '-c',
+            $configuration,
+            '--error-format=' . $input->getOption('format')
+        ];
+        if ($output->getVerbosity() === OutputInterface::VERBOSITY_VERBOSE) {
+            $command[] = '-v';
+        } elseif ($output->getVerbosity() === OutputInterface::VERBOSITY_VERY_VERBOSE) {
+            $command[] = '-vv';
+        } elseif ($output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG) {
+            $command[] = '-vvv';
         }
+        $command = array_merge($command, $paths);
 
-        /** @var ErrorFormatter $errorFormatter */
-        $errorFormatter = $container->getService($errorFormatterServiceName);
-
-        /** @var AnalyseApplication  $application */
-        $application = $container->getByType(AnalyseApplication::class);
-
-        $exitCode = $inceptionResult->handleReturn(
-            $application->analyse(
-                $inceptionResult->getFiles(),
-                $inceptionResult->isOnlyFiles(),
-                $inceptionResult->getConsoleStyle(),
-                $errorFormatter,
-                $inceptionResult->isDefaultLevelUsed(),
-                $output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG,
-                null
-            )
-        );
-        $errorHandler->restore();
-        $warnings = $errorHandler->getWarnings();
-        if (count($warnings) > 0) {
-            $output->write(PHP_EOL);
-            foreach ($warnings as $warning) {
-                $output->writeln("<info>$warning</info>");
+        $process = new Process($command);
+        $process->setTty(true);
+        $process->setTimeout(null);
+        $process->run(static function ($type, $buffer) use ($output) {
+            if (Process::ERR === $type) {
+                $output->write($buffer, false, OutputInterface::OUTPUT_RAW);
+            } else {
+                $output->writeln($buffer, OutputInterface::OUTPUT_RAW);
             }
-        }
+        });
+        unlink($configuration);
 
-        return $exitCode;
+        return $process->getExitCode();
     }
 }

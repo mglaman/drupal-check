@@ -1,3 +1,0 @@
-services:
-	errorFormatter.junit:
-		class: PHPStan\Command\ErrorFormatter\JUnitErrorFormatter

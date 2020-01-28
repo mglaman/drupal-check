@@ -14,6 +14,12 @@ commands:
       - checkout
       - run: sudo apt-get update && sudo apt-get install -y libpng-dev libjpeg62-turbo-dev
       - run: sudo docker-php-ext-install gd
+      - run:
+          name: Disable PHP memory limit
+          command: echo 'memory_limit=-1' | sudo tee -a /usr/local/etc/php/php.ini
+      - run:
+          name: Disable xdebug PHP extension
+          command: sudo rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - restore_cache:
           keys:
             - *composer-cache
@@ -23,7 +29,6 @@ commands:
           key: *composer-cache
           paths:
             - ~/.composer/cache
-
   build-phar:
     steps:
       - run: echo "Downloading box.phar version $BOX_VERSION"
@@ -52,13 +57,16 @@ commands:
   global-require:
     steps:
       - run:
+          name: Remove existing vendor dir
+          command: |
+            rm -rf ~/repo/vendor
+      - run:
           name: Add project as a global dependency
           command: |
             composer global config minimum-stability dev
             composer global config prefer-stable true
             composer global config repositories.0 '{"type": "path", "url": "'$CIRCLE_WORKING_DIRECTORY'", "options": { "symlink": false }}'
             composer global require mglaman/drupal-check "*"
-            rm -rf ~/.composer/vendor/mglaman/drupal-check/vendor
       - run:
           name: Add Composer global path
           command: |
@@ -197,11 +205,11 @@ jobs:
       - build-phar
       - create-drupal-project
       - require-contrib:
-          project: drupal/ctools:^3
+          project: drupal/ctools:3.x-dev
       - run:
           name: Phar - Run against a module
           command: |
-            php drupal-check.phar /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
+            php -d memory_limit=-1 drupal-check.phar /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
   test_global_require_with_drush:
     <<: *defaults
     steps:
@@ -245,7 +253,7 @@ jobs:
       - run:
           name: Phar - Run against a file
           command: |
-            php drupal-check.phar /tmp/drupal/web/modules/contained_not_initialized -vvv | grep "invoked the Drupal container outside of the scope of a function or class method."
+            php drupal-check.phar /tmp/drupal/web/modules/contained_not_initialized -vvv
 workflows:
   version: 2
   test_and_deploy:
