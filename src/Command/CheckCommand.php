@@ -2,6 +2,7 @@
 
 namespace DrupalCheck\Command;
 
+use DrupalCheck\Util\Tty;
 use DrupalFinder\DrupalFinder;
 use Nette\Neon\Neon;
 use PHPStan\ShouldNotHappenException;
@@ -211,7 +212,7 @@ class CheckCommand extends Command
         $command = array_merge($command, $paths);
 
         $process = new Process($command);
-        $process->setTty(true);
+        $process->setTty(Tty::isTtySupported());
         $process->setTimeout(null);
         $process->run(static function ($type, $buffer) use ($output) {
             if (Process::ERR === $type) {
