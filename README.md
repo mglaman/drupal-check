@@ -10,7 +10,7 @@ Don't want to run Drupal Check on your own? We offer a hosted version in [Centar
 
 ## Requirements
 
-* PHP >=7.1
+* PHP >=7.2
 
 ## Installation
 
