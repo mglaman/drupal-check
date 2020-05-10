@@ -74,6 +74,7 @@ Options:
 
 * `-a` Check analysis
 * `-d` Check deprecations (default)
+* `-e` Exclude directories. Wildcards work. Separate multiple excluded directories with commas, no spaces. e.g.: \*/tests/codeception/acceptance/\*.php
 * `--drupal-root` Path to Drupal root. Fallback option if drupal-check could not identify Drupal root from the provided path(s).
 
 Examples:
@@ -101,7 +102,7 @@ Examples:
   ```
   drupal-check -ad web/modules/contrib/address
   ```
-  
+
 ## Drupal Check - VS Code Extension
 
 You can run Drupal Check from VSCode using this extension: https://marketplace.visualstudio.com/items?itemName=bbeversdorf.drupal-check
