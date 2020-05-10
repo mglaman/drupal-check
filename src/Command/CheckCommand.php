@@ -202,6 +202,11 @@ class CheckCommand extends Command
             $configuration,
             '--error-format=' . $input->getOption('format')
         ];
+
+        if ($input->getOption('no-progress')) {
+            $command[] = '--no-progress';
+        }
+
         if ($output->getVerbosity() === OutputInterface::VERBOSITY_VERBOSE) {
             $command[] = '-v';
         } elseif ($output->getVerbosity() === OutputInterface::VERBOSITY_VERY_VERBOSE) {
