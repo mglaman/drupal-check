@@ -161,7 +161,7 @@ class CheckCommand extends Command
         $pharPath = \Phar::running();
         if ($pharPath !== '') {
             // Running in packaged Phar archive.
-            $phpstanBin = 'vendor/phpstan/phpstan/phpstan';
+            $phpstanBin = $pharPath . 'vendor/phpstan/phpstan/phpstan';
             $configuration_data['parameters']['bootstrap'] = $pharPath . '/error-bootstrap.php';
             $configuration_data['includes'] = [
                 $pharPath . '/vendor/phpstan/phpstan-deprecation-rules/rules.neon',
