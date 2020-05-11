@@ -28,6 +28,9 @@ script:
   - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/install.php"
   - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/modules/dynamic_page_cache"
   - php box.phar compile
+  # Remove the vendor directory, to test the phar does not load the local vendor directory.
+  # @see https://github.com/mglaman/drupal-check/issues/164
+  - rm -rf vendor
   - "php $TRAVIS_BUILD_DIR/drupal-check.phar $TRAVIS_BUILD_DIR/../drupal/web/core/install.php"
   - "php $TRAVIS_BUILD_DIR/drupal-check.phar $TRAVIS_BUILD_DIR/../drupal/web/core/modules/dynamic_page_cache"
 after_success:

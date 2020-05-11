@@ -34,6 +34,9 @@ commands:
       - run: echo "Downloading box.phar version $BOX_VERSION"
       - run: curl -O -L https://github.com/humbug/box/releases/download/$BOX_VERSION/box.phar
       - run: php box.phar compile
+      # Remove the vendor directory, to test the phar does not load the local vendor directory.
+      # @see https://github.com/mglaman/drupal-check/issues/164
+      - run: rm -rf vendor
   create-drupal-project:
     parameters:
       project:
