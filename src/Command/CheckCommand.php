@@ -215,6 +215,9 @@ class CheckCommand extends Command
         if ($input->getOption('no-progress')) {
             $command[] = '--no-progress';
         }
+        if ($input->getOption('memory-limit')) {
+            $command[] = '--memory-limit=' . $input->getOption('memory-limit');
+        }
 
         if ($output->getVerbosity() === OutputInterface::VERBOSITY_VERBOSE) {
             $command[] = '-v';
