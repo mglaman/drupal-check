@@ -184,20 +184,20 @@ jobs:
       - run:
           name: Phar - Run against a file
           command: |
-            php drupal-check.phar /tmp/drupal/docroot/core/install.php
-      # - run:
-      #     name: Phar - Run against a module
-      #     command: |
-      #       php drupal-check.phar /tmp/drupal/docroot/core/modules/dynamic_page_cache
+            php drupal-check.phar -vvv /tmp/drupal/docroot/core/install.php
+      - run:
+          name: Phar - Run against a module
+          command: |
+            php drupal-check.phar -vvv /tmp/drupal/docroot/core/modules/dynamic_page_cache
       - global-require
       - run:
           name: Global - Run against a file
           command: |
-            drupal-check /tmp/drupal/docroot/core/install.php
-      # - run:
-      #     name: Global - Run against a module
-      #     command: |
-      #       drupal-check /tmp/drupal/docroot/core/modules/dynamic_page_cache
+            drupal-check -vvv /tmp/drupal/docroot/core/install.php
+      - run:
+          name: Global - Run against a module
+          command: |
+            drupal-check -vvv /tmp/drupal/docroot/core/modules/dynamic_page_cache
   test_contrib:
     <<: *defaults
     steps:
