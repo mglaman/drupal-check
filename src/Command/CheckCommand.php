@@ -229,13 +229,12 @@ class CheckCommand extends Command
         $command = array_merge($command, $paths);
 
         $process = new Process($command);
-        $process->setTty(Tty::isTtySupported());
         $process->setTimeout(null);
         $process->run(static function ($type, $buffer) use ($output) {
             if (Process::ERR === $type) {
-                $output->write($buffer, false, OutputInterface::OUTPUT_RAW);
+                $output->getErrorOutput()->write($buffer, false, OutputInterface::OUTPUT_RAW);
             } else {
-                $output->writeln($buffer, OutputInterface::OUTPUT_RAW);
+                $output->write($buffer, false, OutputInterface::OUTPUT_RAW);
             }
         });
         unlink($configuration);
