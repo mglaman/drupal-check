@@ -171,7 +171,7 @@ class CheckCommand extends Command
         if ($pharPath !== '') {
             // Running in packaged Phar archive.
             $phpstanBin = 'vendor/phpstan/phpstan/phpstan';
-            $configuration_data['parameters']['bootstrap'] = $pharPath . '/error-bootstrap.php';
+            $configuration_data['parameters']['bootstrapFiles'] = [$pharPath . '/error-bootstrap.php'];
             $configuration_data['includes'] = [
                 $pharPath . '/vendor/phpstan/phpstan-deprecation-rules/rules.neon',
                 $pharPath . '/vendor/mglaman/phpstan-drupal/extension.neon',
@@ -179,7 +179,7 @@ class CheckCommand extends Command
         } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
             // Running as a project dependency.
             $phpstanBin = __DIR__ . '/../../vendor/phpstan/phpstan/phpstan';
-            $configuration_data['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
+            $configuration_data['parameters']['bootstrapFiles'] = [__DIR__ . '/../../error-bootstrap.php'];
             $configuration_data['includes'] = [
                 __DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon',
                 __DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon',
@@ -187,7 +187,7 @@ class CheckCommand extends Command
         } elseif (file_exists(__DIR__ . '/../../../../autoload.php')) {
             // Running as a global dependency.
             $phpstanBin = __DIR__ . '/../../../../phpstan/phpstan/phpstan';
-            $configuration_data['parameters']['bootstrap'] = __DIR__ . '/../../error-bootstrap.php';
+            $configuration_data['parameters']['bootstrapFiles'] = [__DIR__ . '/../../error-bootstrap.php'];
             // The phpstan/extension-installer doesn't seem to register.
             $configuration_data['includes'] = [
                 __DIR__ . '/../../../../phpstan/phpstan-deprecation-rules/rules.neon',
