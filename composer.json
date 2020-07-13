@@ -2,7 +2,7 @@
     "name": "mglaman/drupal-check",
     "description": "CLI tool for running checks on a Drupal code base",
     "type": "project",
-    "license": "MIT",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Matt Glaman",
