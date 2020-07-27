@@ -23,7 +23,7 @@ install:
   - composer install --no-interaction --no-progress --no-suggest --prefer-dist
 before_script:
   - COMPOSER_MEMORY_LIMIT=-1 composer create-project drupal-composer/drupal-project:8.x-dev $TRAVIS_BUILD_DIR/../drupal --no-interaction --no-dev --prefer-dist
-  - COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev --dev --working-dir $TRAVIS_BUILD_DIR/../drupal --no-interaction
+  - COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev:^8 --dev --working-dir $TRAVIS_BUILD_DIR/../drupal --no-interaction
 script:
   - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/install.php"
   - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/modules/dynamic_page_cache"
