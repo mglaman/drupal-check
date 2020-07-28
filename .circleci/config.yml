@@ -47,7 +47,7 @@ commands:
       - when:
           condition: << parameters.require_dev >>
           steps:
-            - run: COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev --dev --working-dir /tmp/drupal --no-interaction
+            - run: COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev:^8 --dev --working-dir /tmp/drupal --no-interaction
   require-contrib:
     parameters:
       project:
