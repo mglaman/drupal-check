@@ -7,7 +7,6 @@ env:
 matrix:
   include:
     - php: '7.2'
-      env: DEPLOY=true
     - php: '7.3'
   allow_failures:
     - php: '7.4'
@@ -17,7 +16,6 @@ before_install:
   - set -eo pipefail
   - phpenv config-rm xdebug.ini || true
   - composer global require "hirak/prestissimo:^0.3"
-  - curl -O -L https://github.com/humbug/box/releases/download/$BOX_VERSION/box.phar
 install:
   - composer validate
   - composer install --no-interaction --no-progress --no-suggest --prefer-dist
@@ -27,22 +25,6 @@ before_script:
 script:
   - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/install.php"
   - "$TRAVIS_BUILD_DIR/drupal-check $TRAVIS_BUILD_DIR/../drupal/web/core/modules/dynamic_page_cache"
-  - php box.phar compile
-  - "php $TRAVIS_BUILD_DIR/drupal-check.phar $TRAVIS_BUILD_DIR/../drupal/web/core/install.php"
-  - "php $TRAVIS_BUILD_DIR/drupal-check.phar $TRAVIS_BUILD_DIR/../drupal/web/core/modules/dynamic_page_cache"
-after_success:
-  - php box.phar info drupal-check.phar
 cache:
   directories:
     - "$HOME/.composer/cache/files"
-
-deploy:
-  provider: releases
-  api_key:
-    secure: EOFTPsBrtKkIE/95nt7T7SP5e4tNsrVe4m9DGQuFDQMYQ1d+vHoLLG1+JFaTDboqyLJ11cY5ceqgYNAJS2zFAB20R8gJwOawluahKvlbFrrNaqrfUYH01gMlDWmv9yAEzz1nvwaElNspYtG2/QMG9yGcbFiqxKxz+AM/GLlkZ+wOm4eypOCNF4OVO71KvtcK/wYMzE11pN3WnAobSJxh8UjsaKy5XcqycIqDCSGv17LMa3wvJ7CkvSNyNKAvzBm2KmBLWbCcium3YGsVeRYdbEBRGjnB0YsJoQ58WCGKNZup/pmxi79aEPwH6rrKsJNqOuBp6zs+MlnMMH3GFZFsbpobzNWOx7iO/X4dQcQYvig6Phv8rXSoABjpZ1QZz+BoKKOErHWBiwTxFzJmTHta0gzvlwpPrTr9V/v+KpwQj8Ix6JukTCodwsFCID88iK1q//haxk01QpOlpNuRrMNppNw5IRcXTFJCtZ1DvWZom3WoBhWuVlZvMG0Le3XVbWMw3MSRwUx78//BN/414bZYOmQNHdc7af9tFGq6B5Qbzgbu9jl9KZM1vwibCLRog7uRkv/9qp4xyhga9ng/fzzDj2/rAYQKmv9SxLqc9at/kAZP2vmErwUUsOtd41KD7B9rWK+lfu8us+SjlZwqZR3I/builPfrOP4bXAJ9tjI+on8=
-  file: drupal-check.phar
-  skip_cleanup: true
-  on:
-    tags: true
-    repo: mglaman/drupal-check
-    condition: "$DEPLOY"

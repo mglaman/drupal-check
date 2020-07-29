@@ -29,11 +29,6 @@ commands:
           key: *composer-cache
           paths:
             - ~/.composer/cache
-  build-phar:
-    steps:
-      - run: echo "Downloading box.phar version $BOX_VERSION"
-      - run: curl -O -L https://github.com/humbug/box/releases/download/$BOX_VERSION/box.phar
-      - run: php box.phar compile
   create-drupal-project:
     parameters:
       project:
@@ -93,27 +88,12 @@ jobs:
     <<: *defaults
     steps:
       - setup-job
-      - build-phar
-      - run: php box.phar info drupal-check.phar
   test_drupal:
     <<: *defaults
     steps:
       - setup-job
-      - build-phar
       - create-drupal-project:
           project: 'drupal/legacy-project:^8@alpha'
-      - run:
-          name: Phar - Run against a file
-          command: |
-            php drupal-check.phar /tmp/drupal/core/install.php -vvv
-      - run:
-          name: Phar - Run against a module
-          command: |
-            php drupal-check.phar /tmp/drupal/core/modules/dynamic_page_cache -vvv
-      - run:
-          name: Phar - Run against multiple paths
-          command: |
-            php drupal-check.phar /tmp/drupal/core/install.php /tmp/drupal/core/modules/dynamic_page_cache -vvv
       - global-require
       - run:
           name: Global - Run against a file
@@ -127,16 +107,7 @@ jobs:
     <<: *defaults
     steps:
       - setup-job
-      - build-phar
       - create-drupal-project
-      - run:
-          name: Phar - Run against a file
-          command: |
-            php drupal-check.phar /tmp/drupal/web/core/install.php
-      - run:
-          name: Phar - Run against a module
-          command: |
-            php drupal-check.phar /tmp/drupal/web/core/modules/dynamic_page_cache
       - global-require
       - run:
           name: Global - Run against a file
@@ -175,20 +146,11 @@ jobs:
     <<: *defaults
     steps:
       - setup-job
-      - build-phar
       # acquia/lightning-project does not require-dev Drupal's require-dev.
       # see PR https://github.com/acquia/lightning-project/pull/101
       - create-drupal-project:
           project: 'acquia/lightning-project'
           require_dev: false
-      - run:
-          name: Phar - Run against a file
-          command: |
-            php drupal-check.phar /tmp/drupal/docroot/core/install.php
-      # - run:
-      #     name: Phar - Run against a module
-      #     command: |
-      #       php drupal-check.phar /tmp/drupal/docroot/core/modules/dynamic_page_cache
       - global-require
       - run:
           name: Global - Run against a file
@@ -202,14 +164,14 @@ jobs:
     <<: *defaults
     steps:
       - setup-job
-      - build-phar
+      - global-require
       - create-drupal-project
       - require-contrib:
           project: drupal/ctools:3.x-dev
       - run:
           name: Phar - Run against a module
           command: |
-            php -d memory_limit=-1 drupal-check.phar /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
+            drupal-check /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
   test_global_require_with_drush:
     <<: *defaults
     steps:
@@ -244,7 +206,7 @@ jobs:
     <<: *defaults
     steps:
       - setup-job
-      - build-phar
+      - global-require
       - create-drupal-project
       - run:
           name: Copy test fixture
@@ -253,7 +215,7 @@ jobs:
       - run:
           name: Phar - Run against a file
           command: |
-            php drupal-check.phar /tmp/drupal/web/modules/contained_not_initialized -vvv
+            drupal-check /tmp/drupal/web/modules/contained_not_initialized -vvv
 workflows:
   version: 2
   test_and_deploy:
