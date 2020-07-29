@@ -12,16 +12,6 @@ Are you ready for Drupal 9? Check out our [Drupal 9 Readiness](https://github.co
 
 ## Installation
 
-The easiest way to install is by downloading the latest PHAR and putting it into your path. For example:
-
-```
-curl -O -L https://github.com/mglaman/drupal-check/releases/latest/download/drupal-check.phar
-mv drupal-check.phar /usr/local/bin/drupal-check
-chmod +x /usr/local/bin/drupal-check
-```
-
-### Composer
-
 You can install this in your project using Composer as a development dependency like so:
 
 ```
@@ -35,12 +25,6 @@ composer global require mglaman/drupal-check
 ```
 
 Refer to Composer's documentation on how to ensure global binaries are in your PATH: https://getcomposer.org/doc/00-intro.md#manual-installation.
-
-Note: you can also install this locally to your project and run it from that project's Composer bin directory.
-
-### Build From Source
-
-Follow these instructions to build from source: https://github.com/mglaman/drupal-check/wiki/Build-From-Source.
 
 ## Usage
 
