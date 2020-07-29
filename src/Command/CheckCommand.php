@@ -133,6 +133,7 @@ class CheckCommand extends Command
                     '*/tests/Drupal/Tests/Listeners/Legacy/*',
                     '*/tests/fixtures/*.php',
                     '*/settings*.php',
+                    '*/node_modules/*'
                 ],
                 'drupal' => [
                     'drupal_root' => $this->drupalRoot,
