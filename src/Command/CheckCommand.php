@@ -210,7 +210,7 @@ class CheckCommand extends Command
         }
 
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
-        $configuration = \realpath(sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon');
+        $configuration = sys_get_temp_dir() . PHP_EOL . 'drupal_check_phpstan_' . time() . '.neon';
         file_put_contents($configuration, $configuration_encoded);
 
         $output->writeln('<comment>PHPStan configuration:</comment>', OutputInterface::VERBOSITY_DEBUG);
