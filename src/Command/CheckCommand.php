@@ -52,6 +52,15 @@ class CheckCommand extends Command
         $this->memoryLimit = $input->getOption('memory-limit');
         $this->excludeDirectory = $input->getOption('exclude-dir');
 
+        // Default to deprecations.
+        if (!$this->isDeprecationsCheck) {
+            if (!$this->isAnalysisCheck && !$this->isStyleCheck) {
+                $this->isDeprecationsCheck = true;
+            } else {
+                $this->isDeprecationsCheck = false;
+            }
+        }
+
         if ($this->memoryLimit) {
             $output->writeln("<comment>Memory limit set to $this->memoryLimit", OutputInterface::VERBOSITY_DEBUG);
         }
@@ -63,15 +72,6 @@ class CheckCommand extends Command
         }
         if ($this->isStyleCheck) {
             $output->writeln('<comment>Performing code styling checks', OutputInterface::VERBOSITY_DEBUG);
-        }
-
-        // Default to deprecations.
-        if (!$this->isDeprecationsCheck) {
-            if (!$this->isAnalysisCheck && !$this->isStyleCheck) {
-                $this->isDeprecationsCheck = true;
-            } else {
-                $this->isDeprecationsCheck = false;
-            }
         }
 
         if ($input->getOption('format') === 'json') {
@@ -215,8 +215,7 @@ class CheckCommand extends Command
             $phpstanBin = "php $phpstanBin";
         }
 
-        $output->writeln('<coment>PHPStan path: %s', $phpstanBin, OutputInterface::VERBOSITY_DEBUG);
-
+        $output->writeln(sprintf('<comment>PHPStan path: %s</comment>', $phpstanBin), OutputInterface::VERBOSITY_DEBUG);
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
         $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
         file_put_contents($configuration, $configuration_encoded);
