@@ -109,8 +109,8 @@ class CheckCommand extends Command
         }
 
         $drupalFinder->locateRoot($drupalRootCandidate);
-        $this->drupalRoot = $drupalFinder->getDrupalRoot();
-        $this->vendorRoot = $drupalFinder->getVendorDir();
+        $this->drupalRoot = realpath($drupalFinder->getDrupalRoot());
+        $this->vendorRoot = realpath($drupalFinder->getVendorDir());
 
         if (!$this->drupalRoot) {
             $output->writeln(sprintf('<error>Unable to locate the Drupal root in %s</error>', $drupalRootCandidate));
