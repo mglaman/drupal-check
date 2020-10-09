@@ -9,8 +9,9 @@ cache:
 environment:
   ANSICON: 121x90 (121x90)
   matrix:
-    - { PHP_VERSION: '7.2' }
-    - { PHP_VERSION: '7.3' }
+    # @todo learn how to have Chocolately install latest minor without specifying patch version.
+    - { PHP_VERSION: '7.2.33' }
+    - { PHP_VERSION: '7.3.22' }
 install:
   # Enable Windows Update service, needed to install vcredist2015 (dependency of php)
   - ps: Set-Service wuauserv -StartupType Manual
@@ -21,4 +22,4 @@ install:
   - composer install --no-interaction --no-progress --no-suggest --prefer-dist
 build: off
 test_script:
-  - drupal-check
+  - php drupal-check --version
