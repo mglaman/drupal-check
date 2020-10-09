@@ -94,6 +94,7 @@ class CheckCommand extends Command
                 return 1;
             }
 
+            $output->writeln(sprintf('<comment>Analyzing path: %s</comment>', $realPath), OutputInterface::VERBOSITY_DEBUG);
             $paths[] = $realPath;
         }
 
