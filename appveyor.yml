@@ -25,4 +25,4 @@ install:
 build: off
 test_script:
   - php drupal-check --version
-  - php drupal-check %APPVEYOR_BUILD_FOLDER%\..\drupal\web\core\install.php
+  - php drupal-check "%APPVEYOR_BUILD_FOLDER%\..\drupal\web\core\install.php"
