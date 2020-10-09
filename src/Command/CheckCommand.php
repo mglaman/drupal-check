@@ -178,28 +178,28 @@ class CheckCommand extends Command
         $pharPath = \Phar::running();
         if ($pharPath !== '') {
             // Running in packaged Phar archive.
-            $phpstanBin = 'vendor/phpstan/phpstan/phpstan';
-            $configuration_data['parameters']['bootstrapFiles'] = [$pharPath . '/error-bootstrap.php'];
+            $phpstanBin = \realpath('vendor/phpstan/phpstan/phpstan');
+            $configuration_data['parameters']['bootstrapFiles'] = [\realpath($pharPath . '/error-bootstrap.php')];
             $configuration_data['includes'] = [
-                $pharPath . '/vendor/phpstan/phpstan-deprecation-rules/rules.neon',
-                $pharPath . '/vendor/mglaman/phpstan-drupal/extension.neon',
+                \realpath($pharPath . '/vendor/phpstan/phpstan-deprecation-rules/rules.neon'),
+                \realpath($pharPath . '/vendor/mglaman/phpstan-drupal/extension.neon'),
             ];
-        } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+        } elseif (file_exists(\realpath(__DIR__ . '/../../vendor/autoload.php'))) {
             // Running as a project dependency.
-            $phpstanBin = __DIR__ . '/../../vendor/phpstan/phpstan/phpstan';
-            $configuration_data['parameters']['bootstrapFiles'] = [__DIR__ . '/../../error-bootstrap.php'];
+            $phpstanBin = \realpath(__DIR__ . '/../../vendor/phpstan/phpstan/phpstan');
+            $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
             $configuration_data['includes'] = [
-                __DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon',
-                __DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon',
+                \realpath(__DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon'),
+                \realpath(__DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon'),
             ];
-        } elseif (file_exists(__DIR__ . '/../../../../autoload.php')) {
+        } elseif (file_exists(\realpath(__DIR__ . '/../../../../autoload.php'))) {
             // Running as a global dependency.
-            $phpstanBin = __DIR__ . '/../../../../phpstan/phpstan/phpstan';
-            $configuration_data['parameters']['bootstrapFiles'] = [__DIR__ . '/../../error-bootstrap.php'];
+            $phpstanBin = \realpath(__DIR__ . '/../../../../phpstan/phpstan/phpstan');
+            $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
             // The phpstan/extension-installer doesn't seem to register.
             $configuration_data['includes'] = [
-                __DIR__ . '/../../../../phpstan/phpstan-deprecation-rules/rules.neon',
-                __DIR__ . '/../../../../mglaman/phpstan-drupal/extension.neon',
+                \realpath(__DIR__ . '/../../../../phpstan/phpstan-deprecation-rules/rules.neon'),
+                \realpath(__DIR__ . '/../../../../mglaman/phpstan-drupal/extension.neon'),
             ];
         } else {
             throw new ShouldNotHappenException('Could not determine if local or global installation');
@@ -210,7 +210,7 @@ class CheckCommand extends Command
         }
 
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
-        $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
+        $configuration = \realpath(sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon');
         file_put_contents($configuration, $configuration_encoded);
 
         $output->writeln('<comment>PHPStan configuration:</comment>', OutputInterface::VERBOSITY_DEBUG);
