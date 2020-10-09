@@ -19,6 +19,7 @@ install:
   - choco install -y php --version %PHP_VERSION%
   - choco install -y composer
   - refreshenv
+  - SET | more
   - composer install --no-interaction --no-progress --no-suggest --prefer-dist
   - set COMPOSER_MEMORY_LIMIT=-1&& composer create-project drupal-composer/drupal-project:8.x-dev %APPVEYOR_BUILD_FOLDER%\..\drupal --no-interaction --prefer-dist --ignore-platform-req=ext-gd
 build: off
