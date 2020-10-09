@@ -135,6 +135,7 @@ class CheckCommand extends Command
                     '*/settings*.php',
                     '*/node_modules/*'
                 ],
+                'ignoreErrors' => [],
                 'drupal' => [
                     'drupal_root' => $this->drupalRoot,
                 ]
@@ -149,17 +150,23 @@ class CheckCommand extends Command
 
         if ($this->isAnalysisCheck) {
             $configuration_data['parameters']['level'] = 4;
+
+            $ignored_analysis_errors = [
+                '#Unsafe usage of new static()#'
+            ];
+            $configuration_data['parameters']['ignoreErrors'] = array_merge($ignored_analysis_errors, $configuration_data['parameters']['ignoreErrors']);
         } else {
             $configuration_data['parameters']['customRulesetUsed'] = true;
         }
 
         if ($this->isDeprecationsCheck) {
-            $configuration_data['parameters']['ignoreErrors'] = [
+            $ignored_deprecation_errors = [
                 '#\Drupal calls should be avoided in classes, use dependency injection instead#',
                 '#Plugin definitions cannot be altered.#',
                 '#Missing cache backend declaration for performance.#',
                 '#Plugin manager has cache backend specified but does not declare cache tags.#'
             ];
+            $configuration_data['parameters']['ignoreErrors'] = array_merge($ignored_deprecation_errors, $configuration_data['parameters']['ignoreErrors']);
         }
 
         if ($this->isStyleCheck) {
