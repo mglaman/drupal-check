@@ -206,9 +206,16 @@ class CheckCommand extends Command
             throw new ShouldNotHappenException('Could not determine if local or global installation');
         }
 
+        if (!file_exists($phpstanBin)) {
+            $output->writeln('Could not find PHPStan at ' . $phpstanBin);
+            return 1;
+        }
+
         if (substr(PHP_OS, 0, 3) == 'WIN') {
             $phpstanBin = "php $phpstanBin";
         }
+
+        $output->writeln('<coment>PHPStan path: %s', $phpstanBin, OutputInterface::VERBOSITY_DEBUG);
 
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
         $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
