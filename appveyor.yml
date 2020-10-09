@@ -6,7 +6,11 @@ max_jobs: 3
 cache:
   - '%LOCALAPPDATA%\Composer'
   - '%LOCALAPPDATA%\Temp\Chocolatey'
-
+environment:
+  ANSICON: 121x90 (121x90)
+  matrix:
+    - { PHP_VERSION: '7.2' }
+    - { PHP_VERSION: '7.3' }
 install:
   # Enable Windows Update service, needed to install vcredist2015 (dependency of php)
   - ps: Set-Service wuauserv -StartupType Manual
