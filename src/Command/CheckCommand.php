@@ -184,7 +184,7 @@ class CheckCommand extends Command
                 \realpath($pharPath . '/vendor/phpstan/phpstan-deprecation-rules/rules.neon'),
                 \realpath($pharPath . '/vendor/mglaman/phpstan-drupal/extension.neon'),
             ];
-        } elseif (file_exists(\realpath(__DIR__ . '/../../vendor/autoload.php'))) {
+        } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
             // Running as a project dependency.
             $phpstanBin = \realpath(__DIR__ . '/../../vendor/phpstan/phpstan/phpstan');
             $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
@@ -192,7 +192,7 @@ class CheckCommand extends Command
                 \realpath(__DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon'),
                 \realpath(__DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon'),
             ];
-        } elseif (file_exists(\realpath(__DIR__ . '/../../../../autoload.php'))) {
+        } elseif (file_exists(__DIR__ . '/../../../../autoload.php')) {
             // Running as a global dependency.
             $phpstanBin = \realpath(__DIR__ . '/../../../../phpstan/phpstan/phpstan');
             $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
@@ -210,7 +210,7 @@ class CheckCommand extends Command
         }
 
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
-        $configuration = sys_get_temp_dir() . PHP_EOL . 'drupal_check_phpstan_' . time() . '.neon';
+        $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
         file_put_contents($configuration, $configuration_encoded);
 
         $output->writeln('<comment>PHPStan configuration:</comment>', OutputInterface::VERBOSITY_DEBUG);
