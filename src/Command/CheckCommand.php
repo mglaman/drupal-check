@@ -205,6 +205,10 @@ class CheckCommand extends Command
             throw new ShouldNotHappenException('Could not determine if local or global installation');
         }
 
+        if (substr(PHP_OS, 0, 3) == 'WIN') {
+            $phpstanBin = "php $phpstanBin";
+        }
+
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
         $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
         file_put_contents($configuration, $configuration_encoded);
