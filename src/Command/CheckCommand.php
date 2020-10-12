@@ -52,6 +52,15 @@ class CheckCommand extends Command
         $this->memoryLimit = $input->getOption('memory-limit');
         $this->excludeDirectory = $input->getOption('exclude-dir');
 
+        // Default to deprecations.
+        if (!$this->isDeprecationsCheck) {
+            if (!$this->isAnalysisCheck && !$this->isStyleCheck) {
+                $this->isDeprecationsCheck = true;
+            } else {
+                $this->isDeprecationsCheck = false;
+            }
+        }
+
         if ($this->memoryLimit) {
             $output->writeln("<comment>Memory limit set to $this->memoryLimit", OutputInterface::VERBOSITY_DEBUG);
         }
@@ -63,15 +72,6 @@ class CheckCommand extends Command
         }
         if ($this->isStyleCheck) {
             $output->writeln('<comment>Performing code styling checks', OutputInterface::VERBOSITY_DEBUG);
-        }
-
-        // Default to deprecations.
-        if (!$this->isDeprecationsCheck) {
-            if (!$this->isAnalysisCheck && !$this->isStyleCheck) {
-                $this->isDeprecationsCheck = true;
-            } else {
-                $this->isDeprecationsCheck = false;
-            }
         }
 
         if ($input->getOption('format') === 'json') {
@@ -94,6 +94,7 @@ class CheckCommand extends Command
                 return 1;
             }
 
+            $output->writeln(sprintf('<comment>Analyzing path: %s</comment>', $realPath), OutputInterface::VERBOSITY_DEBUG);
             $paths[] = $realPath;
         }
 
@@ -108,8 +109,8 @@ class CheckCommand extends Command
         }
 
         $drupalFinder->locateRoot($drupalRootCandidate);
-        $this->drupalRoot = $drupalFinder->getDrupalRoot();
-        $this->vendorRoot = $drupalFinder->getVendorDir();
+        $this->drupalRoot = realpath($drupalFinder->getDrupalRoot());
+        $this->vendorRoot = realpath($drupalFinder->getVendorDir());
 
         if (!$this->drupalRoot) {
             $output->writeln(sprintf('<error>Unable to locate the Drupal root in %s</error>', $drupalRootCandidate));
@@ -178,36 +179,48 @@ class CheckCommand extends Command
         $pharPath = \Phar::running();
         if ($pharPath !== '') {
             // Running in packaged Phar archive.
-            $phpstanBin = 'vendor/phpstan/phpstan/phpstan';
-            $configuration_data['parameters']['bootstrapFiles'] = [$pharPath . '/error-bootstrap.php'];
+            $phpstanBin = \realpath('vendor/phpstan/phpstan/phpstan.phar');
+            $configuration_data['parameters']['bootstrapFiles'] = [\realpath($pharPath . '/error-bootstrap.php')];
             $configuration_data['includes'] = [
-                $pharPath . '/vendor/phpstan/phpstan-deprecation-rules/rules.neon',
-                $pharPath . '/vendor/mglaman/phpstan-drupal/extension.neon',
+                \realpath($pharPath . '/vendor/phpstan/phpstan-deprecation-rules/rules.neon'),
+                \realpath($pharPath . '/vendor/mglaman/phpstan-drupal/extension.neon'),
             ];
         } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
             // Running as a project dependency.
-            $phpstanBin = __DIR__ . '/../../vendor/phpstan/phpstan/phpstan';
-            $configuration_data['parameters']['bootstrapFiles'] = [__DIR__ . '/../../error-bootstrap.php'];
+            $phpstanBin = \realpath(__DIR__ . '/../../vendor/phpstan/phpstan/phpstan.phar');
+            $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
             $configuration_data['includes'] = [
-                __DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon',
-                __DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon',
+                \realpath(__DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon'),
+                \realpath(__DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon'),
             ];
         } elseif (file_exists(__DIR__ . '/../../../../autoload.php')) {
             // Running as a global dependency.
-            $phpstanBin = __DIR__ . '/../../../../phpstan/phpstan/phpstan';
-            $configuration_data['parameters']['bootstrapFiles'] = [__DIR__ . '/../../error-bootstrap.php'];
+            $phpstanBin = \realpath(__DIR__ . '/../../../../phpstan/phpstan/phpstan.phar');
+            $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
             // The phpstan/extension-installer doesn't seem to register.
             $configuration_data['includes'] = [
-                __DIR__ . '/../../../../phpstan/phpstan-deprecation-rules/rules.neon',
-                __DIR__ . '/../../../../mglaman/phpstan-drupal/extension.neon',
+                \realpath(__DIR__ . '/../../../../phpstan/phpstan-deprecation-rules/rules.neon'),
+                \realpath(__DIR__ . '/../../../../mglaman/phpstan-drupal/extension.neon'),
             ];
         } else {
             throw new ShouldNotHappenException('Could not determine if local or global installation');
         }
 
+        if (!file_exists($phpstanBin)) {
+            $output->writeln('Could not find PHPStan at ' . $phpstanBin);
+            return 1;
+        }
+
+        if (substr(PHP_OS, 0, 3) == 'WIN') {
+            $phpstanBin = "php $phpstanBin";
+        }
+
+        $output->writeln(sprintf('<comment>PHPStan path: %s</comment>', $phpstanBin), OutputInterface::VERBOSITY_DEBUG);
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
         $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
         file_put_contents($configuration, $configuration_encoded);
+        $configuration = realpath($configuration);
+        $output->writeln(sprintf('<comment>PHPStan configuration path: %s</comment>', $configuration), OutputInterface::VERBOSITY_DEBUG);
 
         $output->writeln('<comment>PHPStan configuration:</comment>', OutputInterface::VERBOSITY_DEBUG);
         $output->writeln($configuration_encoded, OutputInterface::VERBOSITY_DEBUG);
@@ -238,6 +251,8 @@ class CheckCommand extends Command
 
         $process = new Process($command);
         $process->setTimeout(null);
+
+        $output->writeln('<comment>Executing PHPStan</comment>', OutputInterface::VERBOSITY_DEBUG);
         $process->run(static function ($type, $buffer) use ($output) {
             if (Process::ERR === $type) {
                 $output->getErrorOutput()->write($buffer, false, OutputInterface::OUTPUT_RAW);
@@ -245,8 +260,11 @@ class CheckCommand extends Command
                 $output->write($buffer, false, OutputInterface::OUTPUT_RAW);
             }
         });
+        $output->writeln('<comment>Finished executing PHPStan</comment>', OutputInterface::VERBOSITY_DEBUG);
+        $output->writeln('<comment>Unlinking PHPStan configuration</comment>', OutputInterface::VERBOSITY_DEBUG);
         unlink($configuration);
 
+        $output->writeln('<comment>Return PHPStan exit code</comment>', OutputInterface::VERBOSITY_DEBUG);
         return $process->getExitCode();
     }
 }

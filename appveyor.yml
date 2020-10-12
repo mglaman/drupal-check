@@ -1,0 +1,28 @@
+version: '{build}'
+platform:
+  - x64
+clone_depth: 1
+max_jobs: 3
+cache:
+  - '%LOCALAPPDATA%\Composer'
+  - '%LOCALAPPDATA%\Temp\Chocolatey'
+environment:
+  ANSICON: 121x90 (121x90)
+  matrix:
+    # @todo learn how to have Chocolately install latest minor without specifying patch version.
+    - { PHP_VERSION: '7.2.33' }
+    - { PHP_VERSION: '7.3.22' }
+install:
+  # Enable Windows Update service, needed to install vcredist2015 (dependency of php)
+  - ps: Set-Service wuauserv -StartupType Manual
+  - choco config set cacheLocation %LOCALAPPDATA%\Temp\Chocolatey
+  - choco install -y php --version %PHP_VERSION%
+  - choco install -y composer
+  - refreshenv
+  - SET | more
+  - composer install --no-interaction --no-progress --no-suggest --prefer-dist
+  - set COMPOSER_MEMORY_LIMIT=-1&& composer create-project drupal-composer/drupal-project:8.x-dev %APPVEYOR_BUILD_FOLDER%\..\drupal --no-interaction --prefer-dist --ignore-platform-reqs
+build: off
+test_script:
+  - php drupal-check --version
+  - php drupal-check %APPVEYOR_BUILD_FOLDER%\..\drupal\web\core\install.php -vvv
