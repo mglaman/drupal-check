@@ -249,6 +249,8 @@ class CheckCommand extends Command
 
         $process = new Process($command);
         $process->setTimeout(null);
+
+        $output->writeln('<comment>Executing PHPStan</comment>', OutputInterface::VERBOSITY_DEBUG);
         $process->run(static function ($type, $buffer) use ($output) {
             if (Process::ERR === $type) {
                 $output->getErrorOutput()->write($buffer, false, OutputInterface::OUTPUT_RAW);
@@ -256,8 +258,11 @@ class CheckCommand extends Command
                 $output->write($buffer, false, OutputInterface::OUTPUT_RAW);
             }
         });
+        $output->writeln('<comment>Finished executing PHPStan</comment>', OutputInterface::VERBOSITY_DEBUG);
+        $output->writeln('<comment>Unlinking PHPStan configuration</comment>', OutputInterface::VERBOSITY_DEBUG);
         unlink($configuration);
 
+        $output->writeln('<comment>Return PHPStan exit code</comment>', OutputInterface::VERBOSITY_DEBUG);
         return $process->getExitCode();
     }
 }
