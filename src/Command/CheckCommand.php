@@ -211,10 +211,6 @@ class CheckCommand extends Command
             return 1;
         }
 
-        if (substr(PHP_OS, 0, 3) == 'WIN') {
-            $phpstanBin = "php $phpstanBin";
-        }
-
         $output->writeln(sprintf('<comment>PHPStan path: %s</comment>', $phpstanBin), OutputInterface::VERBOSITY_DEBUG);
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
         $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
@@ -232,6 +228,10 @@ class CheckCommand extends Command
             $configuration,
             '--error-format=' . $input->getOption('format')
         ];
+
+        if (substr(PHP_OS, 0, 3) == 'WIN') {
+            array_unshift($command, 'php');
+        }
 
         if ($input->getOption('no-progress')) {
             $command[] = '--no-progress';
