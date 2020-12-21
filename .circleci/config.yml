@@ -23,7 +23,6 @@ commands:
       - restore_cache:
           keys:
             - *composer-cache
-      - run: composer global require "hirak/prestissimo:^0.3"
       - run: composer install -n --prefer-dist
       - save_cache:
           key: *composer-cache
