@@ -153,7 +153,7 @@ class CheckCommand extends Command
             $configuration_data['parameters']['level'] = 4;
 
             $ignored_analysis_errors = [
-                '#Unsafe usage of new static()#'
+                '#Unsafe usage of new static\(\)#'
             ];
             $configuration_data['parameters']['ignoreErrors'] = array_merge($ignored_analysis_errors, $configuration_data['parameters']['ignoreErrors']);
         } else {
