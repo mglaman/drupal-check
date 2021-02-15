@@ -139,7 +139,8 @@ class CheckCommand extends Command
                 'ignoreErrors' => [],
                 'drupal' => [
                     'drupal_root' => $this->drupalRoot,
-                ]
+                ],
+                'tmpDir' => sys_get_temp_dir() . '/phpstan' . '_' . getmypid(),
             ]
         ];
 
