@@ -6,6 +6,12 @@ Why? While there are many static analysis tools out there, none of them run with
 
 Are you ready for Drupal 9? Check out our [Drupal 9 Readiness](https://github.com/mglaman/drupal-check/wiki/Drupal-9-Readiness) instructions for details on how this tool can help.
 
+## Sponsors
+
+[![undpaul](https://www.undpaul.de/themes/custom/undpaul3/logo.svg)](https://www.undpaul.de/)
+
+[Would you like to sponsor?](https://github.com/sponsors/mglaman)
+
 ## Requirements
 
 * PHP >=7.2
