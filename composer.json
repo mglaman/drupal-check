@@ -33,5 +33,10 @@
         "psr-4": {
             "DrupalCheck\\": "src"
         }
+    },
+    "extra": {
+        "violinist": {
+            "one_pull_request_per_package": 1
+        }
     }
 }
