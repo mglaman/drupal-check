@@ -122,6 +122,7 @@ jobs:
       - name: "verify drupal-check version"
         run: |
           cd ~/drupal
+          ls ./vendor
           ./vendor/bin/drupal-check --version
       - name: 'Check ${{ matrix.project }}'
         run: |
