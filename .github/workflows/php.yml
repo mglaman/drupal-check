@@ -39,6 +39,7 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
+      # @todo this actually has test pollution because the vendor directory exists.
       - name: "Install dependencies"
         run: "composer install --no-progress --prefer-dist"
       - name: "PHPCS"
@@ -118,6 +119,8 @@ jobs:
         run: |
           cd ~/drupal
           COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev
+      - name: "verify drupal-check version"
+        run: ./vendor/bin/drupal-check --version
       - name: 'Check ${{ matrix.project }}'
         run: |
           cd ~/drupal

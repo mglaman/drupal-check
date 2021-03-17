@@ -18,6 +18,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 else {
     echo "Composer autoload file not found.\n";
     echo "You need to run 'composer install'.\n";
+    echo "Current working directory: " . getcwd() . PHP_EOL;
     exit(1);
 }
 
