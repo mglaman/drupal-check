@@ -45,6 +45,8 @@ jobs:
         run: "php vendor/bin/phpcs src"
 #      - name: "PHPStan"
 #        run: "php vendor/bin/phpstan analyze src"
+      - name: Remove vendor directory for integration testing
+        run: rm -rf vendor
       - name: Setup Drupal
         run: |
           COMPOSER_MEMORY_LIMIT=-1 composer create-project drupal/recommended-project:${{ matrix.drupal }} ~/drupal --no-interaction
@@ -52,7 +54,7 @@ jobs:
           composer config minimum-stability dev
           composer config prefer-stable true
           composer config preferred-install dist
-          composer config repositories.0 path $GITHUB_WORKSPACE
+          composer config repositories.0 "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"
           composer config repositories.1 composer https://packages.drupal.org/8
           COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev:${{ matrix.drupal }} --with-all-dependencies
       - name: "Add phpspec/prophecy-phpunit"
@@ -67,8 +69,63 @@ jobs:
       - name: "Analyze core/install.php"
         run: |
           cd ~/drupal
-          ./vendor/bin/drupal-check web/core/install.php
+          ./vendor/bin/drupal-check -vvv web/core/install.php
       - name: "Analyze dynamic_page_cache"
         run: |
           cd ~/drupal
-          ./vendor/bin/drupal-check web/core/modules/dynamic_page_cache || if (($? == 255)); then false; else true; fi
+          ./vendor/bin/drupal-check -vvv web/core/modules/dynamic_page_cache || if (($? == 255)); then false; else true; fi
+
+  contrib:
+    runs-on: "ubuntu-latest"
+    name: "${{ matrix.project }} | PHP ${{ matrix.php-version }} | Drupal ${{ matrix.drupal }}"
+    strategy:
+      matrix:
+        include:
+          - php-version: "7.3"
+            drupal: "~8.9"
+            project: config_update
+            additional_projects: ''
+            type: module
+          - php-version: "7.3"
+            drupal: "~8.9"
+            project: blazy
+            additional_projects: 'drupal/token drupal/ctools'
+            type: module
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+          tools: composer:v2
+          extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
+      - name: Setup Drupal
+        run: |
+          COMPOSER_MEMORY_LIMIT=-1 composer create-project drupal/recommended-project:${{ matrix.drupal }} ~/drupal --no-interaction
+          cd ~/drupal
+          composer config minimum-stability dev
+          composer config prefer-stable true
+          composer config preferred-install dist
+          composer config repositories.0 "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"
+          composer config repositories.1 composer https://packages.drupal.org/8
+          COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev:${{ matrix.drupal }} --with-all-dependencies
+      - name: "Add phpspec/prophecy-phpunit"
+        run: |
+          cd ~/drupal
+          COMPOSER_MEMORY_LIMIT=-1 composer require --dev phpspec/prophecy-phpunit:^2
+        if: ${{ matrix.drupal == '^9.0' }}
+      - name: "require drupal-check"
+        run: |
+          cd ~/drupal
+          COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev
+      - name: "verify drupal-check version"
+        run: |
+          cd ~/drupal
+          ./vendor/bin/drupal-check --version
+      - name: 'Check ${{ matrix.project }}'
+        run: |
+          cd ~/drupal
+          COMPOSER_MEMORY_LIMIT=-1 composer require drupal/${{ matrix.project }} ${{ matrix.additional_projects }}
+          ./vendor/bin/drupal-check -vvv web/${{ matrix.type }}s/contrib/${{ matrix.project }} --no-progress || if (($? == 255 || $? == 127)); then false; else true; fi

@@ -2,7 +2,6 @@
 
 namespace DrupalCheck\Command;
 
-use DrupalCheck\Util\Tty;
 use DrupalFinder\DrupalFinder;
 use Nette\Neon\Neon;
 use PHPStan\ShouldNotHappenException;
@@ -179,6 +178,7 @@ class CheckCommand extends Command
         $pharPath = \Phar::running();
         if ($pharPath !== '') {
             // Running in packaged Phar archive.
+            $output->writeln('<comment>Assumed running as Phar</comment>', OutputInterface::VERBOSITY_DEBUG);
             $phpstanBin = \realpath('vendor/phpstan/phpstan/phpstan.phar');
             $configuration_data['parameters']['bootstrapFiles'] = [\realpath($pharPath . '/error-bootstrap.php')];
             $configuration_data['includes'] = [
@@ -187,6 +187,7 @@ class CheckCommand extends Command
             ];
         } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
             // Running as a project dependency.
+            $output->writeln('<comment>Assumed running as local dependency</comment>', OutputInterface::VERBOSITY_DEBUG);
             $phpstanBin = \realpath(__DIR__ . '/../../vendor/phpstan/phpstan/phpstan.phar');
             $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
             $configuration_data['includes'] = [
@@ -195,6 +196,7 @@ class CheckCommand extends Command
             ];
         } elseif (file_exists(__DIR__ . '/../../../../autoload.php')) {
             // Running as a global dependency.
+            $output->writeln('<comment>Assumed running as global dependency</comment>', OutputInterface::VERBOSITY_DEBUG);
             $phpstanBin = \realpath(__DIR__ . '/../../../../phpstan/phpstan/phpstan.phar');
             $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
             // The phpstan/extension-installer doesn't seem to register.
