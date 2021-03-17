@@ -69,11 +69,11 @@ jobs:
       - name: "Analyze core/install.php"
         run: |
           cd ~/drupal
-          ./vendor/bin/drupal-check web/core/install.php
+          ./vendor/bin/drupal-check -vvv web/core/install.php
       - name: "Analyze dynamic_page_cache"
         run: |
           cd ~/drupal
-          ./vendor/bin/drupal-check web/core/modules/dynamic_page_cache || if (($? == 255)); then false; else true; fi
+          ./vendor/bin/drupal-check -vvv web/core/modules/dynamic_page_cache || if (($? == 255)); then false; else true; fi
 
   contrib:
     runs-on: "ubuntu-latest"
@@ -128,4 +128,4 @@ jobs:
         run: |
           cd ~/drupal
           COMPOSER_MEMORY_LIMIT=-1 composer require drupal/${{ matrix.project }} ${{ matrix.additional_projects }}
-          ./vendor/bin/drupal-check web/${{ matrix.type }}s/contrib/${{ matrix.project }} --no-progress || if (($? == 255 || $? == 127)); then false; else true; fi
+          ./vendor/bin/drupal-check -vvv web/${{ matrix.type }}s/contrib/${{ matrix.project }} --no-progress || if (($? == 255 || $? == 127)); then false; else true; fi

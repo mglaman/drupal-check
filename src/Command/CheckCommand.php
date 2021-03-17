@@ -189,13 +189,6 @@ class CheckCommand extends Command
             // Running as a project dependency.
             $phpstanBin = \realpath(__DIR__ . '/../../vendor/phpstan/phpstan/phpstan.phar');
             $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
-
-            if (!\realpath(__DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon')) {
-                throw new \RuntimeException('could not find phpstan-deprecation-rules');
-            }
-            if (!\realpath(__DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon')) {
-                throw new \RuntimeException('could find mglaman/phpstan-drupal');
-            }
             $configuration_data['includes'] = [
                 \realpath(__DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon'),
                 \realpath(__DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon'),
