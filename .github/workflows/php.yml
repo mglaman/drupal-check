@@ -81,12 +81,12 @@ jobs:
         include:
           - php-version: "7.3"
             drupal: "~8.9"
-            project: drupal/config_update
+            project: config_update
             additional_projects: ''
             type: module
           - php-version: "7.3"
             drupal: "~8.9"
-            project: drupal/blazy
+            project: blazy
             additional_projects: 'drupal/token drupal/ctools'
             type: module
     steps:
