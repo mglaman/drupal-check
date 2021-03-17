@@ -69,7 +69,7 @@ jobs:
         run: |
           cd ~/drupal
           ./vendor/bin/drupal-check web/core/install.php
-      - name: "Analyze core/install.php"
+      - name: "Analyze dynamic_page_cache"
         run: |
           cd ~/drupal
-          ./vendor/bin/drupal-check web/core/modules/dynamic_page_cache
+          ./vendor/bin/drupal-check web/core/modules/dynamic_page_cache || if (($? == 255)); then false; else true; fi
