@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Build
 
 on:
   push:
@@ -7,30 +7,63 @@ on:
     branches: [master]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
+  tests:
+    continue-on-error: ${{ matrix.experimental }}
+    runs-on: "ubuntu-latest"
+    name: "Tests | PHP ${{ matrix.php-version }} | Drupal ${{ matrix.drupal }}"
+    strategy:
+      matrix:
+        experimental: [false]
+        php-version:
+          - "7.3"
+          - "7.4"
+        drupal:
+          - "^8.9"
+          - "^9.0"
+        include:
+          - php-version: "7.2"
+            drupal: "~8.9"
+            experimental: false
+          - php-version: "8.0"
+            drupal: "^9.0"
+            experimental: true
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest
-
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-    # - name: Run test suite
-    #   run: composer run-script test
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+          tools: composer:v2
+          extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+      - name: "Install dependencies"
+        run: "composer install --no-progress --prefer-dist"
+      - name: "PHPCS"
+        run: "php vendor/bin/phpcs src"
+#      - name: "PHPStan"
+#        run: "php vendor/bin/phpstan analyze src"
+      - name: Setup Drupal
+        run: |
+          COMPOSER_MEMORY_LIMIT=-1 composer create-project drupal/recommended-project:${{ matrix.drupal }} ~/drupal --no-interaction
+          cd ~/drupal
+          composer config minimum-stability dev
+          composer config prefer-stable true
+          composer config preferred-install dist
+          composer config repositories.0 path $GITHUB_WORKSPACE
+          composer config repositories.1 composer https://packages.drupal.org/8
+          COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev:${{ matrix.drupal }} --with-all-dependencies
+      - name: "require drupal-check"
+        run: |
+          cd ~/drupal
+          COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev
+      - name: "Analyze core/install.php"
+        run: |
+          cd ~/drupal
+          ./vendor/bin/drupal-drupal web/core/install.php
+      - name: "Analyze core/install.php"
+        run: |
+          cd ~/drupal
+          ./vendor/bin/drupal-drupal web/core/modules/dynamic_page_cache
