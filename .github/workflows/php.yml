@@ -118,4 +118,4 @@ jobs:
         run: |
           cd ~/drupal
           COMPOSER_MEMORY_LIMIT=-1 composer require drupal/${{ matrix.project }} ${{ matrix.additional_projects }}
-          ./vendor/bin/phpstan analyze web/${{ matrix.type }}/contrib/${{ matrix.project }} --no-progress || if (($? == 255)); then false; else true; fi
+          ./vendor/bin/drupal-check analyze web/${{ matrix.type }}/contrib/${{ matrix.project }} --no-progress || if (($? == 255)); then false; else true; fi
