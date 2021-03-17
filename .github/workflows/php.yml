@@ -120,7 +120,9 @@ jobs:
           cd ~/drupal
           COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev
       - name: "verify drupal-check version"
-        run: ./vendor/bin/drupal-check --version
+        run: |
+          cd ~/drupal
+          ./vendor/bin/drupal-check --version
       - name: 'Check ${{ matrix.project }}'
         run: |
           cd ~/drupal
