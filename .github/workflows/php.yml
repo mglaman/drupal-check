@@ -114,8 +114,12 @@ jobs:
           cd ~/drupal
           COMPOSER_MEMORY_LIMIT=-1 composer require --dev phpspec/prophecy-phpunit:^2
         if: ${{ matrix.drupal == '^9.0' }}
+      - name: "require drupal-check"
+        run: |
+          cd ~/drupal
+          COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev
       - name: 'Check ${{ matrix.project }}'
         run: |
           cd ~/drupal
           COMPOSER_MEMORY_LIMIT=-1 composer require drupal/${{ matrix.project }} ${{ matrix.additional_projects }}
-          ./vendor/bin/drupal-check analyze web/${{ matrix.type }}/contrib/${{ matrix.project }} --no-progress || if (($? == 255)); then false; else true; fi
+          ./vendor/bin/drupal-check analyze web/${{ matrix.type }}/contrib/${{ matrix.project }} --no-progress || if (($? == 255 || $? == 127)); then false; else true; fi
