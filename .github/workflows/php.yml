@@ -24,9 +24,10 @@ jobs:
           - php-version: "7.2"
             drupal: "~8.9"
             experimental: false
-          - php-version: "8.0"
-            drupal: "^9.0"
-            experimental: true
+# @todo add when upgrading mglaman/phpstan-drupal.
+#          - php-version: "8.0"
+#            drupal: "^9.0"
+#            experimental: true
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v2"
@@ -55,6 +56,11 @@ jobs:
           composer config repositories.0 path $GITHUB_WORKSPACE
           composer config repositories.1 composer https://packages.drupal.org/8
           COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev:${{ matrix.drupal }} --with-all-dependencies
+      - name: "Add phpspec/prophecy-phpunit"
+        run: |
+          cd ~/drupal
+          COMPOSER_MEMORY_LIMIT=-1 composer require --dev phpspec/prophecy-phpunit:^2
+        if: ${{ matrix.drupal == '^9.0' }}
       - name: "require drupal-check"
         run: |
           cd ~/drupal
