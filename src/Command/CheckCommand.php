@@ -138,7 +138,8 @@ class CheckCommand extends Command
                 'ignoreErrors' => [],
                 'drupal' => [
                     'drupal_root' => $this->drupalRoot,
-                ]
+                ],
+                'tmpDir' => sys_get_temp_dir() . '/phpstan' . '_' . getmypid(),
             ]
         ];
 
@@ -215,7 +216,7 @@ class CheckCommand extends Command
 
         $output->writeln(sprintf('<comment>PHPStan path: %s</comment>', $phpstanBin), OutputInterface::VERBOSITY_DEBUG);
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
-        $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '.neon';
+        $configuration = sys_get_temp_dir() . '/drupal_check_phpstan_' . time() . '_' . getmypid() . '.neon';
         file_put_contents($configuration, $configuration_encoded);
         $configuration = realpath($configuration);
         $output->writeln(sprintf('<comment>PHPStan configuration path: %s</comment>', $configuration), OutputInterface::VERBOSITY_DEBUG);
