@@ -131,16 +131,16 @@
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "0.12.9",
+            "version": "0.12.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "f2e1446663fe38a12b1270d35bc332d8806f9f75"
+                "reference": "b8b6642861662cefb86bf19d9faab01715f38b68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/f2e1446663fe38a12b1270d35bc332d8806f9f75",
-                "reference": "f2e1446663fe38a12b1270d35bc332d8806f9f75",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/b8b6642861662cefb86bf19d9faab01715f38b68",
+                "reference": "b8b6642861662cefb86bf19d9faab01715f38b68",
                 "shasum": ""
             },
             "require": {
@@ -212,7 +212,7 @@
             "description": "Drupal extension and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/mglaman/phpstan-drupal/issues",
-                "source": "https://github.com/mglaman/phpstan-drupal/tree/0.12.9"
+                "source": "https://github.com/mglaman/phpstan-drupal/tree/0.12.10"
             },
             "funding": [
                 {
@@ -228,7 +228,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-11T00:17:32+00:00"
+            "time": "2021-05-12T20:49:49+00:00"
         },
         {
             "name": "nette/finder",
@@ -1208,16 +1208,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.4.20",
+            "version": "v4.4.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "29e61305e1c79d25f71060903982ead8f533e267"
+                "reference": "1c2fd24147961525eaefb65b11987cab75adab59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/29e61305e1c79d25f71060903982ead8f533e267",
-                "reference": "29e61305e1c79d25f71060903982ead8f533e267",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/1c2fd24147961525eaefb65b11987cab75adab59",
+                "reference": "1c2fd24147961525eaefb65b11987cab75adab59",
                 "shasum": ""
             },
             "require": {
@@ -1259,7 +1259,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v4.4.20"
+                "source": "https://github.com/symfony/yaml/tree/v4.4.22"
             },
             "funding": [
                 {
@@ -1275,7 +1275,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-22T15:36:50+00:00"
+            "time": "2021-04-23T12:09:37+00:00"
         },
         {
             "name": "webflo/drupal-finder",
