@@ -21,7 +21,7 @@ else {
     exit(1);
 }
 
-$xdebug = new XdebugHandler('cua', '--ansi');
+$xdebug = new XdebugHandler('cua');
 $xdebug->check();
 unset($xdebug);
 
