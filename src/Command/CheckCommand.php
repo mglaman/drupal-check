@@ -129,7 +129,7 @@ class CheckCommand extends Command
             'parameters' => [
                 'tipsOfTheDay' => false,
                 'reportUnmatchedIgnoredErrors' => false,
-                'excludes_analyse' => [
+                'excludePaths' => [
                     '*/tests/Drupal/Tests/Listeners/Legacy/*',
                     '*/tests/fixtures/*.php',
                     '*/settings*.php',
@@ -145,7 +145,7 @@ class CheckCommand extends Command
         if (!empty($this->excludeDirectory)) {
             // There may be more than one path passed in, comma separated.
             $excluded_directories = explode(',', $this->excludeDirectory);
-            $configuration_data['parameters']['excludes_analyse'] = array_merge($excluded_directories, $configuration_data['parameters']['excludes_analyse']);
+            $configuration_data['parameters']['excludePaths'] = array_merge($excluded_directories, $configuration_data['parameters']['excludePaths']);
         }
 
         if ($this->isAnalysisCheck) {
