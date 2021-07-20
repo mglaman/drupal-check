@@ -48,20 +48,10 @@ jobs:
       - name: Remove vendor directory for integration testing
         run: rm -rf vendor
       - name: Setup Drupal
-        run: |
-          COMPOSER_MEMORY_LIMIT=-1 composer create-project drupal/recommended-project:${{ matrix.drupal }} ~/drupal --no-interaction
-          cd ~/drupal
-          composer config minimum-stability dev
-          composer config prefer-stable true
-          composer config preferred-install dist
-          composer config repositories.0 "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"
-          composer config repositories.1 composer https://packages.drupal.org/8
-          COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev:${{ matrix.drupal }} --with-all-dependencies
-      - name: "Add phpspec/prophecy-phpunit"
-        run: |
-          cd ~/drupal
-          COMPOSER_MEMORY_LIMIT=-1 composer require --dev phpspec/prophecy-phpunit:^2
-        if: ${{ matrix.drupal == '^9.0' }}
+        uses: bluehorndigital/setup-drupal@v1.0.1
+        with:
+          version: ${{ matrix.drupal }}
+          path: ~/drupal
       - name: "require drupal-check"
         run: |
           cd ~/drupal
@@ -102,25 +92,14 @@ jobs:
           tools: composer:v2
           extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
       - name: Setup Drupal
-        run: |
-          COMPOSER_MEMORY_LIMIT=-1 composer create-project drupal/recommended-project:${{ matrix.drupal }} ~/drupal --no-interaction
-          cd ~/drupal
-          composer config minimum-stability dev
-          composer config prefer-stable true
-          composer config preferred-install dist
-          composer config repositories.0 "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"
-          composer config repositories.1 composer https://packages.drupal.org/8
-          COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev:${{ matrix.drupal }} --with-all-dependencies
-      - name: "Add phpspec/prophecy-phpunit"
-        run: |
-          cd ~/drupal
-          COMPOSER_MEMORY_LIMIT=-1 composer require --dev phpspec/prophecy-phpunit:^2
-        if: ${{ matrix.drupal == '^9.0' }}
+        uses: bluehorndigital/setup-drupal@v1.0.1
+        with:
+          version: ${{ matrix.drupal }}
+          path: ~/drupal
       - name: "require drupal-check"
         run: |
           cd ~/drupal
-          composer why composer/xdebug-handler
-          COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev -W
+          COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev
       - name: "verify drupal-check version"
         run: |
           cd ~/drupal
