@@ -119,7 +119,7 @@ jobs:
       - name: "require drupal-check"
         run: |
           cd ~/drupal
-          COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev
+          COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev -W
       - name: "verify drupal-check version"
         run: |
           cd ~/drupal
