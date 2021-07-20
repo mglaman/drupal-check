@@ -141,24 +141,6 @@ jobs:
           command: |
             cd /tmp/drupal
             ./vendor/bin/drupal-check -vvv web/core/modules/dynamic_page_cache
-  test_lightning:
-    <<: *defaults
-    steps:
-      - setup-job
-      # acquia/lightning-project does not require-dev Drupal's require-dev.
-      # see PR https://github.com/acquia/lightning-project/pull/101
-      - create-drupal-project:
-          project: 'acquia/lightning-project'
-          require_dev: false
-      - global-require
-      - run:
-          name: Global - Run against a file
-          command: |
-            drupal-check /tmp/drupal/docroot/core/install.php
-      # - run:
-      #     name: Global - Run against a module
-      #     command: |
-      #       drupal-check /tmp/drupal/docroot/core/modules/dynamic_page_cache
   test_contrib:
     <<: *defaults
     steps:
@@ -222,7 +204,6 @@ workflows:
       - lint
       - test_drupal
       - test_drupal_project
-      - test_lightning
       - test_global_require_with_drush
       - test_symfony_console_conflict
       - test_contrib
