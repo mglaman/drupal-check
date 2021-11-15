@@ -190,10 +190,13 @@ class CheckCommand extends Command
             $output->writeln('<comment>Assumed running as local dependency</comment>', OutputInterface::VERBOSITY_DEBUG);
             $phpstanBin = \realpath(__DIR__ . '/../../vendor/phpstan/phpstan/phpstan.phar');
             $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
-            $configuration_data['includes'] = [
-                \realpath(__DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon'),
-                \realpath(__DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon'),
-            ];
+            if (!class_exists('PHPStan\ExtensionInstaller\GeneratedConfig')) {
+                $configuration_data['includes'] = [
+                    \realpath(__DIR__ . '/../../vendor/phpstan/phpstan-deprecation-rules/rules.neon'),
+                    \realpath(__DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon'),
+                ];
+            }
+
         } elseif (file_exists(__DIR__ . '/../../../../autoload.php')) {
             // Running as a global dependency.
             $output->writeln('<comment>Assumed running as global dependency</comment>', OutputInterface::VERBOSITY_DEBUG);
