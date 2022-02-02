@@ -197,7 +197,6 @@ class CheckCommand extends Command
                     \realpath(__DIR__ . '/../../vendor/mglaman/phpstan-drupal/extension.neon'),
                 ];
             }
-
         } elseif (file_exists(__DIR__ . '/../../../../autoload.php')) {
             // Running as a global dependency.
             $output->writeln('<comment>Assumed running as global dependency</comment>', OutputInterface::VERBOSITY_DEBUG);
