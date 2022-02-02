@@ -202,11 +202,12 @@ class CheckCommand extends Command
             $output->writeln('<comment>Assumed running as global dependency</comment>', OutputInterface::VERBOSITY_DEBUG);
             $phpstanBin = \realpath(__DIR__ . '/../../../../phpstan/phpstan/phpstan.phar');
             $configuration_data['parameters']['bootstrapFiles'] = [\realpath(__DIR__ . '/../../error-bootstrap.php')];
-            // The phpstan/extension-installer doesn't seem to register.
-            $configuration_data['includes'] = [
-                \realpath(__DIR__ . '/../../../../phpstan/phpstan-deprecation-rules/rules.neon'),
-                \realpath(__DIR__ . '/../../../../mglaman/phpstan-drupal/extension.neon'),
-            ];
+            if (!class_exists('PHPStan\ExtensionInstaller\GeneratedConfig')) {
+                $configuration_data['includes'] = [
+                    \realpath(__DIR__ . '/../../../../phpstan/phpstan-deprecation-rules/rules.neon'),
+                    \realpath(__DIR__ . '/../../../../mglaman/phpstan-drupal/extension.neon'),
+                ];
+            }
         } else {
             throw new ShouldNotHappenException('Could not determine if local or global installation');
         }
