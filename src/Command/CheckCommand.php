@@ -271,6 +271,16 @@ class CheckCommand extends Command
         unlink($configuration);
 
         $output->writeln('<comment>Return PHPStan exit code</comment>', OutputInterface::VERBOSITY_DEBUG);
+
+        $output->writeln('Thanks for using <info>drupal-check</info>!');
+        $output->writeln('');
+        $output->writeln('Consider sponsoring the development of the maintainers which make <options=bold>drupal-check</> possible:');
+        $output->writeln('');
+        $output->writeln('- <options=bold>phpstan (ondrejmirtes)</>: https://github.com/sponsors/ondrejmirtes');
+        $output->writeln('- <options=bold>phpstan-deprecation-rules (ondrejmirtes))</>: https://github.com/sponsors/ondrejmirtes');
+        $output->writeln('- <options=bold>phpstan-drupal (mglaman))</>: https://github.com/sponsors/mglaman');
+        $output->writeln('- <options=bold>drupal-check (mglaman))</>: https://github.com/sponsors/mglaman');
+
         return $process->getExitCode();
     }
 }
