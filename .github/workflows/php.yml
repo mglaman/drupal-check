@@ -7,26 +7,15 @@ on:
     branches: [main]
 
 jobs:
-  tests:
-    continue-on-error: ${{ matrix.experimental }}
+  lint:
     runs-on: "ubuntu-latest"
-    name: "Tests | PHP ${{ matrix.php-version }} | Drupal ${{ matrix.drupal }}"
     strategy:
       matrix:
         experimental: [false]
         php-version:
-          - "7.3"
           - "7.4"
-        drupal:
-          - "^8.9"
-          - "^9.0"
-        include:
-          - php-version: "7.2"
-            drupal: "~8.9"
-            experimental: false
-          - php-version: "8.0"
-            drupal: "^9.0"
-            experimental: true
+          - "8.0"
+          - "8.1"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v2"
@@ -45,10 +34,37 @@ jobs:
         run: "php vendor/bin/phpcs src"
 #      - name: "PHPStan"
 #        run: "php vendor/bin/phpstan analyze src"
-      - name: Remove vendor directory for integration testing
-        run: rm -rf vendor
+  tests:
+    continue-on-error: ${{ matrix.experimental }}
+    runs-on: "ubuntu-latest"
+    name: "Tests | PHP ${{ matrix.php-version }} | Drupal ${{ matrix.drupal }}"
+    strategy:
+      matrix:
+        experimental: [false]
+        php-version:
+          - "7.4"
+        drupal:
+          - "^8.9"
+          - "^9.0"
+        include:
+          - php-version: "8.0"
+            drupal: "^9.0"
+            experimental: false
+          - php-version: "8.0"
+            drupal: "10.0.x-dev"
+            experimental: false
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+          tools: composer:v2
+          extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
       - name: Setup Drupal
-        uses: bluehorndigital/setup-drupal@v1.0.1
+        uses: bluehorndigital/setup-drupal@v1.0.3
         with:
           version: ${{ matrix.drupal }}
           path: ~/drupal
@@ -92,7 +108,7 @@ jobs:
           tools: composer:v2
           extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
       - name: Setup Drupal
-        uses: bluehorndigital/setup-drupal@v1.0.1
+        uses: bluehorndigital/setup-drupal@v1.0.3
         with:
           version: ${{ matrix.drupal }}
           path: ~/drupal
