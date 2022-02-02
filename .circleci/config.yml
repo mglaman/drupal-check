@@ -2,8 +2,6 @@ version: 2.1
 defaults: &defaults
   docker:
     - image: circleci/php:7.2-cli
-      environment:
-        BOX_VERSION: 3.8.4
   working_directory: ~/repo
 aliases:
   - &composer-cache
@@ -150,7 +148,7 @@ jobs:
       - require-contrib:
           project: drupal/ctools:3.x-dev
       - run:
-          name: Phar - Run against a module
+          name: Run against a module
           command: |
             drupal-check -vvv /tmp/drupal/web/modules/contrib/ctools || if (($? == 255)); then false; else true; fi
   test_global_require_with_drush:
@@ -182,7 +180,7 @@ jobs:
           command: |
             cp -r ~/repo/tests/fixtures/contained_not_initialized /tmp/drupal/web/modules
       - run:
-          name: Phar - Run against a file
+          name: Run against a file
           command: |
             drupal-check -vvv /tmp/drupal/web/modules/contained_not_initialized -vvv
 workflows:

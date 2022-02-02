@@ -11,7 +11,6 @@ assignees: ''
 
 <!-- Please specify the way you have drupal-check installed, as it greatly helps identify certain bugs. -->
 
-drupal-check is installed using the phar
 drupal-check is installed globally via Composer
 drupal-check is installed globally using consolidation/cgr
 drupal-check is installed as a dependency to my project
