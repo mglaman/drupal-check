@@ -176,17 +176,7 @@ class CheckCommand extends Command
             return 1;
         }
 
-        $pharPath = \Phar::running();
-        if ($pharPath !== '') {
-            // Running in packaged Phar archive.
-            $output->writeln('<comment>Assumed running as Phar</comment>', OutputInterface::VERBOSITY_DEBUG);
-            $phpstanBin = \realpath('vendor/phpstan/phpstan/phpstan.phar');
-            $configuration_data['parameters']['bootstrapFiles'] = [\realpath($pharPath . '/error-bootstrap.php')];
-            $configuration_data['includes'] = [
-                \realpath($pharPath . '/vendor/phpstan/phpstan-deprecation-rules/rules.neon'),
-                \realpath($pharPath . '/vendor/mglaman/phpstan-drupal/extension.neon'),
-            ];
-        } elseif (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+        if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
             // Running as a project dependency.
             $output->writeln('<comment>Assumed running as local dependency</comment>', OutputInterface::VERBOSITY_DEBUG);
             $phpstanBin = \realpath(__DIR__ . '/../../vendor/phpstan/phpstan/phpstan.phar');
