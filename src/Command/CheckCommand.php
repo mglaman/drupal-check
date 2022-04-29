@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -262,14 +263,17 @@ class CheckCommand extends Command
 
         $output->writeln('<comment>Return PHPStan exit code</comment>', OutputInterface::VERBOSITY_DEBUG);
 
-        $output->writeln('Thanks for using <info>drupal-check</info>!');
-        $output->writeln('');
-        $output->writeln('Consider sponsoring the development of the maintainers which make <options=bold>drupal-check</> possible:');
-        $output->writeln('');
-        $output->writeln('- <options=bold>phpstan (ondrejmirtes)</>: https://github.com/sponsors/ondrejmirtes');
-        $output->writeln('- <options=bold>phpstan-deprecation-rules (ondrejmirtes))</>: https://github.com/sponsors/ondrejmirtes');
-        $output->writeln('- <options=bold>phpstan-drupal (mglaman))</>: https://github.com/sponsors/mglaman');
-        $output->writeln('- <options=bold>drupal-check (mglaman))</>: https://github.com/sponsors/mglaman');
+        if ($output instanceof ConsoleOutputInterface) {
+            $stderr = $output->getErrorOutput();
+            $stderr->writeln('Thanks for using <info>drupal-check</info>!');
+            $stderr->writeln('');
+            $stderr->writeln('Consider sponsoring the development of the maintainers which make <options=bold>drupal-check</> possible:');
+            $stderr->writeln('');
+            $stderr->writeln('- <options=bold>phpstan (ondrejmirtes)</>: https://github.com/sponsors/ondrejmirtes');
+            $stderr->writeln('- <options=bold>phpstan-deprecation-rules (ondrejmirtes))</>: https://github.com/sponsors/ondrejmirtes');
+            $stderr->writeln('- <options=bold>phpstan-drupal (mglaman))</>: https://github.com/sponsors/mglaman');
+            $stderr->writeln('- <options=bold>drupal-check (mglaman))</>: https://github.com/sponsors/mglaman');
+        }
 
         return $process->getExitCode();
     }
