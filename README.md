@@ -34,23 +34,10 @@ Refer to Composer's documentation on how to ensure global binaries are in your P
 
 ## Usage
 
-This tool works on all Drupal code, but must be executed within the root directory of a Drupal project..
-
-### 1. cd into a Drupal Directory
-
-You can run this tool within any Drupal project. But, for best results, create a fresh Drupal directory on the latest Drupal:
-
-```
-composer create-project drupal-composer/drupal-project:8.x-dev drupal --no-interaction --stability=dev
-cd drupal
-```
-
-### 2. Run drupal-check
-
 Usage:
 
   ```
-  drupal-check [OPTIONS] [DIRS]
+  php vendor/bin/drupal-check [OPTIONS] [DIRS]
   ```
 
 Arguments:
@@ -69,27 +56,60 @@ Examples:
 
 * Check the address contrib module:
 
-  ```
-  drupal-check web/modules/contrib/address
-  ```
+```
+php vendor/bin/drupal-check web/modules/contrib/address
+```
 
 * Check the address contrib module for deprecations:
 
-  ```
-  drupal-check -d web/modules/contrib/address
-  ```
+```
+php vendor/bin/drupal-check -d web/modules/contrib/address
+```
 
 * Check the address contrib module for analysis:
 
-  ```
-  drupal-check -a web/modules/contrib/address
-  ```
+```
+php vendor/bin/drupal-check -a web/modules/contrib/address
+```
 
-* Check the address contrib module for both deprecations and analysis:
+## Rollback update to PHPStan level 2 for deprecation analysis
 
-  ```
-  drupal-check -ad web/modules/contrib/address
-  ```
+drupal-check:1.4.0 set PHPStan's analysis level to 2 for deprecations and 6 for analysis. This ensures basic analysis
+errors are fixed to provide the best deprecated code detection experience. You can read more about PHPStan's rule
+levels here: https://phpstan.org/user-guide/rule-levels
+
+If you do not want to run PHPStan at level 2 and only report deprecation messages, use the following instructions
+
+```shell
+composer remove mglaman/drupal-check
+composer require  --dev phpstan/phpstan \
+  phpstan/extension-installer \
+  mglaman/phpstan-drupal \
+  phpstan/phpstan-deprecation-rules
+```
+
+Create a `phpstan.neon` file with the following:
+
+```neon
+parameters:
+	customRulesetUsed: true
+	ignoreErrors:
+		- '#\Drupal calls should be avoided in classes, use dependency injection instead#'
+		- '#Plugin definitions cannot be altered.#'
+		- '#Missing cache backend declaration for performance.#'
+		- '#Plugin manager has cache backend specified but does not declare cache tags.#'
+
+	# FROM mglaman/drupal-check/phpstan/base_config.neon
+	reportUnmatchedIgnoredErrors: false
+	excludePaths:
+		- */tests/Drupal/Tests/Listeners/Legacy/*
+		- */tests/fixtures/*.php
+		- */settings*.php
+		- */bower_components/*
+		- */node_modules/*
+```
+
+You can copy this from the Upgrade Status module directly https://git.drupalcode.org/project/upgrade_status/-/blob/8.x-3.x/deprecation_testing_template.neon
 
 ## Drupal Check - VS Code Extension
 
@@ -100,10 +120,6 @@ The code can be found at: https://github.com/bbeversdorf/vscode-drupal-check
 ## License
 
 [GPL v2](LICENSE.txt)
-
-## Roadmap
-
-See what feature requests are most popular in the Issue queue: https://github.com/mglaman/drupal-check/issues.
 
 ## Issues
 
