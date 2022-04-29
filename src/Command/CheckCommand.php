@@ -34,6 +34,7 @@ class CheckCommand extends Command
             ->addOption('deprecations', 'd', InputOption::VALUE_NONE, 'Check for deprecations')
             ->addOption('analysis', 'a', InputOption::VALUE_NONE, 'Check code analysis')
             ->addOption('style', 's', InputOption::VALUE_NONE, 'Check code style')
+            ->addOption('php8', null, InputOption::VALUE_NONE, 'Set PHPStan phpVersion for 8.1 (Drupal 10 requirement)')
             ->addOption('memory-limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit for analysis')
             ->addOption('exclude-dir', 'e', InputOption::VALUE_OPTIONAL, 'Directories to exclude. Separate multiple directories with a comma, no spaces.')
             ->addOption(
@@ -143,6 +144,10 @@ class CheckCommand extends Command
                 ]
             ]
         ];
+
+        if ($input->getOption('php8')) {
+            $configuration_data['parameters']['phpVersion'] = 80100;
+        }
 
         if (!empty($this->excludeDirectory)) {
             // There may be more than one path passed in, comma separated.
