@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Terminal;
 use Symfony\Component\Process\Process;
 
 class CheckCommand extends Command
@@ -251,7 +252,11 @@ class CheckCommand extends Command
         }
         $command = array_merge($command, $paths);
 
-        $process = new Process($command);
+        $terminal = new Terminal();
+        $process = new Process($command, null, [
+            'LINES' => $terminal->getHeight(),
+            'COLUMNS' => $terminal->getWidth(),
+        ]);
         $process->setTimeout(null);
 
         $output->writeln('<comment>Executing PHPStan</comment>', OutputInterface::VERBOSITY_DEBUG);
