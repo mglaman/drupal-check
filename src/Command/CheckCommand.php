@@ -138,7 +138,9 @@ class CheckCommand extends Command
                     '*/settings*.php',
                     '*/node_modules/*'
                 ],
-                'ignoreErrors' => [],
+                'ignoreErrors' => [
+                    '#Unsafe usage of new static\(\)#'
+                ],
                 'drupal' => [
                     'drupal_root' => $this->drupalRoot,
                 ]
@@ -156,14 +158,11 @@ class CheckCommand extends Command
         }
 
         if ($this->isAnalysisCheck) {
-            $configuration_data['parameters']['level'] = 4;
-
-            $ignored_analysis_errors = [
-                '#Unsafe usage of new static\(\)#'
-            ];
+            $configuration_data['parameters']['level'] = 6;
+            $ignored_analysis_errors = [];
             $configuration_data['parameters']['ignoreErrors'] = array_merge($ignored_analysis_errors, $configuration_data['parameters']['ignoreErrors']);
         } else {
-            $configuration_data['parameters']['customRulesetUsed'] = true;
+            $configuration_data['parameters']['level'] = 2;
         }
 
         if ($this->isDeprecationsCheck) {

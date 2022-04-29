@@ -99,7 +99,7 @@ jobs:
       - run:
           name: Global - Run against a module
           command: |
-             drupal-check -vvv /tmp/drupal/core/modules/dynamic_page_cache
+             drupal-check -vvv /tmp/drupal/core/modules/dynamic_page_cache || if (($? == 255)); then false; else true; fi
   test_drupal_project:
     <<: *defaults
     steps:
@@ -113,7 +113,7 @@ jobs:
       - run:
           name: Global - Run against a module
           command: |
-             drupal-check -vvv /tmp/drupal/web/core/modules/dynamic_page_cache
+             drupal-check -vvv /tmp/drupal/web/core/modules/dynamic_page_cache || if (($? == 255)); then false; else true; fi
   test_drupal_local_require:
     <<: *defaults
     steps:
@@ -138,7 +138,7 @@ jobs:
           name: Local - Run against a module
           command: |
             cd /tmp/drupal
-            ./vendor/bin/drupal-check -vvv web/core/modules/dynamic_page_cache
+            ./vendor/bin/drupal-check -vvv web/core/modules/dynamic_page_cache || if (($? == 255)); then false; else true; fi
   test_contrib:
     <<: *defaults
     steps:
@@ -168,7 +168,7 @@ jobs:
       - run:
           name: Run against a module
           command: |
-            drupal-check -vvv /tmp/drupal/web/core/modules/dynamic_page_cache
+            drupal-check -vvv /tmp/drupal/web/core/modules/dynamic_page_cache || if (($? == 255)); then false; else true; fi
   test_contained_not_initialized:
     <<: *defaults
     steps:
