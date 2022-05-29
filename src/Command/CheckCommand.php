@@ -159,7 +159,11 @@ class CheckCommand extends Command
 
         if ($this->isAnalysisCheck) {
             $configuration_data['parameters']['level'] = 6;
-            $ignored_analysis_errors = [];
+            $ignored_analysis_errors = [
+                // Ignores all missing types in array iterables.
+                // See more: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type
+                '#value type specified in iterable type array.$#'
+            ];
             $configuration_data['parameters']['ignoreErrors'] = array_merge($ignored_analysis_errors, $configuration_data['parameters']['ignoreErrors']);
         } else {
             $configuration_data['parameters']['level'] = 2;
