@@ -22,6 +22,7 @@ class CheckCommand extends Command
     private $drupalRoot;
     private $vendorRoot;
     private $excludeDirectory;
+    private $includeConfig;
 
     protected function configure(): void
     {
@@ -37,6 +38,7 @@ class CheckCommand extends Command
             ->addOption('php8', null, InputOption::VALUE_NONE, 'Set PHPStan phpVersion for 8.1 (Drupal 10 requirement)')
             ->addOption('memory-limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit for analysis')
             ->addOption('exclude-dir', 'e', InputOption::VALUE_OPTIONAL, 'Directories to exclude. Separate multiple directories with a comma, no spaces.')
+            ->addOption('include', 'i', InputOption::VALUE_OPTIONAL, '')
             ->addOption(
                 'no-progress',
                 null,
@@ -52,6 +54,7 @@ class CheckCommand extends Command
         $this->isStyleCheck = $input->getOption('style');
         $this->memoryLimit = $input->getOption('memory-limit');
         $this->excludeDirectory = $input->getOption('exclude-dir');
+        $this->includeConfig = $input->getOption('include');
 
         // Default to deprecations.
         if (!$this->isDeprecationsCheck) {
@@ -207,10 +210,19 @@ class CheckCommand extends Command
             throw new ShouldNotHappenException('Could not determine if local or global installation');
         }
 
+        if ($this->includeConfig) {
+            if (!file_exists($this->includeConfig)) {
+                $output->writeln("File not found: {$this->includeConfig}");
+                return 1;
+            }
+            $configuration_data['includes'][] = \realpath($this->includeConfig);
+        }
+
         if (!file_exists($phpstanBin)) {
             $output->writeln('Could not find PHPStan at ' . $phpstanBin);
             return 1;
         }
+
 
         $output->writeln(sprintf('<comment>PHPStan path: %s</comment>', $phpstanBin), OutputInterface::VERBOSITY_DEBUG);
         $configuration_encoded = Neon::encode($configuration_data, Neon::BLOCK);
