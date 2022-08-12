@@ -38,7 +38,7 @@ class CheckCommand extends Command
             ->addOption('php8', null, InputOption::VALUE_NONE, 'Set PHPStan phpVersion for 8.1 (Drupal 10 requirement)')
             ->addOption('memory-limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit for analysis')
             ->addOption('exclude-dir', 'e', InputOption::VALUE_OPTIONAL, 'Directories to exclude. Separate multiple directories with a comma, no spaces.')
-            ->addOption('include', 'i', InputOption::VALUE_OPTIONAL, '')
+            ->addOption('include', 'i', InputOption::VALUE_OPTIONAL, 'Use additional phpstan configuration file')
             ->addOption(
                 'no-progress',
                 null,
