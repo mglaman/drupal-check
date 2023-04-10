@@ -170,7 +170,8 @@ class CheckCommand extends Command
                 '#\Drupal calls should be avoided in classes, use dependency injection instead#',
                 '#Plugin definitions cannot be altered.#',
                 '#Missing cache backend declaration for performance.#',
-                '#Plugin manager has cache backend specified but does not declare cache tags.#'
+                '#Plugin manager has cache backend specified but does not declare cache tags.#',
+                '#[a-zA-Z0-9\\_]+\\:\\:buildForm\\(\\) should return array but return statement is missing.#'
             ];
             $configuration_data['parameters']['ignoreErrors'] = array_merge($ignored_deprecation_errors, $configuration_data['parameters']['ignoreErrors']);
         }
