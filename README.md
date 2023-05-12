@@ -34,23 +34,29 @@ Refer to Composer's documentation on how to ensure global binaries are in your P
 
 ## Usage
 
-Usage:
-
-  ```
-  php vendor/bin/drupal-check [OPTIONS] [DIRS]
-  ```
-
+```
+php vendor/bin/drupal-check [options] [--] <path>...
+```
 Arguments:
-
-* `OPTIONS` - See "Options" for allowed values. Specify multiples in sequence, e.g. `-ad`.
-* `DIRS` - One or more directories within the root of a Drupal project.
+* `path` - The Drupal code path(s) to inspect
 
 Options:
-
-* `-a` Check analysis
-* `-d` Check deprecations (default)
-* `-e` Exclude directories. Wildcards work. Separate multiple excluded directories with commas, no spaces. e.g.: \*/tests/codeception/acceptance/\*.php
-* `--drupal-root` Path to Drupal root. Fallback option if drupal-check could not identify Drupal root from the provided path(s).
+* `--drupal-root[=DRUPAL-ROOT]` - Path to Drupal root.
+* `--format[=FORMAT]` - Formatter to use: raw, table, checkstyle, json, or junit [default: "table"]
+* `-d, --deprecations` - Check for deprecations
+* `-a, --analysis` - Check code analysis
+* `-s, --style` - Check code style
+* `--php8` - Set PHPStan phpVersion for 8.1 (Drupal 10 requirement)
+* `--memory-limit[=MEMORY-LIMIT]` - Memory limit for analysis
+* `-e, --exclude-dir[=EXCLUDE-DIR]` - Directories to exclude. Separate multiple directories with a comma, no spaces.
+* `--no-progress` - Do not show progress bar, only results
+* `-h, --help` - Display this help message
+* `-q, --quiet` - Do not output any message
+* `-V, --version` - Display this application version
+* `--ansi` - Force ANSI output
+* `--no-ansi` - Disable ANSI output
+* `-n, --no-interaction` - Do not ask any interactive question
+* `-v|vv|vvv, --verbose` - Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Examples:
 
