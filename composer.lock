@@ -593,16 +593,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.8.7",
+            "version": "1.10.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "536ff0ed719b5679e9f09c17aeaee9b31969cb8e"
+                "reference": "762c4dac4da6f8756eebb80e528c3a47855da9bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/536ff0ed719b5679e9f09c17aeaee9b31969cb8e",
-                "reference": "536ff0ed719b5679e9f09c17aeaee9b31969cb8e",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/762c4dac4da6f8756eebb80e528c3a47855da9bd",
+                "reference": "762c4dac4da6f8756eebb80e528c3a47855da9bd",
                 "shasum": ""
             },
             "require": {
@@ -631,8 +631,11 @@
                 "static analysis"
             ],
             "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.8.7"
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
             },
             "funding": [
                 {
@@ -648,7 +651,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-04T14:09:33+00:00"
+            "time": "2023-05-09T15:28:01+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -1806,25 +1809,26 @@
     "packages-dev": [
         {
             "name": "phpstan/phpstan-strict-rules",
-            "version": "1.4.4",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-strict-rules.git",
-                "reference": "23e5f377ee6395a1a04842d3d6ed4bd25e7b44a6"
+                "reference": "b21c03d4f6f3a446e4311155f4be9d65048218e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-strict-rules/zipball/23e5f377ee6395a1a04842d3d6ed4bd25e7b44a6",
-                "reference": "23e5f377ee6395a1a04842d3d6ed4bd25e7b44a6",
+                "url": "https://api.github.com/repos/phpstan/phpstan-strict-rules/zipball/b21c03d4f6f3a446e4311155f4be9d65048218e6",
+                "reference": "b21c03d4f6f3a446e4311155f4be9d65048218e6",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.8.6"
+                "phpstan/phpstan": "^1.10"
             },
             "require-dev": {
                 "nikic/php-parser": "^4.13.0",
                 "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpstan/phpstan-deprecation-rules": "^1.1",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5"
             },
@@ -1848,9 +1852,9 @@
             "description": "Extra strict and opinionated rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-strict-rules/issues",
-                "source": "https://github.com/phpstan/phpstan-strict-rules/tree/1.4.4"
+                "source": "https://github.com/phpstan/phpstan-strict-rules/tree/1.5.1"
             },
-            "time": "2022-09-21T11:38:17+00:00"
+            "time": "2023-03-29T14:47:40+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
