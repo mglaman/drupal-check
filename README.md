@@ -8,7 +8,7 @@ Are you ready for Drupal 9? Check out our [Drupal 9 Readiness](https://github.co
 
 ## Sponsors
 
-<a href="https://www.undpaul.de/"><img src="https://www.undpaul.de/themes/custom/undpaul3/logo.svg" alt="undpaul" width="250" /></a>
+<a href="https://www.undpaul.de/"><img src="https://www.undpaul.de/themes/custom/undpaul3/logo.svg" alt="undpaul" width="250" /></a> <a href="https://www.optasy.com/"><img src="https://www.optasy.com/images/logo.svg" alt="undpaul" width="200" /></a>
 
 [Would you like to sponsor?](https://github.com/sponsors/mglaman)
 
