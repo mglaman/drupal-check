@@ -117,6 +117,12 @@ parameters:
 
 You can copy this from the Upgrade Status module directly https://git.drupalcode.org/project/upgrade_status/-/blob/8.x-3.x/deprecation_testing_template.neon
 
+* Check all contrib modules except the address module:
+
+  ```
+  drupal-check web/modules/contrib -e */address/*
+  ```
+
 ## Drupal Check - VS Code Extension
 
 You can run Drupal Check from VSCode using this extension: https://marketplace.visualstudio.com/items?itemName=bbeversdorf.drupal-check
