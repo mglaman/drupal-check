@@ -17,8 +17,8 @@
         "mglaman/phpstan-drupal": "^1.0.0",
         "nette/neon": "^3.1",
         "phpstan/phpstan-deprecation-rules": "^1.0.0",
-        "symfony/console": "~3.4.5 || ^4.2|| ^5.0 || ^6.0",
-        "symfony/process": "~3.4.5 || ^4.2|| ^5.0 || ^6.0",
+        "symfony/console": "~3.4.5 || ^4.2|| >=5",
+        "symfony/process": "~3.4.5 || ^4.2|| >=5",
         "webflo/drupal-finder": "^1.1"
     },
     "require-dev": {
