@@ -1,7 +1,7 @@
 version: 2.1
 defaults: &defaults
   docker:
-    - image: cimg/php:7.3
+    - image: cimg/php:8.2
   working_directory: ~/repo
 aliases:
   - &composer-cache
