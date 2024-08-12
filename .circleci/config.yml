@@ -1,7 +1,7 @@
 version: 2.1
 defaults: &defaults
   docker:
-    - image: circleci/php:8.2-cli
+    - image: cimg/php:8.2-cli
   working_directory: ~/repo
 aliases:
   - &composer-cache
