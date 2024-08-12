@@ -10,7 +10,7 @@ commands:
   setup-job:
     steps:
       - checkout
-      - run: sudo apt-get update && sudo apt-get install -y libpng-dev libjpeg62-turbo-dev
+      - run: sudo apt-get update && sudo apt-get install -y libpng-dev libjpeg62-dev
       - run: sudo docker-php-ext-install gd
       - run:
           name: Disable PHP memory limit
