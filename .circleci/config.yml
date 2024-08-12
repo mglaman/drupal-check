@@ -11,7 +11,6 @@ commands:
     steps:
       - checkout
       - run: sudo apt-get update && sudo apt-get install -y libpng-dev libjpeg-dev
-      - run: sudo -E docker-php-ext-install gd
       - run:
           name: Disable PHP memory limit
           command: echo 'memory_limit=-1' | sudo tee -a /usr/local/etc/php/php.ini
