@@ -30,7 +30,7 @@ commands:
     parameters:
       project:
         type: string
-        default: 'drupal/recommended-project:^8.8@alpha'
+        default: 'drupal/recommended-project:^10'
       require_dev:
         type: boolean
         default: true
@@ -39,7 +39,7 @@ commands:
       - when:
           condition: << parameters.require_dev >>
           steps:
-            - run: COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev:^8 --dev --working-dir /tmp/drupal --no-interaction
+            - run: COMPOSER_MEMORY_LIMIT=-1 composer require drupal/core-dev:^10 --dev --working-dir /tmp/drupal --no-interaction
   require-contrib:
     parameters:
       project:
@@ -90,7 +90,7 @@ jobs:
     steps:
       - setup-job
       - create-drupal-project:
-          project: 'drupal/legacy-project:^8@alpha'
+          project: 'drupal/recommended-project:^10'
       - global-require
       - run:
           name: Global - Run against a file
