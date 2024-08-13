@@ -26,7 +26,9 @@ install:
   - composer config --no-plugins allow-plugins.cweagans/composer-patches true
   - composer config --no-plugins allow-plugins.composer/installers true
   - composer config --no-plugins allow-plugins.drupal/core-composer-scaffold true
-  - composer config --no-plugins allow-plugins.php-http/discovery true
+  - composer config --no-plugins allow-plugins.zaporylie/composer-drupal-optimizations true
+  - composer config --no-plugins allow-plugins.drupal/console-extend-plugin true
+  - composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer
   - set COMPOSER_MEMORY_LIMIT=-1&& composer install --no-interaction --ignore-platform-req=ext-gd
 build: off
 test_script:
