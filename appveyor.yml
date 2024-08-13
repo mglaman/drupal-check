@@ -25,6 +25,10 @@ install:
   - cd ../drupal
   - composer config --no-plugins allow-plugins.cweagans/composer-patches true
   - composer config --no-plugins allow-plugins.composer/installers true
+  - composer config --no-plugins allow-plugins.drupal/core-composer-scaffold true
+  - composer config --no-plugins dealerdirect/phpcodesniffer-composer-installer true
+  - composer config --no-plugins phpstan/extension-installer true
+  - composer config --no-plugins php-http/discovery true
   - set COMPOSER_MEMORY_LIMIT=-1&& composer install --no-interaction --ignore-platform-req=ext-gd
 build: off
 test_script:
