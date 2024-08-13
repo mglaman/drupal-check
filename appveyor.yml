@@ -28,7 +28,7 @@ install:
   - composer config --no-plugins allow-plugins.drupal/core-composer-scaffold true
   - composer config --no-plugins allow-plugins.zaporylie/composer-drupal-optimizations true
   - composer config --no-plugins allow-plugins.drupal/console-extend-plugin true
-  - composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer
+  - composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
   - set COMPOSER_MEMORY_LIMIT=-1&& composer install --no-interaction --ignore-platform-req=ext-gd
 build: off
 test_script:
