@@ -22,7 +22,7 @@ install:
   - SET | more
   - composer install --no-interaction --no-progress --no-suggest --prefer-dist
   - set COMPOSER_MEMORY_LIMIT=-1&& composer create-project drupal-composer/drupal-project:8.x-dev %APPVEYOR_BUILD_FOLDER%\..\drupal --no-interaction --prefer-dist --ignore-platform-reqs --no-install
-  - cd drupal
+  - cd ../drupal
   - composer config --no-plugins allow-plugins.cweagans/composer-patches true
   - set COMPOSER_MEMORY_LIMIT=-1&& composer install
 build: off
