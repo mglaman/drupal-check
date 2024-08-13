@@ -22,7 +22,7 @@ install:
   - SET | more
   - composer install --no-interaction --no-progress --no-suggest --prefer-dist
   - set COMPOSER_MEMORY_LIMIT=-1&& composer create-project drupal-composer/drupal-project:8.x-dev %APPVEYOR_BUILD_FOLDER%\..\drupal --no-interaction --prefer-dist --ignore-platform-reqs --no-install
-  - cd ../drupal
+  - cd %APPVEYOR_BUILD_FOLDER%\..\drupal
   - composer config --no-plugins allow-plugins.cweagans/composer-patches true
   - composer config --no-plugins allow-plugins.composer/installers true
   - composer config --no-plugins allow-plugins.drupal/core-composer-scaffold true
@@ -30,6 +30,7 @@ install:
   - composer config --no-plugins allow-plugins.drupal/console-extend-plugin true
   - composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
   - set COMPOSER_MEMORY_LIMIT=-1&& composer install --no-interaction --ignore-platform-req=ext-gd
+  - cd %APPVEYOR_BUILD_FOLDER%
 build: off
 test_script:
   - php drupal-check --version
