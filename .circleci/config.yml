@@ -146,7 +146,7 @@ jobs:
       - global-require
       - create-drupal-project
       - require-contrib:
-          project: drupal/ctools:3.x-dev
+          project: drupal/ctools:3.9
       - run:
           name: Run against a module
           command: |
