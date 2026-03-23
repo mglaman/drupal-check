@@ -4,7 +4,7 @@ Built on [PHPStan](https://github.com/phpstan/phpstan), this static analysis too
 
 Why? While there are many static analysis tools out there, none of them run with the Drupal context in mind. This allows checking contrib modules for deprecation errors thrown by core.
 
-Are you ready for Drupal 9? Check out our [Drupal 9 Readiness](https://github.com/mglaman/drupal-check/wiki/Drupal-9-Readiness) instructions for details on how this tool can help.
+Are you ready for Drupal 11? Check out our [Drupal 9 Readiness](https://github.com/mglaman/drupal-check/wiki/Drupal-9-Readiness) instructions for historical context on how this tool can help.
 
 ## Sponsors
 
@@ -14,7 +14,7 @@ Are you ready for Drupal 9? Check out our [Drupal 9 Readiness](https://github.co
 
 ## Requirements
 
-* PHP >=7.2
+* PHP >=8.4
 
 ## Installation
 
@@ -46,7 +46,8 @@ Options:
 * `-d, --deprecations` - Check for deprecations
 * `-a, --analysis` - Check code analysis
 * `-s, --style` - Check code style
-* `--php8` - Set PHPStan phpVersion for 8.1 (Drupal 10 requirement)
+* `--php-version[=PHP-VERSION]` - Set PHPStan phpVersion, e.g. `80400` for PHP 8.4
+* `--php8` - Deprecated alias for `--php-version=80400`
 * `--memory-limit[=MEMORY-LIMIT]` - Memory limit for analysis
 * `-e, --exclude-dir[=EXCLUDE-DIR]` - Directories to exclude. Separate multiple directories with a comma, no spaces.
 * `--no-progress` - Do not show progress bar, only results
@@ -147,4 +148,3 @@ See the [CONTRIBUTING.md](CONTRIBUTING.md).
 * [Writing better Drupal code with static analysis using PHPStan](https://glamanate.com/blog/writing-better-drupal-code-static-analysis-using-phpstan)
 * [PHPStan: Find Bugs In Your Code Without Writing Tests!](https://medium.com/@ondrejmirtes/phpstan-2939cd0ad0e3)
 * [Online PHPStan Analyzer](https://phpstan.org/)
-

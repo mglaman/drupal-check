@@ -34,7 +34,8 @@ class CheckCommand extends Command
             ->addOption('deprecations', 'd', InputOption::VALUE_NONE, 'Check for deprecations')
             ->addOption('analysis', 'a', InputOption::VALUE_NONE, 'Check code analysis')
             ->addOption('style', 's', InputOption::VALUE_NONE, 'Check code style')
-            ->addOption('php8', null, InputOption::VALUE_NONE, 'Set PHPStan phpVersion for 8.1 (Drupal 10 requirement)')
+            ->addOption('php-version', null, InputOption::VALUE_OPTIONAL, 'Set PHPStan phpVersion (for PHP 8.4 use 80400)')
+            ->addOption('php8', null, InputOption::VALUE_NONE, '[Deprecated] Alias for --php-version=80400')
             ->addOption('memory-limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit for analysis')
             ->addOption('exclude-dir', 'e', InputOption::VALUE_OPTIONAL, 'Directories to exclude. Separate multiple directories with a comma, no spaces.')
             ->addOption(
@@ -77,6 +78,9 @@ class CheckCommand extends Command
 
         if ($input->getOption('format') === 'json') {
             $input->setOption('format', 'prettyJson');
+        }
+        if ($input->getOption('php8') && !$input->getOption('php-version')) {
+            $input->setOption('php-version', '80400');
         }
         if ($output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG) {
             $this->getApplication()->setCatchExceptions(false);
@@ -147,8 +151,13 @@ class CheckCommand extends Command
             ]
         ];
 
-        if ($input->getOption('php8')) {
-            $configuration_data['parameters']['phpVersion'] = 80100;
+        $phpVersion = $input->getOption('php-version');
+        if ($phpVersion !== null) {
+            if (!is_string($phpVersion) || !ctype_digit($phpVersion)) {
+                $output->writeln('<error>Invalid --php-version value. Use integer format, e.g. 80400 for PHP 8.4.</error>');
+                return 1;
+            }
+            $configuration_data['parameters']['phpVersion'] = (int) $phpVersion;
         }
 
         if (!empty($this->excludeDirectory)) {

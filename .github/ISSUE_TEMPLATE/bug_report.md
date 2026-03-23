@@ -18,8 +18,8 @@ drupal-check is installed as a dependency to my project
 
 **Environment:**
  - OS: Windows/macOS/Linux
- - PHP Version: 7.2
- - Drupal core: 8.x.x
+ - PHP Version: 8.4
+ - Drupal core: 11.3.x
 
 **Describe the bug**
 A clear and concise description of what the bug is. Include any modules tested.

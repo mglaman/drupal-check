@@ -1,0 +1,27 @@
+name: drupal-check
+recipe: lamp
+config:
+  webroot: .
+  php: "8.4"
+  xdebug: false
+
+services:
+  appserver:
+    type: php:8.4
+
+tooling:
+  composer:
+    service: appserver
+    cmd: composer
+  php:
+    service: appserver
+    cmd: php
+  phpcs:
+    service: appserver
+    cmd: php vendor/bin/phpcs
+  phpstan:
+    service: appserver
+    cmd: php vendor/bin/phpstan
+  drupal-check:
+    service: appserver
+    cmd: php ./drupal-check

@@ -3,5 +3,3 @@ includes:
 	- vendor/phpstan/phpstan-deprecation-rules/rules.neon
 parameters:
 	level: 8
-	checkGenericClassInNonGenericObjectType: false
-	checkMissingIterableValueType: false

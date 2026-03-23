@@ -8,120 +8,57 @@ on:
 
 jobs:
   lint:
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        experimental: [false]
         php-version:
-          - "7.4"
-          - "8.0"
-          - "8.1"
+          - "8.4"
+          - "8.5"
     steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v4"
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
         with:
-          coverage: "none"
-          php-version: "${{ matrix.php-version }}"
+          coverage: none
+          php-version: ${{ matrix.php-version }}
           tools: composer:v2
-          extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
-      - name: "Install dependencies"
-        run: "composer install --no-progress --prefer-dist"
-      - name: "PHPCS"
-        run: "php vendor/bin/phpcs src"
-#      - name: "PHPStan"
-#        run: "php vendor/bin/phpstan analyze src"
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+      - name: PHPCS
+        run: php vendor/bin/phpcs src
+
   tests:
-    continue-on-error: ${{ matrix.experimental }}
-    runs-on: "ubuntu-latest"
-    name: "Tests | PHP ${{ matrix.php-version }} | Drupal ${{ matrix.drupal }}"
+    runs-on: ubuntu-latest
+    name: Tests | PHP ${{ matrix.php-version }} | Drupal 11.3.0
     strategy:
       matrix:
-        experimental: [false]
         php-version:
-          - "7.4"
-        drupal:
-          - "^8.9"
-          - "^9.0"
-        include:
-          - php-version: "8.0"
-            drupal: "^9.0"
-            experimental: false
-          - php-version: "8.1"
-            drupal: "10.0.x-dev"
-            experimental: false
+          - "8.4"
+          - "8.5"
     steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v4"
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
         with:
-          coverage: "none"
-          php-version: "${{ matrix.php-version }}"
+          coverage: none
+          php-version: ${{ matrix.php-version }}
           tools: composer:v2
-          extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
-      - name: Setup Drupal
-        uses: bluehorndigital/setup-drupal@v1.1.0
-        with:
-          version: ${{ matrix.drupal }}
-          path: ~/drupal
-      - name: "require drupal-check"
+      - name: Setup Drupal 11.3.0
+        run: COMPOSER_MEMORY_LIMIT=-1 composer create-project drupal/recommended-project:11.3.0 ~/drupal --no-interaction --prefer-dist
+      - name: Require local drupal-check
         run: |
           cd ~/drupal
-          COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev
-      - name: "Analyze core/install.php"
+          composer config repositories.0 '{"type":"path","url":"'"$GITHUB_WORKSPACE"'","options":{"symlink":false}}'
+          COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check "*@dev"
+      - name: Analyze core/install.php
         run: |
           cd ~/drupal
           ./vendor/bin/drupal-check -vvv web/core/install.php
-      - name: "Analyze dynamic_page_cache"
+      - name: Analyze dynamic_page_cache
         run: |
           cd ~/drupal
           ./vendor/bin/drupal-check -vvv web/core/modules/dynamic_page_cache || if (($? == 255)); then false; else true; fi
-
-  contrib:
-    runs-on: "ubuntu-latest"
-    name: "${{ matrix.project }} | PHP ${{ matrix.php-version }} | Drupal ${{ matrix.drupal }}"
-    strategy:
-      matrix:
-        include:
-          - php-version: "7.3"
-            drupal: "~8.9"
-            project: config_update
-            additional_projects: ''
-            type: module
-          - php-version: "7.3"
-            drupal: "~8.9"
-            project: blazy
-            additional_projects: 'drupal/token drupal/ctools'
-            type: module
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v4"
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          coverage: "none"
-          php-version: "${{ matrix.php-version }}"
-          tools: composer:v2
-          extensions: dom, curl, libxml, mbstring, zip, pdo, mysql, pdo_mysql, bcmath, gd, exif, iconv
-      - name: Setup Drupal
-        uses: bluehorndigital/setup-drupal@v1.1.0
-        with:
-          version: ${{ matrix.drupal }}
-          path: ~/drupal
-      - name: "require drupal-check"
-        run: |
-          cd ~/drupal
-          COMPOSER_MEMORY_LIMIT=-1 composer require mglaman/drupal-check *@dev
-      - name: "verify drupal-check version"
-        run: |
-          cd ~/drupal
-          ./vendor/bin/drupal-check --version
-      - name: 'Check ${{ matrix.project }}'
-        run: |
-          cd ~/drupal
-          COMPOSER_MEMORY_LIMIT=-1 composer require drupal/${{ matrix.project }} ${{ matrix.additional_projects }}
-          ./vendor/bin/drupal-check -vvv web/${{ matrix.type }}s/contrib/${{ matrix.project }} --no-progress || if (($? == 255 || $? == 127)); then false; else true; fi
