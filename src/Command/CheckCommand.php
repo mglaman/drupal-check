@@ -141,9 +141,6 @@ class CheckCommand extends Command
                 'ignoreErrors' => [
                     '#Unsafe usage of new static\(\)#'
                 ],
-                'drupal' => [
-                    'drupal_root' => $this->drupalRoot,
-                ]
             ]
         ];
 

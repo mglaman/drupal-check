@@ -18,19 +18,11 @@ Are you ready for Drupal 9? Check out our [Drupal 9 Readiness](https://github.co
 
 ## Installation
 
-You can install this in your project using Composer as a development dependency like so:
+You install this in your project using Composer as a development dependency like so:
 
 ```
 composer require mglaman/drupal-check --dev
 ```
-
-You can also install this globally using Composer like so:
-
-```
-composer global require mglaman/drupal-check
-```
-
-Refer to Composer's documentation on how to ensure global binaries are in your PATH: https://getcomposer.org/doc/00-intro.md#manual-installation.
 
 ## Usage
 
